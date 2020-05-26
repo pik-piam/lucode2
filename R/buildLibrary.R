@@ -177,7 +177,7 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
       cat("* git repository detected... OK\n")
       cat("* command suggestions for updating your git repository:\n")
       cat(rep("=", options()$width), "\n", sep="")
-      cat(paste0('adding and committing: $ git add . && git commit -m "type ', update_type, ' lucode upgrade"\n'))
+      cat(paste0('adding and committing: $ git add . && git commit -m "type ', update_type, ' upgrade"\n'))
       cat(paste0("version tagging: $ git tag ", version, "\n"))
       cat("push commits to github: $ git push <remote> <branch>\n")
       cat("push new tag to github: $ git push --tags\n")

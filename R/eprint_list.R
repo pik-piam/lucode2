@@ -13,7 +13,7 @@
 #' 
 #' a <- 1:3
 #' b <- "blub"
-#' lucode:::eprint_list(c("a","b"))
+#' lucode2:::eprint_list(c("a","b"))
 #' 
 eprint_list <- function(var_list, envir=parent.frame()) {
   for(var_name in var_list) {

@@ -9,7 +9,7 @@
 #' @importFrom utils citation vignette
 #' @examples
 #' 
-#' package2readme("lucode")
+#' package2readme("lucode2")
 #' @export
 package2readme <- function(package=".") {
   if(file.exists(paste0(package,"/DESCRIPTION"))) {
@@ -103,7 +103,7 @@ package2readme <- function(package=".") {
     return(x)
   }
   
-  template <- readLines(system.file("extdata","README_template.md",package = "lucode"))
+  template <- readLines(system.file("extdata","README_template.md",package = "lucode2"))
  
   fill <- list(title       = d$get("Title"),
                package     = d$get("Package"),

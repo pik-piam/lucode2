@@ -1,4 +1,4 @@
 library(testthat)
-library(lucode)
+library(lucode2)
 
-test_check("lucode")
+test_check("lucode2")

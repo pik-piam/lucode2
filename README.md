@@ -1,8 +1,8 @@
 # Code Manipulation and Analysis Tools
 
-R package **lucode**, version **3.20.6**
+R package **lucode2**, version **0.1.0**
 
-[![Travis build status](https://travis-ci.com/pik-piam/lucode.svg?branch=master)](https://travis-ci.com/pik-piam/lucode) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1158596.svg)](https://doi.org/10.5281/zenodo.1158596) [![codecov](https://codecov.io/gh/pik-piam/lucode/branch/master/graph/badge.svg)](https://codecov.io/gh/pik-piam/lucode)
+[![Travis build status](https://travis-ci.com/pik-piam/lucode2.svg?branch=master)](https://travis-ci.com/pik-piam/lucode2)  [![codecov](https://codecov.io/gh/pik-piam/lucode2/branch/master/graph/badge.svg)](https://codecov.io/gh/pik-piam/lucode2)
 
 ## Purpose and Functionality
 
@@ -21,7 +21,7 @@ The additional repository can be made available permanently by adding the line a
 After that the most recent version of the package can be installed using `install.packages`:
 
 ```r 
-install.packages("lucode")
+install.packages("lucode2")
 ```
 
 Package updates can be installed using `update.packages` (make sure that the additional repository has been added before running that command):
@@ -36,23 +36,19 @@ In case of questions / problems please contact Jan Philipp Dietrich <dietrich@pi
 
 ## Citation
 
-To cite package **lucode** in publications use:
+To cite package **lucode2** in publications use:
 
-Dietrich J, Klein D, Giannousakis A, Baumstark L, Bonsch M, Bodirsky B, Beier
-F, Koch J (2020). _lucode: Code Manipulation and Analysis Tools_. doi:
-10.5281/zenodo.1158596 (URL: https://doi.org/10.5281/zenodo.1158596), R package
-version 3.20.6, <URL: https://github.com/pik-piam/lucode>.
+Dietrich J, Klein D, Giannousakis A, Bonsch M, Bodirsky B, Baumstark L (2020). _lucode2:
+Code Manipulation and Analysis Tools_. R package version 0.1.0.
 
 A BibTeX entry for LaTeX users is
 
  ```latex
 @Manual{,
-  title = {lucode: Code Manipulation and Analysis Tools},
-  author = {Jan Philipp Dietrich and David Klein and Anastasis Giannousakis and Lavinia Baumstark and Markus Bonsch and Benjamin Leon Bodirsky and Felicitas Beier and Johannes Koch},
+  title = {lucode2: Code Manipulation and Analysis Tools},
+  author = {Jan Philipp Dietrich and David Klein and Anastasis Giannousakis and Markus Bonsch and Benjamin Leon Bodirsky and Lavinia Baumstark},
   year = {2020},
-  note = {R package version 3.20.6},
-  doi = {10.5281/zenodo.1158596},
-  url = {https://github.com/pik-piam/lucode},
+  note = {R package version 0.1.0},
 }
 ```
 

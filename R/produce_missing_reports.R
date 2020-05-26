@@ -11,7 +11,6 @@
 #' @export
 
 produce_missing_reports <- function(modeldir="./") {
-  library(lucode)
   
   maindir <- getwd()
   on.exit(setwd(maindir))
