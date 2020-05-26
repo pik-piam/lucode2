@@ -14,7 +14,7 @@
 #' @param cran If cran-like test is needed
 #' @param update_type 1 if the update is a major revision, 2 (default) for minor, 3 for patch, 4 only for packages in development stage
 #' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch
-#' @seealso \code{\link{codeExtract}},\code{\link{readDeclarations}}
+#' @seealso \code{\link{package2readme}}
 #' @importFrom citation package2zenodo
 #' @export
 #' @examples

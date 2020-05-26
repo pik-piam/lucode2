@@ -14,7 +14,7 @@
 #' for default.cfg or s_max_timesteps=10 for magpie.gms
 #' @author Jan Philipp Dietrich, Markus Bonsch, David Klein
 #' @export
-#' @seealso \code{\link{replace_in_file}},\code{\link{manipulateFile}}
+#' @seealso \code{\link{manipulateFile}}
 #' @examples
 #' 
 #' \dontrun{manipulateConfig("config/default.cfg",input="test_new_yields",title="yihaa",revision=4.2)

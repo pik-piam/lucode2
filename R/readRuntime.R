@@ -19,7 +19,7 @@
 #' hours.
 #' @author David Klein
 #' @importFrom rlang .data
-#' @importFrom dplyr %>% group_by summarize arrange rename
+#' @importFrom dplyr %>% group_by summarize arrange rename mutate
 #' @export
 
 readRuntime <- function(path,plot=FALSE,types=NULL,coupled=FALSE,outfname=NULL) {

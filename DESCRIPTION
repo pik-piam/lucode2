@@ -12,8 +12,8 @@ Authors@R: c(person("Jan Philipp", "Dietrich", email = "dietrich@pik-potsdam.de"
              person("Felicitas", "Beier", role = "aut"),
              person("Johannes", "Koch", role = "aut"))
 Description: A collection of tools which allow to manipulate and analyze code.
-Suggests: igraph, qgraph, tcltk, lusweave, ggplot2, gtools, devtools, mip, curl, visNetwork, testthat, magclass
-Imports: data.table, methods, utils, stringr, dplyr, rlang, citation(>= 0.4.0), desc
+Imports: citation, data.table, desc, dplyr, rlang
+Suggests: devtools, ggplot2, gtools, lusweave, magclass, testthat
 URL: https://github.com/pik-piam/lucode, https://doi.org/10.5281/zenodo.1158596
 BugReports: https://github.com/pik-piam/lucode/issues
 License: BSD_2_clause + file LICENSE

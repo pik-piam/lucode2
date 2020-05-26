@@ -12,7 +12,7 @@
 #' @param ... Further options passed to gsub
 #' @author Jan Philipp Dietrich
 #' @export
-#' @seealso \code{\link{replace_in_file}},\code{\link{manipulateConfig}}
+#' @seealso \code{\link{manipulateConfig}}
 #' @examples
 #' 
 #' #manipulateFile("example.txt",list(c("bla","blub"),c("a","b")))

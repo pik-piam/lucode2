@@ -17,7 +17,6 @@
 #' end of the function for additional information
 #' @author Jan Philipp Dietrich
 #' @export
-#' @seealso \code{\link{codeCheck}}
 #' @examples
 #' \dontrun{
 #' memCheck()
