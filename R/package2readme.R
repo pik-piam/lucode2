@@ -82,7 +82,7 @@ package2readme <- function(package=".") {
       vtext <- "vignettes"
       vtext2 <- "them"
     }
-    tmp <- paste0("vignette(",v[,"Item"],")")
+    tmp <- paste0("vignette(\"",v[,"Item"],"\")")
     tmp <- format(tmp,width = max(nchar(tmp)))
     vig <- paste0(tmp," # ", sub("(source, html)","",v[,"Title"],fixed=TRUE), 
                   collapse="\n")
