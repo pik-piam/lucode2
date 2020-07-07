@@ -49,6 +49,7 @@ updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, p
   nchar <- max(nchar(dirs))
   update_PACKAGES <- FALSE
   for(d in dirs) {
+    if (d=="Archive") next
     setwd(d)
     if(dir.exists(".svn")) {
       if(clean) system("svn revert -Rq .; svn update -q", wait = FALSE)
@@ -61,6 +62,7 @@ updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, p
     setwd("..")
   }
   for(d in dirs) {
+    if (d=="Archive") next
     fd <- format(d,width=nchar)
     curversion <- tryCatch(ap[d,"Version"],error=function(e)return(0))
     setwd(d)

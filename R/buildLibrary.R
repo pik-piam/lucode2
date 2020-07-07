@@ -37,7 +37,7 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
   }  
   
   didYouPull <- function() {
-    cat("Is your repository up-to-date? Did you pull immediatly before running this check? (yes/no)") 
+    cat("Is your repository up-to-date? Did you pull immediately before running this check? (yes/no)") 
     s <- get_line()
     if(!(tolower(s) %in% c("y","yes"))) stop("Please update your repository first, before you proceed!")
   }
