@@ -76,7 +76,7 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
   for(aw in accepted_warnings) {
     ck$warnings <- grep(aw, ck$warnings, value=TRUE,invert=TRUE)
   }
-  accepted_notes <- c("checking package dependencies ... NOTE\nImports includes '.*' non-default packages.\nImporting from so many packages makes the package vulnerable to any of\nthem becoming unavailable.  Move as many as possible to Suggests and\nuse conditionally.")
+  accepted_notes <- c("checking package dependencies ... NOTE\nImports includes \\d+ non-default packages.\nImporting from so many packages makes the package vulnerable to any of\nthem becoming unavailable.  Move as many as possible to Suggests and\nuse conditionally.")
   for(aw in accepted_notes) {
     ck$notes <- grep(aw, ck$notes, value=TRUE,invert=TRUE)
   }
