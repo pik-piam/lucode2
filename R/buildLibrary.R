@@ -12,7 +12,17 @@
 #' 
 #' @param lib Path to the package
 #' @param cran If cran-like test is needed
-#' @param update_type 1 if the update is a major revision, 2 (default) for minor, 3 for patch, 4 only for packages in development stage
+#' @param update_type Either an integer or character string:
+#' 
+#'   | **number**  | **string**    | **description**                          |
+#'   |-------------|---------------|------------------------------------------|
+#'   | 1           | `major`       | for major rewrite of the whole package   |
+#'   | 2 (default) | `minor`       | for new features or improvements         |
+#'   | 3           | `patch`       | for bugfixes and corrections             |
+#'   | 4           | `development` | only for packages in development stage   |
+#' 
+#' @md
+#' 
 #' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch
 #' @seealso \code{\link{package2readme}}
 #' @importFrom citation package2zenodo
@@ -130,7 +140,19 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
     if (any(!(identifier %in% (1:length(update_type)-1)))) stop("This choice (",identifier,") is not possible. Please type in a number between 0 and ",length(update_type)-1)
     return(identifier)
   }
-  if (is.null(update_type)) update_type <- choose_module(".")
+  
+  if (is.null(update_type)) {
+    update_type <- choose_module(".")
+  } else {
+    # convert character update_type parameters to numbers
+    update_type <- switch(as.character(update_type),
+           'major' = 1,       '1' = 1,
+           'minor' = 2,       '2' = 2,
+           'patch' = 3,       '3' = 3,
+           'development' = 4, '4' = 4,
+           # default
+           choose_module('.'))
+  }
   version <- autoversion(version,update_type)
   
   #Change the version in descfile
