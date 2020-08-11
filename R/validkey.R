@@ -17,7 +17,12 @@ validkey <- function(package=".") {
   .read <- function(x,y) return(sub("[^(0-9)]*$","",sub(paste0(x,":[^(0-9)]*"),"",grep(x,y,value=T),perl=T),perl=T))
   version <- .read("Version",descfile)
   date <- as.Date(.read("Date",descfile))
-  vkey <- as.numeric(.read("ValidationKey",descfile))
+  cfgfile <- paste0(package,"/.buildlibrary")
+  if(file.exists(cfgfile)) {
+    vkey <- read_yaml(cfgfile)$ValidationKey
+  } else {
+    vkey <- as.numeric(.read("ValidationKey",descfile))
+  }
   out <- list(version=version, date=date, roxygen=any(grepl("RoxygenNote",descfile)))
   if(length(vkey)==0) {
     out$valid <- FALSE

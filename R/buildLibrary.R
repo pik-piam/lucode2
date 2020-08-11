@@ -26,11 +26,11 @@
 #' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch
 #' @seealso \code{\link{package2readme}}
 #' @importFrom citation package2zenodo
-#' @export
+#' @importFrom yaml read_yaml write_yaml
 #' @examples
 #' 
 #' \dontrun{buildLibrary()}
-#' 
+#' @export 
 buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
 
     get_line <- function(){
@@ -81,11 +81,20 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
   ck <- devtools::check(".",cran=cran)
   
   if(!file.exists(".buildlibrary")) {
+    # if not yet available, add .buildlibrary and add to .Rbuildignore
     cfg <- list(ValidationKey=0, 
                 AcceptedWarnings=c("Warning: package '.*' was built under R version",
                                    "Warning: namespace '.*' is not available and has been replaced"), 
                 AcceptedNotes=NULL)
     write_yaml(cfg,".buildlibrary")
+    message("Created .buildlibrary config file and added it to .Rbuildignore. Please add it to your next commit!")
+    if(file.exists(".Rbuildignore")) {
+      a <- c(readLines(".Rbuildignore") , "^\\.buildlibrary$")
+      if(anyDuplicated(a)) a <- a[!duplicated(a)]
+    } else {
+      a <- "^\\.buildlibrary$"
+    }
+    writeLines(a,".Rbuildignore")
   }
   
   cfg <- read_yaml(".buildlibrary")
@@ -185,9 +194,9 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
   # Update validation key
   ############################################################
   if(cran) {
-    cfg$ValidationKey <- validationkey(version,date)
+    cfg$ValidationKey <- as.integer(validationkey(version,date))
   } else {
-    cfg$ValidationKey <- 0
+    cfg$ValidationKey <- as.integer(0)
   }
   if(any(grepl("ValidationKey:",descfile))) {
     descfile[grep("ValidationKey:",descfile)]<- ""
