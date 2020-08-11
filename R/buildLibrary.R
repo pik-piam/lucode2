@@ -199,7 +199,7 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
     cfg$ValidationKey <- as.character(0)
   }
   if(any(grepl("ValidationKey:",descfile))) {
-    descfile[grep("ValidationKey:",descfile)]<- ""
+    descfile <- descfile[!grepl("ValidationKey:",descfile)]
   } 
   
   ##################################################################
