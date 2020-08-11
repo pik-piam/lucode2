@@ -194,9 +194,9 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
   # Update validation key
   ############################################################
   if(cran) {
-    cfg$ValidationKey <- validationkey(version,date)
+    cfg$ValidationKey <- as.character(validationkey(version,date))
   } else {
-    cfg$ValidationKey <- 0
+    cfg$ValidationKey <- as.character(0)
   }
   if(any(grepl("ValidationKey:",descfile))) {
     descfile[grep("ValidationKey:",descfile)]<- ""

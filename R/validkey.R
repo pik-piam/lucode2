@@ -19,7 +19,7 @@ validkey <- function(package=".") {
   date <- as.Date(.read("Date",descfile))
   cfgfile <- paste0(package,"/.buildlibrary")
   if(file.exists(cfgfile)) {
-    vkey <- read_yaml(cfgfile)$ValidationKey
+    vkey <- as.numeric(read_yaml(cfgfile)$ValidationKey)
   } else {
     vkey <- as.numeric(.read("ValidationKey",descfile))
   }
