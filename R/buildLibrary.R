@@ -70,11 +70,24 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
   ############################################################
   ck <- devtools::check(".",cran=cran)
   
+  if(!file.exists(".buildlibrary")) {
+    cfg <- list(ValidationKey=0, 
+                AcceptedWarnings=c("Warning: package '.*' was built under R version",
+                                   "Warning: namespace '.*' is not available and has been replaced"), 
+                AcceptedNotes=NULL)
+    write_yaml(cfg,".buildlibrary")
+  }
+  
+  cfg <- read_yaml(".buildlibrary")
+  
   #Filter warnings and notes which are accepted
   accepted_warnings <- c("Warning: package '.*' was built under R version",
                          "Warning: namespace '.*' is not available and has been replaced")
-  for(aw in accepted_warnings) {
+  for(aw in cfg$AcceptedWarnings) {
     ck$warnings <- grep(aw, ck$warnings, value=TRUE,invert=TRUE)
+  }
+  for(aw in cfg$AcceptedNotes) {
+    ck$notes <- grep(aw, ck$notes, value=TRUE,invert=TRUE)
   }
   print(ck)
   
@@ -150,20 +163,19 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
   # Update validation key
   ############################################################
   if(cran) {
-    vkey <- paste("ValidationKey:", validationkey(version,date))
+    cfg$ValidationKey <- validationkey(version,date)
   } else {
-    vkey <- "ValidationKey: 0"
+    cfg$ValidationKey <- 0
   }
   if(any(grepl("ValidationKey:",descfile))) {
-    descfile[grep("ValidationKey:",descfile)]<- vkey
-  } else {
-    descfile <- c(descfile,vkey)
-  }
+    descfile[grep("ValidationKey:",descfile)]<- ""
+  } 
   
   ##################################################################
   # Write the modified description files, update metadata and readme
   ##################################################################
   writeLines(descfile,"DESCRIPTION")
+  write_yaml(cfg,".buildlibrary")
   package2zenodo(".")
   package2readme(".")
   
