@@ -10,12 +10,16 @@
 
 githubMetadataExtract <- function(org) {
  filter <- c("name","description","html_url","default_branch","created_at","updated_at",
-             "language","license","stargazers_count","watchers_count","forks") 
+             "language","stargazers_count","watchers_count","forks") 
  xraw <- suppressWarnings(read_yaml(url(paste0("https://api.github.com/orgs/",org,"/repos?per_page=100"))))
  x <- sapply(xraw,function(x, filter) return(x[filter]), filter=filter)
  x <- as.data.frame(t(x))
+ x$language <- as.character(x$language)
+ x$created_at <- format(as.POSIXct(unlist(x$created_at)),"%Y-%m-%d")
+ x$updated_at <- format(as.POSIXct(unlist(x$updated_at)),"%Y-%m-%d")
  x$type <- ""
  x$title <- ""
+ a$license <- NA
  x$published <- TRUE
  x$opensource <- NA
  x$doi <- ""
@@ -24,7 +28,7 @@ githubMetadataExtract <- function(org) {
    if(x[i,"language"]=="R") {
      desc_url <- paste0("https://raw.githubusercontent.com/",org,"/",
                         x[i,"name"],"/",x[i,"default_branch"],"/DESCRIPTION")
-     desc <- try(readLines(url(desc_url)))
+     desc <- try(readLines(url(desc_url)), silent = TRUE)
      if(class(desc)!="try-error") {
        x[i,"type"] <- "package"
        x[i,"license"] <- sub("^.*: *","",grep("License:",desc,value=TRUE))
@@ -48,6 +52,10 @@ githubMetadataExtract <- function(org) {
  x$license[grepl("BSD_2",x$license)] <- "bsd-2"
  x$opensource[x$license %in% c("lgpl-3","gpl-3","gpl-2","bsd-2","mit")] <- TRUE
  x$url <- x$html_url
- x$description <- x$title
- return(x[c("name","type","published","opensource","license","url","doi","description")])
+ x$description[x$title!=""] <- x$title[x$title!=""]
+ x <- x[c("name","type","language","created_at", "updated_at", "published","opensource","license","url","doi","description")]
+ for(i in 1:ncol(x)) x[[i]] <- unlist(x[[i]])
+ out <- list()
+ for(j in 1:nrow(x)) out[[x$name[j]]] <- x[j,]
+ return(out)
 }
