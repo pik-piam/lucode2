@@ -6,14 +6,12 @@
 #' 
 #' @param org name of the organization from which the metadata should be extracted
 #' @author Jan Philipp Dietrich
-#' @examples
-#' githubMetadataExtract("pik-piam")
 #' @export 
 
 githubMetadataExtract <- function(org) {
  filter <- c("name","description","html_url","default_branch","created_at","updated_at",
              "language","license","stargazers_count","watchers_count","forks") 
- xraw <- suppressWarnings(read_yaml(url(paste0("https://api.github.com/orgs/",org,"/repos"))))
+ xraw <- suppressWarnings(read_yaml(url(paste0("https://api.github.com/orgs/",org,"/repos?per_page=100"))))
  x <- sapply(xraw,function(x, filter) return(x[filter]), filter=filter)
  x <- as.data.frame(t(x))
  x$type <- ""
@@ -48,7 +46,6 @@ githubMetadataExtract <- function(org) {
                                   "MIT"="mit"))
  x$license[grepl("GPL-3",x$license)]  <- "gpl-3"
  x$license[grepl("BSD_2",x$license)] <- "bsd-2"
- x$license <- unlist(x$license)
  x$opensource[x$license %in% c("lgpl-3","gpl-3","gpl-2","bsd-2","mit")] <- TRUE
  x$url <- x$html_url
  x$description <- x$title
