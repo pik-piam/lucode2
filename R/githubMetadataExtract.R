@@ -19,7 +19,7 @@ githubMetadataExtract <- function(org) {
  x$updated_at <- format(as.POSIXct(unlist(x$updated_at)),"%Y-%m-%d")
  x$type <- ""
  x$title <- ""
- a$license <- NA
+ x$license <- NA
  x$published <- TRUE
  x$opensource <- NA
  x$doi <- ""
