@@ -69,6 +69,7 @@ updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, p
     vkey <- validkey()
     pattern <- paste0("^",d,"_(.*)\\.tar\\.gz")
     build_version <- max(as.numeric_version(sub(pattern,"\\1",dir("..",pattern=pattern))))
+    if(length(build_version)==0) build_version <- as.numeric_version(0)
     
     if(as.numeric_version(curversion) < as.numeric_version(vkey$version) | force_rebuild) {
       if(vkey$valid | !check | force_rebuild) {
