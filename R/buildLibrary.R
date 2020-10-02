@@ -83,6 +83,7 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
   if(!file.exists(".buildlibrary")) {
     # if not yet available, add .buildlibrary and add to .Rbuildignore
     cfg <- list(ValidationKey=0, 
+                AutocreateReadme=TRUE,
                 AcceptedWarnings=c("Warning: package '.*' was built under R version",
                                    "Warning: namespace '.*' is not available and has been replaced"), 
                 AcceptedNotes=NULL)
@@ -98,6 +99,7 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
   }
   
   cfg <- read_yaml(".buildlibrary")
+  if(is.null(cfg$AutocreateReadme)) cfg$AutocreateReadme <- TRUE
   
   #Filter warnings and notes which are accepted
   accepted_warnings <- c("Warning: package '.*' was built under R version",
@@ -208,7 +210,7 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
   writeLines(descfile,"DESCRIPTION")
   write_yaml(cfg,".buildlibrary")
   package2zenodo(".")
-  package2readme(".")
+  if(isTRUE(cfg$AutocreateReadme)) package2readme(".")
   
   ############################################################
   # Verbosity for version information and git commands
