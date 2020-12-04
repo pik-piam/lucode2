@@ -61,6 +61,7 @@ updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, p
     }  
     setwd("..")
   }
+  dirs <- dirs[order(tolower(dirs))]
   for(d in dirs) {
     if (d=="Archive") next
     fd <- format(d,width=nchar)
