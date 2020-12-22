@@ -2,7 +2,7 @@
 
 R package **[:package:]**, version **[:version:]**
 
-[:travis:] [:zenodo:] [:codecov:]
+[:cran:] [:zenodo:] [:travis:] [:githubactions:] [:codecov:]
 
 ## Purpose and Functionality
 

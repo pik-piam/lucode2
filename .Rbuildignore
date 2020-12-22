@@ -1,6 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-.travis.yml
 ^\.git$
 ^.*\.zenodo.json$
 ^\.buildlibrary$
+^\.github$

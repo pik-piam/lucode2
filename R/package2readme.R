@@ -20,7 +20,40 @@ package2readme <- function(package=".") {
     folder <- NULL
   }
   
-  fillTravis <- function(d){
+  withTravis <- function(folder) {
+    travisfile <- paste0(folder,"/.travis.yml")
+    if(!is.null(folder) && file.exists(travisfile)) return(TRUE)
+    return(FALSE)
+  }
+  
+  withGithubActions <- function(folder) {
+    ghactionsfile <- Sys.glob(paste0(folder,"/.github/workflows/*.y*ml"))
+    if(length(ghactionsfile)>0) return(TRUE)
+    return(FALSE)
+  }
+  
+  withCodecov <- function(folder) {
+    if(withTravis(folder)) {
+      travisfile <- paste0(folder,"/.travis.yml")
+      if(file.exists(travisfile)) {
+        tmp <- readLines(travisfile)
+        if(any(grepl("codecov",tmp))) return(TRUE)
+      }
+    }
+    if(withGithubActions(folder)) {
+      ghafile <- Sys.glob(paste0(folder,"/.github/workflows/*.y*ml"))
+      if(length(ghafile)>0) {
+        for(f in ghafile) {
+          tmp <- readLines(f)
+          if(any(grepl("codecov",tmp))) return(TRUE) 
+        }
+      }
+    }
+    return(FALSE)
+  }
+  
+  fillTravis <- function(d,folder){
+    if(!withTravis(folder)) return("")
     pkg <- d$get("Package")
     z <- grep("github",d$get_urls(),value=TRUE)
     if(length(z)==0) return("")
@@ -28,6 +61,24 @@ package2readme <- function(package=".") {
     out <- paste0("[![Travis build status](https://travis-ci.com", 
                   path, ".svg?branch=master)](https://travis-ci.com",
                   path, ")")
+    return(out)
+  }
+  
+  fillGithubActions <- function(d,folder){
+    if(!withGithubActions(folder)) return("")
+    pkg <- d$get("Package")
+    z <- grep("github",d$get_urls(),value=TRUE)
+    if(length(z)==0) return("")
+    out <- paste0("[![R build status](",
+                  z, "/workflows/check/badge.svg)](",
+                  z, "/actions)")
+    return(out)
+  }
+  
+  fillCRAN <- function(d){
+    pkg <- d$get("Package")
+    out <- paste0("[![CRAN status](https://www.r-pkg.org/badges/version/", pkg,
+                  ")](https://cran.r-project.org/package=", pkg,")")
     return(out)
   }
   
@@ -41,10 +92,7 @@ package2readme <- function(package=".") {
   }
   
   fillCodecov <- function(d,folder) {
-    travisfile <- paste0(folder,"/.travis.yml")
-    if(is.null(folder) || !file.exists(travisfile)) return("")
-    tmp <- readLines(travisfile)
-    if(!(any(grepl("codecov",tmp)))) return("")
+    if(!withCodecov(folder)) return("")
     out <- paste0("[![codecov](https://codecov.io/gh/pik-piam/", d$get("Package"),
                   "/branch/master/graph/badge.svg)](https://codecov.io/gh/pik-piam/", 
                   d$get("Package"),")")
@@ -105,16 +153,18 @@ package2readme <- function(package=".") {
   
   template <- readLines(system.file("extdata","README_template.md",package = "lucode2"))
  
-  fill <- list(title       = d$get("Title"),
-               package     = d$get("Package"),
-               description = d$get("Description"),
-               version     = d$get("Version"),
-               maintainer  = d$get_maintainer(),
-               zenodo      = fillZenodo(d),
-               travis      = fillTravis(d),
-               codecov     = fillCodecov(d,folder),
-               cite        = fillCite(d),
-               vignette    = fillVignette(d,folder))
+  fill <- list(title         = d$get("Title"),
+               package       = d$get("Package"),
+               description   = d$get("Description"),
+               version       = d$get("Version"),
+               maintainer    = d$get_maintainer(),
+               cran          = fillCRAN(d),
+               zenodo        = fillZenodo(d),
+               travis        = fillTravis(d,folder),
+               githubactions = fillGithubActions(d,folder),
+               codecov       = fillCodecov(d,folder),
+               cite          = fillCite(d),
+               vignette      = fillVignette(d,folder))
   
   out <- fillTemplate(template, fill)
 
