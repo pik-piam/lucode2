@@ -38,9 +38,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages(c("remotes", "qgraph","lucode2"), 
-                           repos=c("https://cloud.r-project.org","https://rse.pik-potsdam.de/r/packages/"))
-          remotes::install_deps(dependencies = TRUE)
+          repos <- c("https://cloud.r-project.org","https://rse.pik-potsdam.de/r/packages/")
+          install.packages(c("remotes","lucode2"), repos=repos)
+          remotes::install_deps(dependencies = TRUE, repos=repos)
           remotes::install_cran("covr")
         shell: Rscript {0}
 
