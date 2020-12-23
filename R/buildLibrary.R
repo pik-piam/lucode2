@@ -46,14 +46,20 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
     return(s);
   }  
   
-  didYouPull <- function() {
-    cat("Is your repository up-to-date? Did you pull immediately before running this check? (yes/no)") 
+  askYesNo <- function(question) {
+    cat(paste(question,"(yes/no)"))
     s <- get_line()
-    if(!(tolower(s) %in% c("y","yes"))) stop("Please update your repository first, before you proceed!")
+    if(!(tolower(s) %in% c("y","yes"))) return(FALSE)
+    return(TRUE)
+  }  
+    
+  didYouPull <- function() {
+    if(!askYesNo("Is your repository up-to-date? Did you pull immediately before running this check?")){
+      stop("Please update your repository first, before you proceed!")  
+    }
   }
   didYouPull()
   
-  OS<-Sys.info()["sysname"]
   thisdir<-getwd()
   if(lib!=".") setwd(lib)
   on.exit(setwd(thisdir))
@@ -78,7 +84,6 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
   ############################################################
   #check the library
   ############################################################
-  ck <- devtools::check(".",cran=cran)
   
   if(!file.exists(".buildlibrary")) {
     # if not yet available, add .buildlibrary and add to .Rbuildignore
@@ -99,11 +104,30 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
   }
   
   cfg <- read_yaml(".buildlibrary")
+  
   if(is.null(cfg$AutocreateReadme)) cfg$AutocreateReadme <- TRUE
+  if(is.null(cfg$UseGithubActions) && 
+     askYesNo("Do you want to use GitHub Actions for package testing?")) cfg$UseGithubActions <- TRUE
+  
+  if(isTRUE(cfg$UseGithubActions)) {
+    addGitHubActions(lib)
+    # remove travis related parts
+    travisfile <- paste0(lib,"/.travis.yml")
+    if(file.exists(travisfile)) {
+      file.remove(travisfile)
+      rbuildignore <- paste0(lib,"/.Rbuildignore")
+      if(file.exists(rbuildignore)) {
+        a <- readLines(rbuildignore)
+        writeLines(grep("travis",a,value=TRUE,invert=TRUE), rbuildignore)
+      }
+      travistest <- paste0(lib,"/tests/testthat/test-travisCI.R")
+      if(file.exists(travistest)) file.remove(travistest)
+    }
+  }
+  
+  ck <- devtools::check(".",cran=cran)
   
   #Filter warnings and notes which are accepted
-  accepted_warnings <- c("Warning: package '.*' was built under R version",
-                         "Warning: namespace '.*' is not available and has been replaced")
   for(aw in cfg$AcceptedWarnings) {
     ck$warnings <- grep(aw, ck$warnings, value=TRUE,invert=TRUE)
   }

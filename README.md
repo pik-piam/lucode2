@@ -1,6 +1,6 @@
 # Code Manipulation and Analysis Tools
 
-R package **lucode2**, version **0.7.0**
+R package **lucode2**, version **0.8.0**
 
 [![CRAN status](https://www.r-pkg.org/badges/version/lucode2)](https://cran.r-project.org/package=lucode2)   [![R build status](https://github.com/pik-piam/lucode2/workflows/check/badge.svg)](https://github.com/pik-piam/lucode2/actions) [![codecov](https://codecov.io/gh/pik-piam/lucode2/branch/master/graph/badge.svg)](https://codecov.io/gh/pik-piam/lucode2)
 
@@ -39,7 +39,7 @@ In case of questions / problems please contact Jan Philipp Dietrich <dietrich@pi
 To cite package **lucode2** in publications use:
 
 Dietrich J, Klein D, Giannousakis A, Bonsch M, Bodirsky B, Baumstark L (2020). _lucode2: Code Manipulation and
-Analysis Tools_. R package version 0.7.0.
+Analysis Tools_. R package version 0.8.0.
 
 A BibTeX entry for LaTeX users is
 
@@ -48,7 +48,7 @@ A BibTeX entry for LaTeX users is
   title = {lucode2: Code Manipulation and Analysis Tools},
   author = {Jan Philipp Dietrich and David Klein and Anastasis Giannousakis and Markus Bonsch and Benjamin Leon Bodirsky and Lavinia Baumstark},
   year = {2020},
-  note = {R package version 0.7.0},
+  note = {R package version 0.8.0},
 }
 ```
 
