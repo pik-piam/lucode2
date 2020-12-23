@@ -24,7 +24,7 @@ jobs:
       
       - name: Install dependencies
         run: |
-          sudo apt-get install libcurl4-openssl-dev
+          sudo apt-get install libcurl4-openssl-dev libgit2-dev
 
       - name: Query dependencies
         run: |
@@ -40,7 +40,7 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
           restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
 
-      - name: Install dependencies
+      - name: Install R dependencies
         run: |
           repos <- c("https://cloud.r-project.org","https://rse.pik-potsdam.de/r/packages/")
           install.packages(c("remotes"), repos=repos)
