@@ -7,6 +7,7 @@
 #' @author Jan Philipp Dietrich
 #' @importFrom desc desc
 #' @importFrom utils citation vignette
+#' @importFrom usethis git_remotes
 #' @examples
 #' 
 #' package2readme("lucode2")
@@ -18,6 +19,21 @@ package2readme <- function(package=".") {
   } else {
     d <- desc(package=package)
     folder <- NULL
+  }
+  
+  getGitHubRepo <- function(d,folder) {
+    .harmonize <- function(x) {
+      return(sub("\\.git$","",sub(":","/",sub("^[^@]*@","",sub("https://","",x)))))
+    }
+    z <- grep("github",d$get_urls(),value=TRUE)
+    if(length(z)>0) return(.harmonize(z[1]))
+    if(is.null(folder)) return(NULL)
+    cwd <- getwd()
+    on.exit(setwd(cwd))
+    setwd(folder)
+    out <- try(usethis::git_remotes(), silent=TRUE)
+    if("try-error" %in% class(out)) return(NULL)
+    return(.harmonize(out))
   }
   
   withTravis <- function(folder) {
@@ -55,9 +71,9 @@ package2readme <- function(package=".") {
   fillTravis <- function(d,folder){
     if(!withTravis(folder)) return("")
     pkg <- d$get("Package")
-    z <- grep("github",d$get_urls(),value=TRUE)
-    if(length(z)==0) return("")
-    path <- strsplit(z,"github.com",fixed=TRUE)[[1]][2]
+    z <- getGitHubRepo(d,folder)
+    if(is.null(z)) return("")
+    path <- sub("^[^/]*","",z)
     out <- paste0("[![Travis build status](https://travis-ci.com", 
                   path, ".svg?branch=master)](https://travis-ci.com",
                   path, ")")
@@ -67,10 +83,10 @@ package2readme <- function(package=".") {
   fillGithubActions <- function(d,folder){
     if(!withGithubActions(folder)) return("")
     pkg <- d$get("Package")
-    z <- grep("github",d$get_urls(),value=TRUE)
-    if(length(z)==0) return("")
-    out <- paste0("[![R build status](",
-                  z, "/workflows/check/badge.svg)](",
+    z <- getGitHubRepo(d,folder)
+    if(is.null(z)) return("")
+    out <- paste0("[![R build status](https://",
+                  z, "/workflows/check/badge.svg)](https://",
                   z, "/actions)")
     return(out)
   }
@@ -93,9 +109,11 @@ package2readme <- function(package=".") {
   
   fillCodecov <- function(d,folder) {
     if(!withCodecov(folder)) return("")
-    out <- paste0("[![codecov](https://codecov.io/gh/pik-piam/", d$get("Package"),
-                  "/branch/master/graph/badge.svg)](https://codecov.io/gh/pik-piam/", 
-                  d$get("Package"),")")
+    z <- getGitHubRepo(d,folder)
+    if(is.null(z)) return("")
+    z <- sub("^[^/]*","",z)
+    out <- paste0("[![codecov](https://codecov.io/gh",z,
+                  "/branch/master/graph/badge.svg)](https://codecov.io/gh",z,")")
     return(out)
   }
   
