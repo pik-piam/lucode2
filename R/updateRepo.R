@@ -43,7 +43,7 @@ updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, p
     if(clean) system("svn revert -Rq .")
     system("svn update -q")
   }
-  ap <- suppressWarnings(available.packages(paste0("file:",getwd())))
+  ap <- suppressWarnings(available.packages(paste0("file:",getwd()), filters = "duplicates"))
   
   dirs <- grep("^\\.",list.dirs(recursive = FALSE,full.names = FALSE), value=TRUE, invert=TRUE)
   nchar <- max(nchar(dirs))
