@@ -25,5 +25,8 @@ addGitHubActions <- function(lib="."){
     usethis::use_coverage("codecov")
     file.copy(system.file("extdata/codecov.yml", package="lucode2"),paste0(lib,"/codecov.yml"), overwrite = TRUE)
   }
+  testfolder <- paste0(lib,"/tests/testthat")
+  if (!file.exists(testfolder)) dir.create(testfolder, recursive = TRUE)
+  if (length(dir(testfolder)) == 0) writeLines('skip("dummy test")', paste0(testfolder,"/test-dummy.R"))
 }
   
