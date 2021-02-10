@@ -15,8 +15,10 @@
 #' }
 #' 
 testPackage <- function(repo, tmpLib=tempdir(), ...) {
+  dir.create(tmpLib, recursive = TRUE)
   tmpLib <- normalizePath(tmpLib)
   .libPaths(c(tmpLib,.libPaths()))
   devtools::install_github(repo,...)
+  return(tmpLib)
 }
 
