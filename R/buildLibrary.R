@@ -120,11 +120,11 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
         a <- readLines(rbuildignore)
         writeLines(grep("travis",a,value=TRUE,invert=TRUE), rbuildignore)
       }
+      testfolder <- paste0(lib,"/tests/testthat")
+      if (!file.exists(testfolder)) dir.create(testfolder, recursive = TRUE)
       travistest <- paste0(lib,"/tests/testthat/test-travisCI.R")
-      if(file.exists(travistest)) {
-        file.remove(travistest)
-        if(length(dir(paste0(lib,"/tests/testthat/")))==0) writeLines('skip("dummy test")', paste0(lib,"/tests/testthat/test-dummy.R"))
-      }
+      if (file.exists(travistest)) file.remove(travistest)
+      if (length(dir(testfolder) == 0)) writeLines('skip("dummy test")', paste0(testfolder,"/test-dummy.R"))
     }
   }
   
