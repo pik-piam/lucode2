@@ -39,7 +39,7 @@ modeltests<-function(dir=".",gitdir=NULL, model=NULL,user=NULL){
   # Did all the runs start?
   amtcsv<-read.csv2(paste0(dir,"/config/scenario_config_AMT.csv"))
   start<-NULL
-  amtcsv<-dplyr::filter(amtcsv,start==1)
+  amtcsv <- filter(amtcsv,start==1)
   if (length(paths) < length(amtcsv[,"start"]) ) out["Runs"]<-"Some runs did not start"
 
   # Which runs finished properly?
@@ -48,8 +48,8 @@ modeltests<-function(dir=".",gitdir=NULL, model=NULL,user=NULL){
   mifs <- grep("_withoutPlus",mifs,invert = TRUE, value = TRUE)
   if (length(mifs) < length(amtcsv[,"start"]) ) out["mifs"]<-"Some runs did not write a reporting file"
 
-  a<-quitte::read.quitte(mifs)
-  out[["iamCheck"]]<-iamc::iamCheck(a,model)
+  a <- read.quitte(mifs)
+  out[["iamCheck"]] <- iamCheck(a,model)
 
 
 #  write.csv(c(date(),out[["Runs"]]),file = "README.md")
