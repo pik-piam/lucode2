@@ -11,10 +11,10 @@
 #'
 #' @author Anastasis Giannousakis
 #' @seealso \code{\link{package2readme}}
-#' @importFrom yaml read_yaml write_yaml
-#' @examples
-#'
-#' \dontrun{modeltests()}
+#' @importFrom utils read.csv2
+#' @importFrom dplyr filter
+#' @importFrom iamc iamCheck
+#' @importFrom quitte read.quitte
 #' @export
 modeltests<-function(dir=".",gitdir=NULL, model=NULL,user=NULL){
 
