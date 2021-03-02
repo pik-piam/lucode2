@@ -30,14 +30,12 @@ modeltests<-function(dir=".",gitdir=NULL, model=NULL,user=NULL){
 
   runcode<- paste0("-AMT-.*.202[1-9]-[0-1][0-9]-",format(Sys.Date(),"%d"))
   repeat {
-    print("in")
     if(!any(grepl(runcode,system(paste0("squeue -u ",user," -h -o '%i %q %T %C %M %j %V %L %e %Z'"),intern=TRUE) ))) break
   }
-  print("out")
+
   expr <- paste0("'/.*.",runcode,"_[0-9][0-9].[0-9][0-9].[0-9][0-9]'")
   paths <- system(paste0("find ",dir,"/output -type d -regex ",expr),intern=TRUE)
-  print(runcode)
-  print(paths)
+
   # Did all the runs start?
   amtcsv<-read.csv2(paste0(dir,"/config/scenario_config_AMT.csv"))
   start<-NULL
@@ -49,7 +47,7 @@ modeltests<-function(dir=".",gitdir=NULL, model=NULL,user=NULL){
   mifs <- grep(runcode,mifs,value=TRUE)
   mifs <- grep("_withoutPlus",mifs,invert = TRUE, value = TRUE)
   if (length(mifs) < length(amtcsv[,"start"]) ) out["mifs"]<-"Some runs did not write a reporting file"
-  print(mifs)
+
   a<-quitte::read.quitte(mifs)
   out[["iamCheck"]]<-iamc::iamCheck(a,model)
 
