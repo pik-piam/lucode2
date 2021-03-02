@@ -18,31 +18,6 @@
 #' @export
 modeltests<-function(dir=".",gitdir=NULL, model=NULL,user=NULL){
 
-    get_line <- function(){
-    # gets characters (line) from the terminal or from a connection
-    # and returns it
-    if(interactive()){
-      s <- readline()
-    } else {
-      con <- file("stdin")
-      s <- readLines(con, 1, warn=FALSE)
-      on.exit(close(con))
-    }
-    return(s);
-  }
-
-  askYesNo <- function(question) {
-    cat(paste(question,"(yes/no)"))
-    s <- get_line()
-    if(!(tolower(s) %in% c("y","yes"))) return(FALSE)
-    return(TRUE)
-  }
-
-  didYouPull <- function() {
-    if(!askYesNo("Is your repository up-to-date? Did you pull immediately before running this check?")){
-      stop("Please update your repository first, before you proceed!")
-    }
-  }
 
   if (is.null(model)) stop("Model cannot be NULL")
 
