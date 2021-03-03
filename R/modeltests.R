@@ -26,8 +26,9 @@ modeltests<-function(dir=".",gitdir=NULL, model=NULL,user=NULL){
 
   setwd(dir)
   system("git reset --hard origin/develop && git pull")
-  if (any(grepl("choose_slurmConfig",readLines("start.R")))) file.copy("/p/projects/remind/start.R","start.R",overwrite=T)
-  source("start.R")
+  argv <- "config/scenario_config_AMT.csv"
+  slurmConfig <- "--qos=priority --nodes=1 --tasks-per-node=12"
+  source("start.R",local=TRUE)
   out<-list()
   modelinerror = FALSE
 
@@ -55,7 +56,7 @@ modeltests<-function(dir=".",gitdir=NULL, model=NULL,user=NULL){
   out[["iamCheck"]] <- iamCheck(a,model)
 
   setwd(gitdir)
-  linkgit <- system("git config --get remote.origin.url",intern = TRUE)
+  linkgit <- system("git config --get remote.upstream.url",intern = TRUE)
   setwd(dir)
   rdm<-readLines(paste0(gitdir,"/README_temp.md"))
   rdm <- sub("Date: .*",paste0("Date: ",date(),". Direct link to this report: ",linkgit),rdm)
