@@ -29,6 +29,7 @@ modeltests<-function(dir=".",gitdir=NULL, model=NULL,user=NULL){
   argv <- "config/scenario_config_AMT.csv"
   slurmConfig <- "--qos=priority --nodes=1 --tasks-per-node=12"
   source("start.R",local=TRUE)
+
   out<-list()
   modelinerror = FALSE
 
@@ -37,38 +38,43 @@ modeltests<-function(dir=".",gitdir=NULL, model=NULL,user=NULL){
     if(!any(grepl(runcode,system(paste0("squeue -u ",user," -h -o '%i %q %T %C %M %j %V %L %e %Z'"),intern=TRUE) ))) break
   }
 
-  expr <- paste0("'/.*.",runcode,"_[0-9][0-9].[0-9][0-9].[0-9][0-9]'")
-  paths <- system(paste0("find ",dir,"/output -type d -regex ",expr),intern=TRUE)
+  runcode2 <- sub("-AMT-\\.\\*\\.","",runcode)
 
   # Did all the runs start?
+  runs <- system(paste0("find ",dir,"/output -name 'full.gms'| grep ",runcode2),intern=TRUE)
   amtcsv<-read.csv2(paste0(dir,"/config/scenario_config_AMT.csv"))
   start<-NULL
   amtcsv <- filter(amtcsv,start==1)
-  if (length(paths) < length(amtcsv[,"start"]) ) out["Runs"]<-"Some runs did not start"
+  out["Runs"]<-"yes"
+  if (length(runs) < length(amtcsv[,"start"]) ) out["Runs"]<-"Some runs did not start"
 
   # Which runs finished properly?
-  mifs <- system(paste0("find /p/projects/remind/modeltests/ -name ",model,"*mif"),intern=TRUE)
+  mifs <- system(paste0("find ",dir,"/output -name ",model,"*mif"),intern=TRUE)
   mifs <- grep(runcode,mifs,value=TRUE)
   mifs <- grep("_withoutPlus",mifs,invert = TRUE, value = TRUE)
+  out["mifs"] <- "yes"
   if (length(mifs) < length(amtcsv[,"start"]) ) out["mifs"]<-"Some runs did not write a reporting file"
 
   a <- read.quitte(mifs)
   out[["iamCheck"]] <- iamCheck(a,model)
 
-  setwd(gitdir)
-  linkgit <- system("git config --get remote.upstream.url",intern = TRUE)
-  setwd(dir)
+
   rdm<-readLines(paste0(gitdir,"/README_temp.md"))
-  rdm <- sub("Date: .*",paste0("Date: ",date(),". Direct link to this report: ",linkgit),rdm)
+  rdm <- sub("Date: .*",paste0("Date: ",date(),". Direct link to this report: see top of email"),rdm)
   rdm <- sub("Tested Commit: .*",paste0("Tested commit: ",system("git log -1",intern=TRUE)[[1]]),rdm)
+  
   if (modelinerror) {
    rdm <- sub(paste0(model," is in .*"),paste0(model, " is in ERROR"),rdm)
   } else {
    rdm <- sub(paste0(model," is in .*"),paste0(model, " is in PRODUCTION"),rdm)
   }
+  rdm <- sub("Did all the runs start: .*",paste0("Did all the runs start: ",date(),out["Runs"]),rdm)
+
+  rdm <- sub("Did all the runs converge: .*",paste0("Did all the runs converge: ",date(),out["Conv"]),rdm)
+
+  rdm <- sub("Did all the runs report: .*",paste0("Did all the runs report: ",date(),out["mifs"]),rdm)
   
-  dir.create("modeltesttmp")
-  writeLines(rdm,"modeltesttmp/README.md")
-  sendmail(gitdir,paste0(getwd(),"/modeltesttmp/README.md"))
+  writeLines(rdm,paste0(tempdir(),"/README.md"))
+  sendmail(gitdir,paste0(tempdir(),"/README.md"),"Test Results")
 }
 
