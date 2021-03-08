@@ -44,6 +44,7 @@ updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, p
     system("svn update -q")
   }
   ap <- suppressWarnings(available.packages(paste0("file:",getwd()), filters = "duplicates"))
+  apCRAN <- suppressWarnings(available.packages("https://cloud.r-project.org/src/contrib", filters = "duplicates"))
   
   dirs <- grep("^\\.",list.dirs(recursive = FALSE,full.names = FALSE), value=TRUE, invert=TRUE)
   nchar <- max(nchar(dirs))
@@ -88,8 +89,10 @@ updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, p
         message(".:: ",fd," ",curversion," -> ",vkey$version," invalid commit ::.")
         if(dir.exists(".git")) system("git --no-pager show -s --format='(%h) %s \n%an <%ae>' HEAD")
       }
+    } else if(as.numeric_version(curversion) < build_version) {
+      message(".:: ",fd," ",curversion," -> not build as newer version (",build_version,") is already part of the repo ::.")
     } else if(as.numeric_version(curversion)==as.numeric_version(vkey$version) && 
-              as.numeric_version(curversion)!=build_version){ 
+              as.numeric_version(curversion) > build_version){ 
       error <- try(devtools::build())
       if("try-error" %in% class(error)) {
         message(".:: ",fd," ",curversion," -> package build failed ::.")
@@ -97,10 +100,23 @@ updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, p
       } else {
         message(".:: ",fd," ",curversion," -> package build success ::.")
       }
-    } else message(".:: ",fd," ",format(curversion, width=10)," ok ::.")
+    } else {
+      craninfo <- ""
+      if(d %in% rownames(apCRAN)) {
+        cranversion <- apCRAN[d,"Version"]
+        if(as.numeric_version(cranversion) > as.numeric_version(curversion)) {
+          warning("Package version of package \"",d,"\" is newer on CRAN (",cranversion,
+                  ") compared to PIK-CRAN (",curversion,")! Check version on CRAN immediatly!")
+          craninfo <- paste0(" .::WARNING! CRAN: ",apCRAN[d,"Version"]," !WARNING::.")
+        } else {
+          craninfo <- paste0(" .::CRAN: ",apCRAN[d,"Version"],"::.")
+        }
+      }
+      message(".:: ",fd," ",format(curversion, width=10)," ok ::.", craninfo)
+    }
     setwd("..")
   }
-  if(update_PACKAGES) tools::write_PACKAGES(unpacked = TRUE) 
-  file.remove(pidfile)
+  if (update_PACKAGES) tools::write_PACKAGES(unpacked = TRUE) 
+  if (!is.null(pidfile)) file.remove(pidfile)
   message("done.")
 }
