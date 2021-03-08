@@ -13,13 +13,13 @@
 sendmail <- function(org,file,commitmessage) {
 
   if (!grepl("^/",file)) stop("'file' has to be an absolute path!")
-  goback<-getwd()
-  setwd(org)
-  system("git reset --hard origin/master &&
-          git pull")
-  file.copy(file,"README.md",overwrite=T)
-  system(paste0("git commit -m '",commitmessage,"' README.md &&
-          git push"))
-  setwd(goback)
+
+
+  system(paste0("git -C ",org," reset --hard origin/master &&
+          git -C ",org," pull"))
+  file.copy(file,paste0(org,"/README.md"),overwrite=T)
+  system(paste0("git -C ",org," commit -m '",commitmessage,"' README.md &&
+          git -C ",org," push"))
+
 
 }
