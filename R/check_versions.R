@@ -22,7 +22,7 @@ check_versions <- function(mail=TRUE) {
   if (length(newer)!=0 ) {
     cat("WARNING\n")
     writeLines(paste0("WARNING, following packages have a newer version number on CRAN: ",newer),file)
-    if (mail) sendmail("/p/projects/rd3mod/R/libraries/compCRANtoRSE/",file,commitmessage="PACKAGE WARNING")
+    if (mail) sendmail("/p/projects/rd3mod/R/libraries/compcrantorse/",file,commitmessage="PACKAGE WARNING")
   } else {
     cat("No CRAN packages with newer versions than our RSE packages found\n")
   }
