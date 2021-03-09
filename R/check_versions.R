@@ -3,6 +3,7 @@
 #' Checks if there are CRAN-packages with the same name as those in our PIK-CRAN whose version is newer
 #' 
 #' @param mail whether an email notification is sent to RSE
+#' @param test to test whether auto email sending works
 #' @author Anastasis Giannousakis
 #' @export
 #' @importFrom utils available.packages
@@ -10,7 +11,7 @@
 #' 
 #' \dontrun{check_versions()}
 #' 
-check_versions <- function(mail=TRUE) {
+check_versions <- function(mail=TRUE,test=FALSE) {
   
   a<-available.packages("https://rse.pik-potsdam.de/r/packages/src/contrib")
   
@@ -33,6 +34,7 @@ check_versions <- function(mail=TRUE) {
   } else {
     message("No CRAN packages with newer versions than our RSE packages found\n")
   }
-
+  if (test) writeLines("This is a test mail",file)
+  if (test) sendmail(path="/p/projects/rd3mod/R/libraries/compcrantorse/",file=file,commitmessage="TEST: PACKAGE WARNING",remote=TRUE,reset = TRUE)
 }
 
