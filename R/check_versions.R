@@ -21,13 +21,13 @@ check_versions <- function(mail=TRUE) {
   newer <- NULL
   
   for (i in same) {
-    if (a[i,"Version"] > cran[i,"Version"] ) newer[i]<-i
+    if (cran[i,"Version"] > a[i,"Version"] ) newer[i]<-i
   }
   
   file <- paste0(tempdir(),"/README.md")
 
   if (length(newer)!=0 ) {
-    warning(c("WARNING, following packages have a newer version number on CRAN: ",paste0(newer,collapse = " ")))
+    warning(c("Following packages have a newer version number on CRAN: ",paste0(newer,collapse = " ")))
     writeLines(c("WARNING, following packages have a newer version number on CRAN: ",paste0(newer,collapse = " ")),file)
     if (mail) sendmail(org="/p/projects/rd3mod/R/libraries/compcrantorse/",file=file,commitmessage="PACKAGE WARNING",remote=TRUE,reset = TRUE)
   } else {
