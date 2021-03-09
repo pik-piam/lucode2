@@ -5,7 +5,7 @@
 #' @param mail whether an email notification is sent to RSE
 #' @author Anastasis Giannousakis
 #' @export
-#' @importFrom utils available.packages old.packages
+#' @importFrom utils available.packages
 #' @examples
 #' 
 #' \dontrun{check_versions()}
