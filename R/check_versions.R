@@ -1,4 +1,4 @@
-#' Library cleanup tool
+#' Package version check tool
 #' 
 #' Checks if there are CRAN-packages with the same name as those in our PIK-CRAN whose version is newer
 #' 
@@ -12,19 +12,26 @@
 #' 
 check_versions <- function(mail=TRUE) {
   
-  a<-rownames(available.packages("https://rse.pik-potsdam.de/r/packages/src/contrib"))
+  a<-available.packages("https://rse.pik-potsdam.de/r/packages/src/contrib")
   
-  cran<-rownames(old.packages(repos=getOption("repos")["CRAN"]))
+  cran<-suppressWarnings(available.packages("https://cloud.r-project.org/src/contrib", filters = "duplicates"))
   
-  newer <- intersect(a,cran)
+  same <- intersect(rownames(a),rownames(cran))
+  
+  newer <- NULL
+  
+  for (i in same) {
+    if (a[i,"Version"] > cran[i,"Version"] ) newer[i]<-i
+  }
+  
   file <- paste0(tempdir(),"/README.md")
 
   if (length(newer)!=0 ) {
-    cat("WARNING\n")
-    writeLines(paste0("WARNING, following packages have a newer version number on CRAN: ",newer),file)
-    if (mail) sendmail("/p/projects/rd3mod/R/libraries/compcrantorse/",file,commitmessage="PACKAGE WARNING")
+    warning(c("WARNING, following packages have a newer version number on CRAN: ",paste0(newer,collapse = " ")))
+    writeLines(c("WARNING, following packages have a newer version number on CRAN: ",paste0(newer,collapse = " ")),file)
+    if (mail) sendmail(org="/p/projects/rd3mod/R/libraries/compcrantorse/",file=file,commitmessage="PACKAGE WARNING",remote=TRUE,reset = TRUE)
   } else {
-    cat("No CRAN packages with newer versions than our RSE packages found\n")
+    message("No CRAN packages with newer versions than our RSE packages found\n")
   }
 
 }
