@@ -4,14 +4,12 @@
 #' 
 #' @param mail whether an email notification is sent to RSE
 #' @param test to test whether auto email sending works
+#' @param gitpath if an email notification has to be sent out, the path to the git repo
 #' @author Anastasis Giannousakis
 #' @export
 #' @importFrom utils available.packages
-#' @examples
 #' 
-#' \dontrun{check_versions()}
-#' 
-check_versions <- function(mail=TRUE,test=FALSE) {
+check_versions <- function(mail=TRUE,test=FALSE,gitpath=NULL) {
   
   a<-available.packages("https://rse.pik-potsdam.de/r/packages/src/contrib")
   
@@ -30,11 +28,11 @@ check_versions <- function(mail=TRUE,test=FALSE) {
   if (length(newer)!=0 ) {
     warning(c("Following packages have a newer version number on CRAN: ",paste0(newer,collapse = " ")))
     writeLines(c("WARNING, following packages have a newer version number on CRAN: ",paste0(newer,collapse = " ")),file)
-    if (mail) sendmail(path="/p/projects/rd3mod/R/libraries/compcrantorse/",file=file,commitmessage="PACKAGE WARNING",remote=TRUE,reset = TRUE)
+    if (mail) sendmail(path=gitpath,file=file,commitmessage="PACKAGE WARNING",remote=TRUE,reset = TRUE)
   } else {
     message("No CRAN packages with newer versions than our RSE packages found\n")
   }
   if (test) writeLines("This is a test mail",file)
-  if (test) sendmail(path="/p/projects/rd3mod/R/libraries/compcrantorse/",file=file,commitmessage="TEST: PACKAGE WARNING",remote=TRUE,reset = TRUE)
+  if (test) sendmail(path=gitpath,file=file,commitmessage="TEST: PACKAGE WARNING",remote=TRUE,reset = TRUE)
 }
 
