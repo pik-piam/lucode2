@@ -22,6 +22,18 @@
 #' @export
 
 updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, pidfile=NULL) {
+  
+  .archive <- function(d,curversion) {
+    arch<-paste0("../Archive/",d)
+    lastgz<-paste0("../",d,"_",curversion,".tar.gz")
+    if (all(file.exists(c(arch,lastgz)))) {
+      file.move(lastgz,arch)
+    } else {
+      dir.create(arch)
+      file.move(lastgz,arch)
+    }
+  }
+  
   cat(date(),"\n")
   cwd <- getwd()
   on.exit(setwd(cwd))
@@ -85,12 +97,7 @@ updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, p
         } else {
           update_PACKAGES <- TRUE
           message(".:: ",fd," ",curversion," -> ",vkey$version," build success ::.")
-          if (file.exists(paste0("../Archive/","remind"))) {
-            file.move(paste0("../",d,"_",curversion,".tar.gz"),paste0("../Archive/",d))
-          } else {
-            dir.create(paste0("../Archive/",d))
-            file.move(paste0("../",d,"_",curversion,".tar.gz"),paste0("../Archive/",d))
-          }
+          try(.archive(d,curversion))
         }
       } else {
         message(".:: ",fd," ",curversion," -> ",vkey$version," invalid commit ::.")
@@ -106,12 +113,7 @@ updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, p
         if(dir.exists(".git")) system("git --no-pager show -s --format='(%h) %s \n%an <%ae>' HEAD")
       } else {
         message(".:: ",fd," ",curversion," -> package build success ::.")
-        if (file.exists(paste0("../Archive/","remind"))) {
-          file.move(paste0("../",d,"_",curversion,".tar.gz"),paste0("../Archive/",d))
-        } else {
-          dir.create(paste0("../Archive/",d))
-          file.move(paste0("../",d,"_",curversion,".tar.gz"),paste0("../Archive/",d))
-        }
+        try(.archive(d,curversion))
       }
     } else {
       craninfo <- ""
