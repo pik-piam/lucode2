@@ -1,7 +1,7 @@
 #' Update package repository
 #' 
-#' Function to update an package repository. Run this function on a folder which contains
-#' packages sources as subfolders. Packages should be either managed via svn or git
+#' Function to update a package repository. Run this function on a folder which contains
+#' packages' sources as subfolders. Packages should be either managed via svn or git
 #' in order to be updated properly.
 #' To add a new package to the repo just checkout/clone it into this folder. The
 #' function will automatically detect the new package and add it.
@@ -16,6 +16,7 @@
 #' process. If set this will make sure that the function is not run twice at the same time. 
 #' If set to NULL this will be ignored. The OS needs to provide a "ps" command in order to
 #' have this working.
+#' @importFrom filesstrings file.move
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{buildLibrary}}
 #' @export
@@ -84,6 +85,12 @@ updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, p
         } else {
           update_PACKAGES <- TRUE
           message(".:: ",fd," ",curversion," -> ",vkey$version," build success ::.")
+          if (file.exists(paste0("../Archive/","remind"))) {
+            file.move(paste0("../",d,"_",curversion,".tar.gz"),paste0("../Archive/",d))
+          } else {
+            dir.create(paste0("../Archive/",d))
+            file.move(paste0("../",d,"_",curversion,".tar.gz"),paste0("../Archive/",d))
+          }
         }
       } else {
         message(".:: ",fd," ",curversion," -> ",vkey$version," invalid commit ::.")
@@ -99,6 +106,12 @@ updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, p
         if(dir.exists(".git")) system("git --no-pager show -s --format='(%h) %s \n%an <%ae>' HEAD")
       } else {
         message(".:: ",fd," ",curversion," -> package build success ::.")
+        if (file.exists(paste0("../Archive/","remind"))) {
+          file.move(paste0("../",d,"_",curversion,".tar.gz"),paste0("../Archive/",d))
+        } else {
+          dir.create(paste0("../Archive/",d))
+          file.move(paste0("../",d,"_",curversion,".tar.gz"),paste0("../Archive/",d))
+        }
       }
     } else {
       craninfo <- ""
