@@ -116,7 +116,23 @@ updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, p
     }
     setwd("..")
   }
-  if (update_PACKAGES) tools::write_PACKAGES(unpacked = TRUE) 
+  if (update_PACKAGES) {
+    tools::write_PACKAGES(unpacked = TRUE)
+    for (d in dirs) {
+      if (d=="Archive") next
+      targz <- grep(paste0("^",d,".*.tar.gz"),dir(),value=TRUE)
+      if (length(targz)>1) {
+        newest<-max(numeric_version(sub("^.*_","",sub(".tar.gz$","",targz))))
+        targz <- targz[-grep(newest,targz)]
+        if (file.exists(paste0("Archive/",d))) {
+          file.rename(targz,paste0("Archive/",d,"/",targz))
+        } else {
+          file.create(paste0("Archive/",d))
+          file.rename(targz,paste0("Archive/",d,"/",targz))
+        }
+      }
+    }
+  } 
   if (!is.null(pidfile)) file.remove(pidfile)
   message("done.")
 }
