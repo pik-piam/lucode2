@@ -29,7 +29,7 @@ updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, p
     if (all(file.exists(c(arch,lastgz)))) {
       file.move(lastgz,arch)
     } else {
-      dir.create(arch)
+      if (!file.exists(arch)) dir.create(arch)
       file.move(lastgz,arch)
     }
   }
