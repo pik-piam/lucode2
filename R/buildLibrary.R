@@ -12,6 +12,8 @@
 #' 
 #' @param lib Path to the package
 #' @param cran If cran-like test is needed
+#' @param gitpush If a git commit should happen automatically
+#' @param commitmessage Your commit message
 #' @param update_type Either an integer or character string:
 #' 
 #'   | **number**  | **string**    | **description**                          |
@@ -31,7 +33,7 @@
 #' 
 #' \dontrun{buildLibrary()}
 #' @export 
-buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
+buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL,gitpush=FALSE,commitmessage=NULL){
 
     get_line <- function(){
     # gets characters (line) from the terminal or from a connection
@@ -246,14 +248,18 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL){
   if(update_type != 0){
     cat(paste0("* updating from version"), descfile_version, "to version", toString(version), "... OK\n")
     if(file.exists(".git")){
-      cat("* git repository detected... OK\n")
-      cat("* command suggestions for updating your git repository:\n")
-      cat(rep("=", options()$width), "\n", sep="")
-      cat(paste0('adding and committing: $ git add . && git commit -m "type ', update_type, ' upgrade"\n'))
-      cat(paste0("version tagging: $ git tag ", version, "\n"))
-      cat("push commits to github: $ git push <remote> <branch>\n")
-      cat("push new tag to github: $ git push --tags\n")
-      cat(rep("=", options()$width), "\n", sep="")
+      if (gitpush) {
+        system(paste0('git add . && git commit -m "',commitmessage,' and type ', update_type, ' upgrade" && git push'))
+      } else {
+        cat("* git repository detected... OK\n")
+        cat("* command suggestions for updating your git repository:\n")
+        cat(rep("=", options()$width), "\n", sep="")
+        cat(paste0('adding and committing: $ git add . && git commit -m "type ', update_type, ' upgrade"\n'))
+        cat(paste0("version tagging: $ git tag ", version, "\n"))
+        cat("push commits to github: $ git push <remote> <branch>\n")
+        cat("push new tag to github: $ git push --tags\n")
+        cat(rep("=", options()$width), "\n", sep="")
+      }
     }
   }
   cat("done")
