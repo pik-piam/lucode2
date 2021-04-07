@@ -120,7 +120,7 @@ updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, p
     tools::write_PACKAGES(unpacked = TRUE)
     for (d in dirs) {
       if (d=="Archive") next
-      targz <- grep(paste0("^",d,".*.tar.gz"),dir(),value=TRUE)
+      targz <- grep(paste0("^",d,"_.*.tar.gz"),dir(),value=TRUE)
       if (length(targz)>1) {
         newest<-max(numeric_version(sub("^.*_","",sub(".tar.gz$","",targz))))
         targz <- targz[-grep(newest,targz)]
