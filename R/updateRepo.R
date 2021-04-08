@@ -127,7 +127,7 @@ updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, p
         if (file.exists(paste0("Archive/",d))) {
           file.rename(targz,paste0("Archive/",d,"/",targz))
         } else {
-          dir.create(paste0("Archive/",d),)
+          dir.create(paste0("Archive/",d))
           file.rename(targz,paste0("Archive/",d,"/",targz))
         }
       }
