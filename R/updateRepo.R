@@ -50,7 +50,7 @@ updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, p
   nchar <- max(nchar(dirs))
   update_PACKAGES <- FALSE
   for(d in dirs) {
-    if (d=="Archive") next
+    if (d%in%c("Archive","gdxrrw")) next
     setwd(d)
     if(dir.exists(".svn")) {
       if(clean) system("svn revert -Rq .; svn update -q", wait = FALSE)
@@ -64,7 +64,7 @@ updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, p
   }
   dirs <- dirs[order(tolower(dirs))]
   for(d in dirs) {
-    if (d=="Archive") next
+    if (d%in%c("Archive","gdxrrw")) next
     fd <- format(d,width=nchar)
     curversion <- tryCatch(ap[d,"Version"],error=function(e)return(0))
     setwd(d)
@@ -119,7 +119,7 @@ updateRepo <- function(path=".", check=TRUE, force_rebuild=FALSE, clean=FALSE, p
   if (update_PACKAGES) {
     tools::write_PACKAGES(unpacked = TRUE)
     for (d in dirs) {
-      if (d=="Archive") next
+      if (d%in%c("Archive","gdxrrw")) next
       targz <- grep(paste0("^",d,"_.*.tar.gz"),dir(),value=TRUE)
       if (length(targz)>1) {
         newest<-max(numeric_version(sub("^.*_","",sub(".tar.gz$","",targz))))
