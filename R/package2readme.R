@@ -33,6 +33,7 @@ package2readme <- function(package=".") {
     setwd(folder)
     out <- try(usethis::git_remotes(), silent=TRUE)
     if("try-error" %in% class(out)) return(NULL)
+    out <- ifelse('origin' %in% names(out), out[['origin']], out[[1]])
     return(.harmonize(out))
   }
   
