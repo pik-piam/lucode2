@@ -20,7 +20,7 @@ check_versions <- function(mail=TRUE,test=FALSE,gitpath=NULL) {
   newer <- NULL
   
   for (i in same) {
-    if (cran[i,"Version"] > a[i,"Version"] ) newer[i]<-i
+    if (package_version(cran[i,"Version"]) > package_version(a[i,"Version"]) ) newer[i]<-i
   }
   
   file <- paste0(tempdir(),"/README.md")
