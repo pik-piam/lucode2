@@ -91,7 +91,7 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL,gitpush=FALSE,commitm
   # auto-format
   ############################################################
   if (identical(autoFormat, "none")) {
-    cat("Skipping auto-formatting (to enable it run build_library using the autoFormat parameter)")
+    cat("Skipping auto-formatting (to enable it run buildLibrary with autoFormat set to \"changed\" or \"all\")\n")
   } else if (identical(autoFormat, "changed")) {
     stop("not implemented")
   } else if (identical(autoFormat, "all")) {
@@ -106,7 +106,8 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL,gitpush=FALSE,commitm
 
   if (FALSE && length(devtools::lint()) > 0) {
     stop(paste("The linter produced warnings. You need to address these before submission!",
-               "You can use pass autoFormat set to \"changed\" or \"all\" to buildLibrary to fix some warnings."))
+               "Run devtools::lint() in the RStudio console to see where linter warnings come from.",
+               "You can also run buildLibrary with autoFormat set to \"changed\" or \"all\" to fix some warnings."))
   }
 
   ############################################################
