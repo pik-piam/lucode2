@@ -21,7 +21,7 @@
 #' extract_arguments("ble=hallo")
 #' # [1] "hallo"
 #' }
-#' 
+
 #This file reads arguments from command line. To use this script you have to include it by typing source("readArgs.R")
 #in your script and call readArgs(allowed_args) including all arguments that can be read from command line
 

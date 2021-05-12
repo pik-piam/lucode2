@@ -32,7 +32,7 @@
 #' @seealso \code{\link{package2readme}}
 #' @importFrom citation package2zenodo
 #' @importFrom yaml read_yaml write_yaml
-#' @importFrom styler style_pkg
+#' @importFrom styler style_pkg style_file
 #' @examples
 #' 
 #' \dontrun{buildLibrary()}
@@ -93,7 +93,9 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL,gitpush=FALSE,commitm
   if (identical(autoFormat, "none")) {
     cat("Skipping auto-formatting (to enable it run buildLibrary with autoFormat set to \"changed\" or \"all\")\n")
   } else if (identical(autoFormat, "changed")) {
-    stop("not implemented")
+    changedFiles <- paste0(system("git rev-parse --show-toplevel", intern = TRUE),
+                           system("git diff --name-only", intern = TRUE))
+    sapply(changedFiles, style_file)
   } else if (identical(autoFormat, "all")) {
     style_pkg()
   } else {
