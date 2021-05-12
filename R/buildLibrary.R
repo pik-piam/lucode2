@@ -90,7 +90,7 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL,gitpush=FALSE,commitm
   # auto-format
   ############################################################
   changedFiles <- grep(pattern = "\\.R(md|nw)?$",
-                       x = system("git diff --name-only", intern = TRUE),
+                       x = system("git diff --name-only", intern = TRUE),  # TODO diff to fork commit
                        value = TRUE)
   if (length(changedFiles) > 0) {
     # prepend git root path, so we have absolute paths
