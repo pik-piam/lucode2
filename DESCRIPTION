@@ -17,7 +17,8 @@ Imports:
     dplyr, 
     rlang,
     usethis,
-    yaml
+    yaml,
+    styler
 Suggests: 
     devtools,
     ggplot2,

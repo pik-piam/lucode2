@@ -14,6 +14,9 @@
 #' @param cran If cran-like test is needed
 #' @param gitpush If a git commit should happen automatically
 #' @param commitmessage Your commit message
+#' @param autoFormat One of "none", "changed", "all". "none" disables auto formatting, "changed" applies
+#' auto-format to changed files and "all" auto-formats the whole package. Currently the styler package
+#' is used for auto-formatting.
 #' @param update_type Either an integer or character string:
 #' 
 #'   | **number**  | **string**    | **description**                          |
@@ -29,13 +32,14 @@
 #' @seealso \code{\link{package2readme}}
 #' @importFrom citation package2zenodo
 #' @importFrom yaml read_yaml write_yaml
+#' @importFrom styler style_pkg
 #' @examples
 #' 
 #' \dontrun{buildLibrary()}
 #' @export 
-buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL,gitpush=FALSE,commitmessage=NULL){
+buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL,gitpush=FALSE,commitmessage=NULL, autoFormat = "none"){
 
-    get_line <- function(){
+  get_line <- function(){
     # gets characters (line) from the terminal or from a connection
     # and returns it
     if(interactive()){
@@ -45,8 +49,8 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL,gitpush=FALSE,commitm
       s <- readLines(con, 1, warn=FALSE)
       on.exit(close(con))
     }
-    return(s);
-  }  
+    return(s)
+  }
   
   askYesNo <- function(question) {
     cat(paste(question,"(yes/no)"))
@@ -83,6 +87,28 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL,gitpush=FALSE,commitm
     roxygen <- FALSE
   }
   
+  ############################################################
+  # auto-format
+  ############################################################
+  if (identical(autoFormat, "none")) {
+    cat("Skipping auto-formatting (to enable it run build_library using the autoFormat parameter)")
+  } else if (identical(autoFormat, "changed")) {
+    stop("not implemented")
+  } else if (identical(autoFormat, "all")) {
+    style_pkg()
+  } else {
+    stop(paste("autoFormat =", autoFormat, "is not allowed. Use \"none\", \"changed\" or \"all\" instead."))
+  }
+
+  ############################################################
+  # linter
+  ############################################################
+
+  if (FALSE && length(devtools::lint()) > 0) {
+    stop(paste("The linter produced warnings. You need to address these before submission!",
+               "You can use pass autoFormat set to \"changed\" or \"all\" to buildLibrary to fix some warnings."))
+  }
+
   ############################################################
   #check the library
   ############################################################
