@@ -18,7 +18,8 @@ Imports:
     rlang,
     usethis,
     yaml,
-    styler
+    styler,
+    lintr
 Suggests: 
     devtools,
     ggplot2,

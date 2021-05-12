@@ -14,9 +14,7 @@
 #' @param cran If cran-like test is needed
 #' @param gitpush If a git commit should happen automatically
 #' @param commitmessage Your commit message
-#' @param autoFormat One of "none", "changed", "all". "none" disables auto formatting, "changed" applies
-#' auto-format to changed files and "all" auto-formats the whole package. Currently the styler package
-#' is used for auto-formatting.
+#' @param autoFormat set to TRUE to auto-format changed R files with styler
 #' @param update_type Either an integer or character string:
 #' 
 #'   | **number**  | **string**    | **description**                          |
@@ -33,11 +31,12 @@
 #' @importFrom citation package2zenodo
 #' @importFrom yaml read_yaml write_yaml
 #' @importFrom styler style_pkg style_file
+#' @importFrom lintr lint
 #' @examples
 #' 
 #' \dontrun{buildLibrary()}
 #' @export 
-buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL,gitpush=FALSE,commitmessage=NULL, autoFormat = "none"){
+buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL,gitpush=FALSE,commitmessage=NULL, autoFormat = FALSE){
 
   get_line <- function(){
     # gets characters (line) from the terminal or from a connection
@@ -90,31 +89,30 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL,gitpush=FALSE,commitm
   ############################################################
   # auto-format
   ############################################################
-  if (identical(autoFormat, "none")) {
-    cat("Skipping auto-formatting (to enable it run buildLibrary with autoFormat set to \"changed\" or \"all\")\n")
-  } else if (identical(autoFormat, "changed")) {
-    changedFiles <- grep(pattern = "\\.R(md|nw)?$",
-                         x = system("git diff --name-only", intern = TRUE),
-                         value = TRUE)
-    if (length(changedFiles) > 0) {
-      # prepend git root path, so we have absolute paths
-      changedFiles <- paste0(system("git rev-parse --show-toplevel", intern = TRUE), "/", changedFiles)
-      sapply(changedFiles, style_file)
-    }
-  } else if (identical(autoFormat, "all")) {
-    style_pkg()
+  changedFiles <- grep(pattern = "\\.R(md|nw)?$",
+                       x = system("git diff --name-only", intern = TRUE),
+                       value = TRUE)
+  if (length(changedFiles) > 0) {
+    # prepend git root path, so we have absolute paths
+    changedFiles <- paste0(system("git rev-parse --show-toplevel", intern = TRUE), "/", changedFiles)
+  }
+
+  if (autoFormat) {
+    sapply(changedFiles, style_file)
   } else {
-    stop(paste("autoFormat =", autoFormat, "is not allowed. Use \"none\", \"changed\" or \"all\" instead."))
+    cat("Skipping auto-formatting (to enable it run buildLibrary with autoFormat = TRUE)\n")
   }
 
   ############################################################
   # linter
   ############################################################
-
-  if (FALSE && length(devtools::lint()) > 0) {
-    stop(paste("The linter produced warnings. You need to address these before submission!",
-               "Run devtools::lint() (ideally in the RStudio console) to see where linter warnings come from.",
-               "You can also run buildLibrary with autoFormat set to \"changed\" or \"all\" to fix some warnings."))
+  linterWarningFiles <- names(sapply(changedFiles, lint))
+  if (length(linterWarningFiles) > 0) {
+    cat(paste0("Run lintr::lint(\"", linterWarningFiles, "\") to see linter warnings.", collapse = "\n"))
+    cat("\n")
+    stop(paste("See above for linter warnings. You need to address these before submission!",
+               "You can also run buildLibrary with autoFormat = TRUE to fix some warnings.",
+               "In exceptional cases disabling the linter might be okay, ?lintr::exclude describes how to do that."))
   }
 
   ############################################################
