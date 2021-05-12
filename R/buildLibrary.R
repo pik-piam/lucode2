@@ -93,9 +93,14 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL,gitpush=FALSE,commitm
   if (identical(autoFormat, "none")) {
     cat("Skipping auto-formatting (to enable it run buildLibrary with autoFormat set to \"changed\" or \"all\")\n")
   } else if (identical(autoFormat, "changed")) {
-    changedFiles <- paste0(system("git rev-parse --show-toplevel", intern = TRUE),
-                           system("git diff --name-only", intern = TRUE))
-    sapply(changedFiles, style_file)
+    changedFiles <- grep(pattern = "\\.R(md|nw)?$",
+                         x = system("git diff --name-only", intern = TRUE),
+                         value = TRUE)
+    if (length(changedFiles) > 0) {
+      # prepend git root path, so we have absolute paths
+      changedFiles <- paste0(system("git rev-parse --show-toplevel", intern = TRUE), "/", changedFiles)
+      sapply(changedFiles, style_file)
+    }
   } else if (identical(autoFormat, "all")) {
     style_pkg()
   } else {
@@ -108,7 +113,7 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL,gitpush=FALSE,commitm
 
   if (FALSE && length(devtools::lint()) > 0) {
     stop(paste("The linter produced warnings. You need to address these before submission!",
-               "Run devtools::lint() in the RStudio console to see where linter warnings come from.",
+               "Run devtools::lint() (ideally in the RStudio console) to see where linter warnings come from.",
                "You can also run buildLibrary with autoFormat set to \"changed\" or \"all\" to fix some warnings."))
   }
 
