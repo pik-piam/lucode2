@@ -88,30 +88,30 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL,gitpush=FALSE,commitm
   }
   
   ############################################################
-  # identify changed files
+  # identify files to auto-format and lint
   ############################################################
   # untracked, unstaged, staged files
-  recentlyChanged <- system("git status --porcelain", intern = TRUE) %>%  # get git status in parsable form
-    (function(x) grep("^ ?D", x, value = TRUE, invert = TRUE)) %>%  # filter out deleted files
-    substring(4)  # trim info on modified/added/staged
+  recentlyChanged <- system("git status --porcelain", intern = TRUE) %>% # get git status in parsable form
+    (function(x) grep("^ ?D", x, value = TRUE, invert = TRUE)) %>% # filter out deleted files
+    substring(4) # trim info on modified/added/staged
 
   # files changed in any non-merge commit authored by current git user within the last 30 days
   previouslyChanged <- system(paste0('git log --name-only --format=format:"" --no-merges --since="30 days"',
-                                          ' --author="', system("git config user.email", intern = TRUE), '"'),
-                                   intern = TRUE)
+                                     ' --author="', system("git config user.email", intern = TRUE), '"'),
+                              intern = TRUE)
 
   # remove duplicate files, keep only .R .Rmd .Rnw files
-  changedRFiles <- grep(pattern = "\\.R(md|nw)?$", x = unique(c(recentlyChanged, previouslyChanged)), value = TRUE)
-  if (length(changedRFiles) > 0) {
+  filesToLint <- grep(pattern = "\\.R(md|nw)?$", x = unique(c(recentlyChanged, previouslyChanged)), value = TRUE)
+  if (length(filesToLint) > 0) {
     # prepend git root path, so we get absolute paths
-    changedRFiles <- paste0(system("git rev-parse --show-toplevel", intern = TRUE), "/", changedRFiles)
+    filesToLint <- paste0(system("git rev-parse --show-toplevel", intern = TRUE), "/", filesToLint)
   }
 
   ############################################################
   # auto-format
   ############################################################
   if (autoFormat) {
-    sapply(changedRFiles, style_file)
+    sapply(filesToLint, style_file)
   } else {
     cat("Skipping auto-formatting (to enable it run buildLibrary with autoFormat = TRUE)\n")
   }
@@ -119,7 +119,12 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL,gitpush=FALSE,commitm
   ############################################################
   # linter
   ############################################################
-  linterWarningFiles <- names(sapply(changedFiles, lint))
+  linters <- lintr::with_defaults(
+    line_length_linter = lintr::line_length_linter(120),
+    object_name_linter = lintr::object_name_linter(styles = "camelCase"),
+    cyclocomp_linter = NULL
+    )
+  linterWarningFiles <- names(Filter(function(x) length(x) > 0, sapply(filesToLint, lint, linters = linters)))
   if (length(linterWarningFiles) > 0) {
     cat(paste0("Run lintr::lint(\"", linterWarningFiles, "\") to see linter warnings.", collapse = "\n"))
     cat("\n")
