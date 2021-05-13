@@ -32,6 +32,7 @@
 #' @importFrom yaml read_yaml write_yaml
 #' @importFrom styler style_pkg style_file
 #' @importFrom lintr lint
+#' @importFrom dplyr %>%
 #' @examples
 #' 
 #' \dontrun{buildLibrary()}
@@ -87,18 +88,30 @@ buildLibrary<-function(lib=".",cran=TRUE, update_type=NULL,gitpush=FALSE,commitm
   }
   
   ############################################################
-  # auto-format
+  # identify changed files
   ############################################################
-  changedFiles <- grep(pattern = "\\.R(md|nw)?$",
-                       x = system("git diff --name-only", intern = TRUE),  # TODO diff to fork commit
-                       value = TRUE)
-  if (length(changedFiles) > 0) {
-    # prepend git root path, so we have absolute paths
-    changedFiles <- paste0(system("git rev-parse --show-toplevel", intern = TRUE), "/", changedFiles)
+  # untracked, unstaged, staged files
+  recentlyChanged <- system("git status --porcelain", intern = TRUE) %>%  # get git status in parsable form
+    (function(x) grep("^ ?D", x, value = TRUE, invert = TRUE)) %>%  # filter out deleted files
+    substring(4)  # trim info on modified/added/staged
+
+  # files changed in any non-merge commit authored by current git user within the last 30 days
+  previouslyChanged <- system(paste0('git log --name-only --format=format:"" --no-merges --since="30 days"',
+                                          ' --author="', system("git config user.email", intern = TRUE), '"'),
+                                   intern = TRUE)
+
+  # remove duplicate files, keep only .R .Rmd .Rnw files
+  changedRFiles <- grep(pattern = "\\.R(md|nw)?$", x = unique(c(recentlyChanged, previouslyChanged)), value = TRUE)
+  if (length(changedRFiles) > 0) {
+    # prepend git root path, so we get absolute paths
+    changedRFiles <- paste0(system("git rev-parse --show-toplevel", intern = TRUE), "/", changedRFiles)
   }
 
+  ############################################################
+  # auto-format
+  ############################################################
   if (autoFormat) {
-    sapply(changedFiles, style_file)
+    sapply(changedRFiles, style_file)
   } else {
     cat("Skipping auto-formatting (to enable it run buildLibrary with autoFormat = TRUE)\n")
   }
