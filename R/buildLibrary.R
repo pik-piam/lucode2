@@ -14,7 +14,6 @@
 #' @param cran If cran-like test is needed
 #' @param gitpush If a git commit should happen automatically
 #' @param commitmessage Your commit message
-#' @param autoFormat set to TRUE to auto-format changed R files with styler
 #' @param updateType Either an integer or character string:
 #'
 #'   | **number**  | **string**    | **description**                          |
@@ -27,19 +26,15 @@
 #' @md
 #'
 #' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch
-#' @seealso \code{\link{package2readme}}
+#' @seealso \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
 #' @importFrom citation package2zenodo
 #' @importFrom yaml read_yaml write_yaml
-#' @importFrom styler style_pkg style_file
-#' @importFrom lintr lint
-#' @importFrom dplyr %>%
 #' @examples
 #' \dontrun{
 #' buildLibrary()
 #' }
 #' @export
-buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FALSE, commitmessage = NULL,
-                         autoFormat = FALSE) {
+buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FALSE, commitmessage = NULL) {
   getLine <- function() {
     # gets characters (line) from the terminal or from a connection
     # and returns it
@@ -91,63 +86,12 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   }
 
   ############################################################
-  # identify files to auto-format and lint
-  ############################################################
-  # untracked, unstaged, staged files
-  recentlyChanged <- system("git status --porcelain", intern = TRUE) %>% # get git status in parsable form
-    (function(x) grep("^ ?D", x, value = TRUE, invert = TRUE)) %>% # filter out deleted files
-    substring(4) # trim info on modified/added/staged
-
-  # files changed in any non-merge commit authored by current git user within the last 30 days
-  previouslyChanged <- system(paste0('git log --name-only --format=format:"" --no-merges --since="30 days"',
-                                     ' --author="', system("git config user.email", intern = TRUE), '"'),
-                              intern = TRUE)
-
-  # remove duplicate files, keep only .R .Rmd .Rnw files
-  filesToLint <- grep(pattern = "\\.R(md|nw)?$", x = unique(c(recentlyChanged, previouslyChanged)), value = TRUE)
-  gitRoot <- system("git rev-parse --show-toplevel", intern = TRUE)
-  if (length(filesToLint) > 0) {
-    # prepend git root path, so we get absolute paths
-    filesToLint <- paste0(gitRoot, "/", filesToLint)
-  }
-
-  ############################################################
-  # auto-format
-  ############################################################
-  if (autoFormat) {
-    sapply(filesToLint, style_file)
-  } else {
-    cat("Skipping auto-formatting (to enable it run buildLibrary with autoFormat = TRUE)\n")
-  }
-
-  ############################################################
   # linter
   ############################################################
-  # using a config file instead of explicitly setting linter config here (in code) has the advantage of also being
-  # respected when linting this project in another way, for example lintr::lint(path) or devtools::lint()
-
-  linterConfigPath <- paste0(gitRoot, "/.lintr")
-  if (!file.exists(linterConfigPath)) {
-    cat(paste("linters: with_defaults(",
-              "  line_length_linter = line_length_linter(120),",
-              '  object_name_linter = object_name_linter(styles = "camelCase"),',
-              "  cyclocomp_linter = NULL",
-              "  )\n", sep = "\n"), file = linterConfigPath)
-
-    rbuildignorePath <- paste0(gitRoot, "/.Rbuildignore")
-    cat("^\\.lintr$", file = rbuildignorePath, append = TRUE)
-    system(paste("git add", linterConfigPath, rbuildignorePath))
-    cat("Created linter config file '.lintr' and added it to '.Rbuildignore'. Please commit these files.\n")
-  }
-
-  # names of files with at least one linter warning
-  linterWarningFiles <- names(Filter(function(x) length(x) > 0, sapply(filesToLint, lint)))
-  if (length(linterWarningFiles) > 0) {
-    cat(paste0('Run lintr::lint("', linterWarningFiles, '") to see linter warnings.', collapse = "\n"))
-    cat("\n")
+  if (any(sapply(lint(), length) > 0)) {
     stop(paste(
-      "There were linter warnings, see above for how to show them. You need to address these before submission!",
-      "Running buildLibrary with autoFormat = TRUE might fix some warnings.",
+      "There were linter warnings, run lucode2::lint() to see them. You need to address these before submission!",
+      "Running lucode2::autoFormat() might fix some warnings.",
       "In exceptional cases disabling the linter for some lines might be okay, see ?lintr::exclude on how to do that.",
       sep = "\n"))
   }

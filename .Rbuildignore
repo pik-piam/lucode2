@@ -5,4 +5,4 @@
 ^\.buildlibrary$
 ^\.github$
 ^codecov\.yml$
-^\.lintr$^\.lintr$^\.lintr$
+^\.lintr$
