@@ -80,9 +80,9 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   descfile <- readLines("DESCRIPTION")
   if (any(grepl("RoxygenNote", descfile))) {
     devtools::document(pkg = ".", roclets = c("rd", "collate", "namespace", "vignette"))
-    roxygen <- TRUE  # nolint
+    roxygen <- TRUE  # can we remove this variable? it is not used anywhere in this file
   } else {
-    roxygen <- FALSE  # nolint
+    roxygen <- FALSE
   }
 
   ############################################################

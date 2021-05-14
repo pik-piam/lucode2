@@ -11,9 +11,7 @@
 #' @seealso \code{\link{lint}}, \code{\link{autoFormat}}
 #' @importFrom dplyr %>%
 #' @examples
-#' \dontrun{
 #' lucode2:::getFilesToLint()
-#' }
 getFilesToLint <- function() {
   # untracked, unstaged, staged files
   recentlyChanged <- system("git status --porcelain", intern = TRUE) %>% # get git status in parsable form

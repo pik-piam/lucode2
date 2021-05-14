@@ -10,9 +10,7 @@
 #' @author Pascal Führlich
 #' @seealso \code{\link{getFilesToLint}}, \code{\link{autoFormat}}, \code{\link[lintr]{lint}}
 #' @examples
-#' \dontrun{
 #' lucode2::lint()
-#' }
 #' @export
 lint <- function(filesToLint = getFilesToLint(), useLintrConfigFile = FALSE) {
   if (useLintrConfigFile) {
