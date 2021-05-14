@@ -105,9 +105,10 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
 
   # remove duplicate files, keep only .R .Rmd .Rnw files
   filesToLint <- grep(pattern = "\\.R(md|nw)?$", x = unique(c(recentlyChanged, previouslyChanged)), value = TRUE)
+  gitRoot <- system("git rev-parse --show-toplevel", intern = TRUE)
   if (length(filesToLint) > 0) {
     # prepend git root path, so we get absolute paths
-    filesToLint <- paste0(system("git rev-parse --show-toplevel", intern = TRUE), "/", filesToLint)
+    filesToLint <- paste0(gitRoot, "/", filesToLint)
   }
 
   ############################################################
@@ -122,20 +123,33 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ############################################################
   # linter
   ############################################################
-  linters <- lintr::with_defaults(
-    line_length_linter = lintr::line_length_linter(120),
-    object_name_linter = lintr::object_name_linter(styles = "camelCase"),
-    cyclocomp_linter = NULL
-    )
-  linterWarningFiles <- names(Filter(function(x) length(x) > 0, sapply(filesToLint, lint, linters = linters)))
+  # using a config file instead of explicitly setting linter config here (in code) has the advantage of also being
+  # respected when linting this project in another way, for example lintr::lint(path) or devtools::lint()
+
+  linterConfigPath <- paste0(gitRoot, "/.lintr")
+  if (!file.exists(linterConfigPath)) {
+    cat(paste("linters: with_defaults(",
+              "  line_length_linter = line_length_linter(120),",
+              '  object_name_linter = object_name_linter(styles = "camelCase"),',
+              "  cyclocomp_linter = NULL",
+              "  )\n", sep = "\n"), file = linterConfigPath)
+
+    rbuildignorePath <- paste0(gitRoot, "/.Rbuildignore")
+    cat("^\\.lintr$", file = rbuildignorePath, append = TRUE)
+    system(paste("git add", linterConfigPath, rbuildignorePath))
+    cat("Created linter config file '.lintr' and added it to '.Rbuildignore'. Please commit these files.\n")
+  }
+
+  # names of files with at least one linter warning
+  linterWarningFiles <- names(Filter(function(x) length(x) > 0, sapply(filesToLint, lint)))
   if (length(linterWarningFiles) > 0) {
-    cat(paste0("Run lintr::lint(\"", linterWarningFiles, "\") to see linter warnings.", collapse = "\n"))
+    cat(paste0('Run lintr::lint("', linterWarningFiles, '") to see linter warnings.', collapse = "\n"))
     cat("\n")
     stop(paste(
-      "See above for linter warnings. You need to address these before submission!",
-      "You can also run buildLibrary with autoFormat = TRUE to fix some warnings.",
-      "In exceptional cases disabling the linter might be okay, ?lintr::exclude describes how to do that."
-    ))
+      "There were linter warnings, see above for how to show them. You need to address these before submission!",
+      "Running buildLibrary with autoFormat = TRUE might fix some warnings.",
+      "In exceptional cases disabling the linter for some lines might be okay, see ?lintr::exclude on how to do that.",
+      sep = "\n"))
   }
 
   ############################################################
