@@ -13,5 +13,6 @@
 #' }
 #' @export
 autoFormat <- function(filesToAutoFormat = getFilesToLint()) {
-  sapply(filesToAutoFormat, style_file)
+  style_file(filesToAutoFormat)
+  # TODO test
 }

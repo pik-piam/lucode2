@@ -9,15 +9,13 @@
 #'
 #' @author Pascal Führlich
 #' @seealso \code{\link{lint}}, \code{\link{autoFormat}}
-#' @importFrom dplyr %>%
 #' @examples
 #' lucode2:::getFilesToLint()
 getFilesToLint <- function() {
-  # untracked, unstaged, staged files
-  recentlyChanged <- system("git status --porcelain", intern = TRUE) %>% # get git status in parsable form
-    (function(x) grep("^ ?D", x, value = TRUE, invert = TRUE)) %>% # filter out deleted files
-    substring(4) # trim info on modified/added/staged
+  # use git status to get all changed (untracked, unstaged and staged) files
+  recentlyChanged <- substring(system("git status --porcelain", intern = TRUE), 4)
 
+  # TODO instead of 30 days look at commits since last validation key change (version increment)
   # files changed in any non-merge commit authored by current git user within the last 30 days
   previouslyChanged <- system(paste0('git log --name-only --format=format:"" --no-merges --since="30 days"',
                                      ' --author="', system("git config user.email", intern = TRUE), '"'),
@@ -29,5 +27,9 @@ getFilesToLint <- function() {
     # prepend git root path, so we get absolute paths
     filesToLint <- paste0(system("git rev-parse --show-toplevel", intern = TRUE), "/", filesToLint)
   }
+
+  # remove files that do not exist or we lack read permission for
+  filesToLint <- filesToLint[file.access(filesToLint, mode = 4) == 0]
+  # TODO add test
   return(filesToLint)
 }

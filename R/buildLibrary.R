@@ -14,6 +14,8 @@
 #' @param cran If cran-like test is needed
 #' @param gitpush If a git commit should happen automatically
 #' @param commitmessage Your commit message
+#' @param allowLinterWarnings Set to TRUE to build even though there are linter warnings. This feature will be removed
+#' at some point and should ideally not be used.
 #' @param updateType Either an integer or character string:
 #'
 #'   | **number**  | **string**    | **description**                          |
@@ -25,7 +27,7 @@
 #'
 #' @md
 #'
-#' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch
+#' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Führlich
 #' @seealso \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
 #' @importFrom citation package2zenodo
 #' @importFrom yaml read_yaml write_yaml
@@ -34,7 +36,8 @@
 #' buildLibrary()
 #' }
 #' @export
-buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FALSE, commitmessage = NULL) {
+buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FALSE, commitmessage = NULL,
+                         allowLinterWarnings = TRUE) {
   getLine <- function() {
     # gets characters (line) from the terminal or from a connection
     # and returns it
@@ -80,26 +83,34 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   descfile <- readLines("DESCRIPTION")
   if (any(grepl("RoxygenNote", descfile))) {
     devtools::document(pkg = ".", roclets = c("rd", "collate", "namespace", "vignette"))
-    roxygen <- TRUE  # can we remove this variable? it is not used anywhere in this file
-  } else {
-    roxygen <- FALSE
+  }
+
+  ############################################################
+  # auto-formatter
+  ############################################################
+  if (askYesNo("Do you want to auto-format your code (recommended)?")) {
+    autoFormat()
   }
 
   ############################################################
   # linter
   ############################################################
-  if (any(sapply(lint(), length) > 0)) {
-    stop(paste(
+  if (length(lint()) > 0) {
+    linterErrorMessage <- paste(
       "There were linter warnings, run lucode2::lint() to see them. You need to address these before submission!",
       "Running lucode2::autoFormat() might fix some warnings.",
       "In exceptional cases disabling the linter for some lines might be okay, see ?lintr::exclude on how to do that.",
-      sep = "\n"))
+      sep = "\n")
+    if (allowLinterWarnings) {
+      warning(linterErrorMessage)
+    } else {
+      stop(linterErrorMessage)
+    }
   }
 
   ############################################################
   # check the library
   ############################################################
-
   if (!file.exists(".buildlibrary")) {
     # if not yet available, add .buildlibrary and add to .Rbuildignore
     cfg <- list(
@@ -212,11 +223,12 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
       "no version increment (only to use if version is already incremented!)"
     )
     cat(title, ":\n")
-    cat(paste(c(1:(length(updateType) - 1), 0), updateType, sep = ": "), sep = "\n")
+    updateTypeNumber <- c(1:(length(updateType) - 1), 0)
+    cat(paste(updateTypeNumber, updateType, sep = ": "), sep = "\n")
     cat("\nNumber: ")
     identifier <- getLine()
     identifier <- as.numeric(strsplit(identifier, ",")[[1]])
-    if (any(!(identifier %in% (1:(length(updateType) - 1))))) {
+    if (any(!(identifier %in% updateTypeNumber))) {
       stop("This choice (", identifier, ") is not possible. ",
            "Please type in a number between 0 and ", length(updateType) - 1)
     }
