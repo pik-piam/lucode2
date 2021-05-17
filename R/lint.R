@@ -7,6 +7,7 @@
 #'
 #' @param filesToLint A character vector of paths to files that should be checked by the linter. If filesToLint = "."
 #' the whole package is linted.
+#' @param stopAfterFirstWarning Set to TRUE if the linter should stop after finding a warning.
 #'
 #' @author Pascal Führlich
 #' @seealso \code{\link{getFilesToLint}}, \code{\link{autoFormat}}, \code{\link[lintr]{lint}}
@@ -14,16 +15,23 @@
 #' @examples
 #' lucode2::lint()
 #' @export
-lint <- function(filesToLint = getFilesToLint()) {
+lint <- function(filesToLint = getFilesToLint(), stopAfterFirstWarning = FALSE) {
   linters <- lintr::with_defaults(line_length_linter = lintr::line_length_linter(120),
                                   object_name_linter = lintr::object_name_linter(styles = "camelCase"),
                                   cyclocomp_linter = NULL)
   if (identical(filesToLint, ".")) {
     return(lint_package(linters = linters))
   }
-  linterWarnings <- sapply(filesToLint, lintr::lint, linters = linters)
+  linterWarnings <- NULL
+  for (fileToLint in filesToLint) {
+    cat('Running lucode2::lint("', fileToLint, '")\n', sep = "")
+    linterWarnings <- append(linterWarnings, lintr::lint(fileToLint, linters = linters))
+    if (stopAfterFirstWarning && length(linterWarnings) > 0) {
+      break
+    }
+  }
 
-  # required to combine the results of multiple calls to lintr::lint, taken from lintr:::flatten_lints
+  # combine the results of multiple calls to lintr::lint, taken from lintr:::flatten_lints
   .flattenLints <- function(x) {
     res <- list()
     itr <- 1L
@@ -31,8 +39,7 @@ lint <- function(filesToLint = getFilesToLint()) {
       if (inherits(x, "lint")) {
         res[[itr]] <<- x
         itr <<- itr + 1L
-      }
-      else if (is.list(x)) {
+      } else if (is.list(x)) {
         lapply(x, assignItem)
       }
     }

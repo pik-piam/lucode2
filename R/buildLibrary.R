@@ -14,8 +14,6 @@
 #' @param cran If cran-like test is needed
 #' @param gitpush If a git commit should happen automatically
 #' @param commitmessage Your commit message
-#' @param allowLinterWarnings Set to TRUE to build even though there are linter warnings. This feature will be removed
-#' at some point and should ideally not be used.
 #' @param updateType Either an integer or character string:
 #'
 #'   | **number**  | **string**    | **description**                          |
@@ -36,8 +34,7 @@
 #' buildLibrary()
 #' }
 #' @export
-buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FALSE, commitmessage = NULL,
-                         allowLinterWarnings = TRUE) {
+buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FALSE, commitmessage = NULL) {
   getLine <- function() {
     # gets characters (line) from the terminal or from a connection
     # and returns it
@@ -93,23 +90,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   }
 
   ############################################################
-  # linter
-  ############################################################
-  if (length(lint()) > 0) {
-    linterErrorMessage <- paste(
-      "There were linter warnings, run lucode2::lint() to see them. You need to address these before submission!",
-      "Running lucode2::autoFormat() might fix some warnings.",
-      "In exceptional cases disabling the linter for some lines might be okay, see ?lintr::exclude on how to do that.",
-      sep = "\n")
-    if (allowLinterWarnings) {
-      warning(linterErrorMessage)
-    } else {
-      stop(linterErrorMessage)
-    }
-  }
-
-  ############################################################
-  # check the library
+  # load/create .buildLibrary file
   ############################################################
   if (!file.exists(".buildlibrary")) {
     # if not yet available, add .buildlibrary and add to .Rbuildignore
@@ -120,7 +101,8 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
         "Warning: package '.*' was built under R version",
         "Warning: namespace '.*' is not available and has been replaced"
       ),
-      AcceptedNotes = NULL
+      AcceptedNotes = NULL,
+      allowLinterWarnings = TRUE
     )
     write_yaml(cfg, ".buildlibrary")
     message("Created .buildlibrary config file and added it to .Rbuildignore. Please add it to your next commit!")
@@ -142,6 +124,25 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
     }
   }
 
+  ############################################################
+  # linter
+  ############################################################
+  if (length(lint(stopAfterFirstWarning = TRUE)) > 0) {
+    linterErrorMessage <- paste(
+      "There were linter warnings, run lucode2::lint() to see them. You need to address these before submission!",
+      "Running lucode2::autoFormat() might fix some warnings.",
+      "In exceptional cases disabling the linter for some lines might be okay, see ?lintr::exclude on how to do that.",
+      sep = "\n")
+    if (isFALSE(cfg$allowLinterWarnings)) {
+      stop(linterErrorMessage)
+    } else {
+      warning(linterErrorMessage)
+    }
+  }
+
+  ############################################################
+  # GitHub actions
+  ############################################################
   if (isTRUE(cfg$UseGithubActions)) {
     addGitHubActions(lib)
     # remove travis related parts
@@ -160,6 +161,10 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
       if (length(dir(testfolder) == 0)) writeLines('skip("dummy test")', paste0(testfolder, "/test-dummy.R"))
     }
   }
+
+  ############################################################
+  # check the library
+  ############################################################
 
   ck <- devtools::check(".", cran = cran)
 
