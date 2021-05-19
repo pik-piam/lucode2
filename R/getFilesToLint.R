@@ -15,17 +15,19 @@ getFilesToLint <- function() {
   # use git status to get all changed (untracked, unstaged and staged) files
   recentlyChanged <- substring(system("git status --porcelain", intern = TRUE), 4)
 
-  # TODO instead of 30 days look at commits since last validation key change (version increment)
-  # files changed in any non-merge commit authored by current git user within the last 30 days
-  previouslyChanged <- system(paste0('git log --name-only --format=format:"" --no-merges --since="30 days"',
-                                     ' --author="', system("git config user.email", intern = TRUE), '"'),
-                              intern = TRUE)
+  gitRootPath <- system("git rev-parse --show-toplevel", intern = TRUE)
+  lastVersionTime <- system(paste0('git log -1 --format=format:"%aD" "', gitRootPath, '/.buildlibrary"'), intern = TRUE)
+  gitUserMail <- system("git config user.email", intern = TRUE)
+
+  # files changed in any non-merge commit authored by current git user since the last version
+  previouslyChanged <- system(paste0('git log --name-only --format=format:"" --no-merges ',
+                                     '--since="', lastVersionTime, '" --author="', gitUserMail, '"'), intern = TRUE)
 
   # remove duplicate files, keep only .R .Rmd .Rnw files
   filesToLint <- grep(pattern = "\\.R(md|nw)?$", x = unique(c(recentlyChanged, previouslyChanged)), value = TRUE)
   if (length(filesToLint) > 0) {
     # prepend git root path, so we get absolute paths
-    filesToLint <- paste0(system("git rev-parse --show-toplevel", intern = TRUE), "/", filesToLint)
+    filesToLint <- paste0(gitRootPath, "/", filesToLint)
   }
 
   # remove files that do not exist or we lack read permission for

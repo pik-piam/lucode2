@@ -315,5 +315,5 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
       }
     }
   }
-  cat("done")
+  cat("done\n")
 }
