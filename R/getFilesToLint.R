@@ -32,6 +32,5 @@ getFilesToLint <- function() {
 
   # remove files that do not exist or we lack read permission for
   filesToLint <- filesToLint[file.access(filesToLint, mode = 4) == 0]
-  # TODO add test
   return(filesToLint)
 }

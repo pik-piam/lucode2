@@ -49,5 +49,4 @@ lint <- function(filesToLint = getFilesToLint(), stopAfterFirstWarning = FALSE) 
   linterWarnings <- .flattenLints(linterWarnings)
   class(linterWarnings) <- "lints"
   return(linterWarnings)
-  # TODO test
 }
