@@ -119,9 +119,12 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
 
   if (is.null(cfg$AutocreateReadme)) {
     cfg$AutocreateReadme <- TRUE  # nolint
-    if (askYesNo("Do you want to use GitHub Actions for package testing?")) {
-      cfg$UseGithubActions <- TRUE  # nolint
-    }
+  }
+  if (is.null(cfg$UseGithubActions) && askYesNo("Do you want to use GitHub Actions for package testing?")) {
+    cfg$UseGithubActions <- TRUE  # nolint
+  }
+  if (is.null(cfg$allowLinterWarnings)) {
+    cfg$allowLinterWarnings <- TRUE
   }
 
   ############################################################
