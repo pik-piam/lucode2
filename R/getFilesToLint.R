@@ -16,7 +16,8 @@ getFilesToLint <- function() {
   recentlyChanged <- substring(system("git status --porcelain", intern = TRUE), 4)
 
   gitRootPath <- system("git rev-parse --show-toplevel", intern = TRUE)
-  lastVersionTime <- system(paste0('git log -1 --format=format:"%aD" "', gitRootPath, '/.buildlibrary"'), intern = TRUE)
+  lastVersionTime <- system(paste0('git log -1 --format=format:"%at" "', gitRootPath, '/.buildlibrary"'), intern = TRUE)
+  lastVersionTime <- as.double(lastVersionTime) + 1  # add 1 second, we want only commits that are actually newer
   gitUserMail <- system("git config user.email", intern = TRUE)
 
   # files changed in any non-merge commit authored by current git user since the last version
