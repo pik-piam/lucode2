@@ -3,12 +3,13 @@
 #' Builds R libraries. Includes checks for consistency.
 #'
 #' This function is designed to help building R libraries. It performs the
-#' following steps: \itemize{ \item Version: Determination
-#' of a new version number (Can also be defined by the user). \item Date:
-#' Determination of a the date of the build (Can also be defined by the user).
+#' following steps: \itemize{
+#' \item Version: Determination of a new version number (Can also be defined by the user).
+#' \item Date: Determination of a the date of the build (Can also be defined by the user).
 #' \item R check: Check whether the library is consistent and can be built.
-#' \item Package building Builds the .zip and .tar.gz packages under windows.
-#' Under linux, only the .tar.gz package is built. } The commit has to be performed by the user still.
+#' \item Package building: Builds the .zip and .tar.gz packages under windows.
+#' Under linux, only the .tar.gz package is built. }
+#' The commit has to be performed by the user still.
 #'
 #' @param lib Path to the package
 #' @param cran If cran-like test is needed
@@ -268,20 +269,18 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ############################################################
   # Check for the date
   ############################################################
+  dateToday <- Sys.Date()
   if (any(grepl("Date:", descfile))) {
-    descfileDate <- sub(pattern = "[^(0-9)]*$", replacement = "", perl = TRUE,
-                         x = sub(pattern = "Date:[^(0-9)]*", replacement = "", perl = TRUE,
-                                 x = grep(pattern = "Date:", x = descfile, value = TRUE)))
-    date <- Sys.Date()
-    # Change the date in descfile
-    descfile[grep("Date:", descfile)] <- sub(descfileDate, date, descfile[grep("Date:", descfile)])
+    descfile[grep("Date:", descfile)] <- paste("Date:", dateToday)
+  } else {
+    descfile <- append(descfile, paste("Date:", dateToday))
   }
 
   ############################################################
   # Update validation key
   ############################################################
   if (cran) {
-    cfg$ValidationKey <- as.character(validationkey(version, date))  # nolint
+    cfg$ValidationKey <- as.character(validationkey(version, dateToday))  # nolint
   } else {
     cfg$ValidationKey <- as.character(0)  # nolint
   }
