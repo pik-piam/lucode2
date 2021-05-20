@@ -280,6 +280,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   # Update validation key
   ############################################################
   if (cran) {
+    ununsue <- 1
     cfg$ValidationKey <- as.character(validationkey(version, dateToday))  # nolint
   } else {
     cfg$ValidationKey <- as.character(0)  # nolint
