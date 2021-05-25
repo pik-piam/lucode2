@@ -84,13 +84,6 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   }
 
   ############################################################
-  # auto-formatter
-  ############################################################
-  if (askYesNo("Do you want to auto-format your code (recommended)?")) {
-    autoFormat()
-  }
-
-  ############################################################
   # load/create .buildLibrary file
   ############################################################
   if (!file.exists(".buildlibrary")) {
@@ -119,10 +112,10 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   cfg <- read_yaml(".buildlibrary")
 
   if (is.null(cfg$AutocreateReadme)) {
-    cfg$AutocreateReadme <- TRUE  # nolint
+    cfg$AutocreateReadme <- TRUE # nolint
   }
   if (is.null(cfg$UseGithubActions) && askYesNo("Do you want to use GitHub Actions for package testing?")) {
-    cfg$UseGithubActions <- TRUE  # nolint
+    cfg$UseGithubActions <- TRUE # nolint
   }
   if (is.null(cfg$allowLinterWarnings)) {
     cfg$allowLinterWarnings <- TRUE
@@ -131,16 +124,16 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ############################################################
   # linter
   ############################################################
-  if (length(lint(stopAfterFirstWarning = TRUE)) > 0) {
-    linterErrorMessage <- paste(
+  linterResult <- lint()
+  if (length(linterResult) > 0) {
+    warning(paste(
       "There were linter warnings, run lucode2::lint() to see them. You need to address these before submission!",
       "Running lucode2::autoFormat() might fix some warnings.",
       "In exceptional cases disabling the linter for some lines might be okay, see ?lintr::exclude on how to do that.",
-      sep = "\n")
+      sep = "\n"
+    ))
     if (isFALSE(cfg$allowLinterWarnings)) {
-      stop(linterErrorMessage)
-    } else {
-      warning(linterErrorMessage)
+      return(linterResult)
     }
   }
 
@@ -199,9 +192,13 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   # Version number in the man file
   # Version number in the description file
   descfile <- readLines("DESCRIPTION")
-  descfileVersion <- sub(pattern = "[^(0-9)]*$", replacement = "", perl = TRUE,
-                          x = sub(pattern = "Version:[^(0-9)]*", replacement = "", perl = TRUE,
-                                  x = grep(pattern = "Version", x = descfile, value = TRUE)))
+  descfileVersion <- sub(
+    pattern = "[^(0-9)]*$", replacement = "", perl = TRUE,
+    x = sub(
+      pattern = "Version:[^(0-9)]*", replacement = "", perl = TRUE,
+      x = grep(pattern = "Version", x = descfile, value = TRUE)
+    )
+  )
 
   version <- descfileVersion
 
@@ -238,8 +235,10 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
     identifier <- getLine()
     identifier <- as.numeric(strsplit(identifier, ",")[[1]])
     if (any(!(identifier %in% updateTypeNumber))) {
-      stop("This choice (", identifier, ") is not possible. ",
-           "Please type in a number between 0 and ", length(updateType) - 1)
+      stop(
+        "This choice (", identifier, ") is not possible. ",
+        "Please type in a number between 0 and ", length(updateType) - 1
+      )
     }
     return(identifier)
   }
@@ -280,9 +279,9 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   # Update validation key
   ############################################################
   if (cran) {
-    cfg$ValidationKey <- as.character(validationkey(version, dateToday))  # nolint
+    cfg$ValidationKey <- as.character(validationkey(version, dateToday)) # nolint
   } else {
-    cfg$ValidationKey <- as.character(0)  # nolint
+    cfg$ValidationKey <- as.character(0) # nolint
   }
   if (any(grepl("ValidationKey:", descfile))) {
     descfile <- descfile[!grepl("ValidationKey:", descfile)]
@@ -318,4 +317,5 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
     }
   }
   cat("done\n")
+  return(linterResult)
 }
