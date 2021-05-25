@@ -18,7 +18,7 @@ autoFormat <- function(files = getFilesToLint(), ignoreLintFreeFiles = TRUE, lin
   if (ignoreLintFreeFiles) {
     files <- files[sapply(files, function(aFile) length(lint(aFile)) > 0)]
   }
-  style_file(files)
+  style_file(files, strict = FALSE)
   if (lintAfterwards) {
     return(lint(files))
   }
