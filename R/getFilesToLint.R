@@ -17,8 +17,16 @@ getFilesToLint <- function() {
 
   gitRootPath <- system("git rev-parse --show-toplevel", intern = TRUE)
   lastVersionTime <- system(paste0('git log -1 --format=format:"%at" "', gitRootPath, '/.buildlibrary"'), intern = TRUE)
-  lastVersionTime <- as.double(lastVersionTime) + 1  # add 1 second, we want only commits that are actually newer
-  gitUserMail <- system("git config user.email", intern = TRUE)
+  lastVersionTime <- as.double(lastVersionTime) + 1 # add 1 second, we want only commits that are actually newer
+  if (identical(Sys.info()[["sysname"]], "Windows")) {
+    gitUserMail <- suppressWarnings(system("git config user.email", intern = TRUE))
+    if (!identical(attr(gitUserMail, "status"), NULL)) {
+      # the global gitconfig is not found on some Windows systems -> pass path to it explicitly
+      gitUserMail <- shell("git config -f %UserProfile%/.gitconfig user.email", intern = TRUE) # nolint
+    }
+  } else {
+    gitUserMail <- system("git config user.email", intern = TRUE)
+  }
 
   # files changed in any non-merge commit authored by current git user since the last version
   previouslyChanged <- system(paste0('git log --name-only --format=format:"" --no-merges ',

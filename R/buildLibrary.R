@@ -6,6 +6,7 @@
 #' following steps: \itemize{
 #' \item Version: Determination of a new version number (Can also be defined by the user).
 #' \item Date: Determination of a the date of the build (Can also be defined by the user).
+#' \item Linter: Check for code style problems.
 #' \item R check: Check whether the library is consistent and can be built.
 #' \item Package building: Builds the .zip and .tar.gz packages under windows.
 #' Under linux, only the .tar.gz package is built. }
