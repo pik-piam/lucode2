@@ -36,7 +36,7 @@ lint <- function(files = getFilesToLint()) {
   }
 
   linterWarnings <- lapply(files, function(aFile) {
-    cat('Running lucode2::lint("', aFile, '")\n', sep = "")
+    message('Running lucode2::lint("', aFile, '")')
     return(lintr::lint(aFile, linters = linters))
   })
 

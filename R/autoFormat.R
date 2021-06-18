@@ -17,13 +17,13 @@
 autoFormat <- function(files = getFilesToLint(), ignoreLintFreeFiles = TRUE, lintAfterwards = TRUE) {
   if (ignoreLintFreeFiles) {
     # keep only files with linter warnings
-    files <- files[lapply(files, function(aFile) length(lint(aFile)) > 0)]
+    files <- files[vapply(files, function(aFile) length(lint(aFile)) > 0, logical(1))]
   }
 
   # strict = FALSE -> keep alignment spaces around assignments, keep extra newlines
   # scope is set to not change indentation, otherwise the alignment of continuation lines would be messed up
   style_file(files, strict = FALSE, scope = I(c("tokens", "line_breaks", "spaces")))
-  cat("Hint: In RStudio you can fix indentation in selected lines using ctrl + i.\n")
+  message("Hint: In RStudio you can fix indentation in selected lines using ctrl + i.")
 
   if (lintAfterwards) {
     return(lint(files))
