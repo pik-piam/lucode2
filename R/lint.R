@@ -15,29 +15,39 @@
 #' lucode2::lint()
 #' @export
 lint <- function(files = getFilesToLint()) {
+  # names = deprecated functions, values = replacement hint
+  deprecatedFunctions <- list(
+    fulldim = "use magclass::getItems()"
+  )
+
   linters <- lintr::with_defaults(
+    absolute_path_linter = lintr::absolute_path_linter(),
     line_length_linter = lintr::line_length_linter(120),
+    nonportable_path_linter = lintr::nonportable_path_linter(),
     object_name_linter = lintr::object_name_linter(styles = "camelCase"),
-    cyclocomp_linter = NULL
+    todo_comment_linter = lintr::todo_comment_linter(),
+    undesirable_function_linter = lintr::undesirable_function_linter(c(lintr::default_undesirable_functions,
+                                                                       deprecatedFunctions)),
+    undesirable_operator_linter = lintr::undesirable_operator_linter()
   )
 
   if (identical(files, ".")) {
     return(lint_package(linters = linters))
   }
 
-  linterWarnings <- sapply(files, function(aFile) {
+  linterWarnings <- lapply(files, function(aFile) {
     cat('Running lucode2::lint("', aFile, '")\n', sep = "")
     return(lintr::lint(aFile, linters = linters))
   })
 
   # combine the results of multiple calls to lintr::lint, taken from lintr:::flatten_lints
-  .flattenLints <- function(x) {
+  flattenLints <- function(x) {
     res <- list()
     itr <- 1L
     assignItem <- function(x) {
       if (inherits(x, "lint")) {
-        res[[itr]] <<- x
-        itr <<- itr + 1L
+        res[[itr]] <<- x # nolint
+        itr <<- itr + 1L # nolint
       } else if (is.list(x)) {
         lapply(x, assignItem)
       }
@@ -45,7 +55,7 @@ lint <- function(files = getFilesToLint()) {
     assignItem(x)
     return(structure(res, class = "lints"))
   }
-  linterWarnings <- .flattenLints(linterWarnings)
+  linterWarnings <- flattenLints(linterWarnings)
   class(linterWarnings) <- "lints"
   return(linterWarnings)
 }

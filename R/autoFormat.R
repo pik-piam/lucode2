@@ -17,7 +17,7 @@
 autoFormat <- function(files = getFilesToLint(), ignoreLintFreeFiles = TRUE, lintAfterwards = TRUE) {
   if (ignoreLintFreeFiles) {
     # keep only files with linter warnings
-    files <- files[sapply(files, function(aFile) length(lint(aFile)) > 0)]
+    files <- files[lapply(files, function(aFile) length(lint(aFile)) > 0)]
   }
 
   # strict = FALSE -> keep alignment spaces around assignments, keep extra newlines
