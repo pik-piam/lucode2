@@ -1,8 +1,8 @@
 #' packageInfo
-#' 
-#' Function to print version number and time since last update 
+#'
+#' Function to print version number and time since last update
 #' formatted to the standard output
-#' 
+#'
 #' @param package Package name
 #' @param repos vector of package repositories in which availability of the package should
 #' be checked
@@ -11,30 +11,31 @@
 #' @export
 #' @examples
 #' packageInfo("lucode2")
-#' 
-
-packageInfo <- function(package, repos=c("https://cran.rstudio.com/", "https://rse.pik-potsdam.de/r/packages/")) {
-  version <- try(packageVersion(package), silent=TRUE)
-  if("try-error" %in% class(version)) {
+packageInfo <- function(package, repos = c("https://cran.rstudio.com/", "https://rse.pik-potsdam.de/r/packages/")) {
+  version <- try(packageVersion(package), silent = TRUE)
+  if ("try-error" %in% class(version)) {
     version <- "<not installed>"
     installed <- "<never>"
   } else {
     version <- as.character(version)
-    installed <- paste(as.integer(difftime(Sys.time(),file.mtime(system.file("DESCRIPTION", package=package)), units="mins")), "minutes ago")
+    installed <- paste(
+      as.integer(difftime(Sys.time(), file.mtime(system.file("DESCRIPTION", package = package)), units = "mins")),
+      "minutes ago")
   }
-  
-  cat("\nPackage:", package,"\n")
+
+  cat("\nPackage:", package, "\n")
   cat("Installed version:", version, "\n")
   cat("Last updated:", installed, "\n\n")
 
-  if(!is.null(repos)) {
+  if (!is.null(repos)) {
     cat("Availability in repositories:\n")
     v <- list()
-    for(r in repos) {
-      v$r <- tryCatch(available.packages(paste0(r,"/src/contrib"))[package,"Version"], error=function(e)return("<not available>"))
-      cat(v$r,"|",r,"\n")
+    for (r in repos) {
+      v$r <- tryCatch(
+        available.packages(paste0(r, "/src/contrib"))[package, "Version"],
+        error = function(e) return("<not available>"))
+      cat(v$r, "|", r, "\n")
     }
     cat("\n")
   }
-  
 }

@@ -1,9 +1,9 @@
 #' Replace in File
-#' 
+#'
 #' Function to replace a specific text string in a text file. Useful to
 #' manipulate GAMS sourcecode files.
-#' 
-#' 
+#'
+#'
 #' @param file a connection object or a character string describing the file,
 #' that should be manipulated.
 #' @param manipulations A list of 2 element vectors, containing the search
@@ -14,15 +14,15 @@
 #' @export
 #' @seealso \code{\link{manipulateConfig}}
 #' @examples
-#' 
-#' #manipulateFile("example.txt",list(c("bla","blub"),c("a","b")))
-#' 
-#' 
-manipulateFile <- function(file,manipulations,...) {
-  if(!is.list(manipulations)) manipulations <- list(manipulations)
-  f <- paste(readLines(file),collapse="\n")
-  for(m in manipulations) {
-    f <- gsub(m[1],m[2],f,perl=TRUE,...)
+#'
+#' # manipulateFile("example.txt",list(c("bla","blub"),c("a","b")))
+manipulateFile <- function(file, manipulations, ...) {
+  if (!is.list(manipulations)) {
+    manipulations <- list(manipulations)
   }
-  writeLines(f,file)
+  f <- paste(readLines(file), collapse = "\n")
+  for (m in manipulations) {
+    f <- gsub(m[1], m[2], f, perl = TRUE, ...)
+  }
+  writeLines(f, file)
 }

@@ -5,24 +5,21 @@
 #'
 #' @return no direct return, values are assigned to .GlobalEnv
 #' @author Benjamin Leon Bodirsky
-#' 
+#'
 #' @examples
-#' 
-#' \dontrun{ 
-#' 
-#' test<-function(a="klk",b="kjlkv",kk=3) {paste(a,b,kk)}
-#' functionHeaderDefaults(a="klk",b="kjlkv",kk=3)
-#' print(a)
-#' paste(a,b,kk)
-#' 
+#' \dontrun{
+#' test <- function(a = "klk", b = "kjlkv", kk = 3) {
+#' paste(a, b, kk)
 #' }
-#' 
+#' functionHeaderDefaults(a = "klk", b = "kjlkv", kk = 3)
+#' print(a)
+#' paste(a, b, kk)
+#' }
+#'
 #' @export
-
-
-functionHeaderDefaults<-function(...){
-  parameters<-list(...)
-  for(i in 1:length(parameters)){
-    assign(names(parameters)[i],parameters[[i]])
+functionHeaderDefaults <- function(...) {
+  parameters <- list(...)
+  for (i in seq_along(parameters)) {
+    assign(names(parameters)[i], parameters[[i]])
   }
 }
