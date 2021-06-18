@@ -1,6 +1,6 @@
 #' autoFormat
 #'
-#' Apply auto-formatting using styler::style_file to the given files.
+#' Apply auto-formatting using styler::style_file to the given files. Does not change indentation.
 #'
 #' @param files A character vector of paths to files that should be auto-formatted.
 #' @param ignoreLintFreeFiles If set to TRUE only files with linter warnings are auto-formatted.
@@ -16,9 +16,15 @@
 #' @export
 autoFormat <- function(files = getFilesToLint(), ignoreLintFreeFiles = TRUE, lintAfterwards = TRUE) {
   if (ignoreLintFreeFiles) {
+    # keep only files with linter warnings
     files <- files[sapply(files, function(aFile) length(lint(aFile)) > 0)]
   }
-  style_file(files, strict = FALSE)
+
+  # strict = FALSE -> keep alignment spaces around assignments, keep extra newlines
+  # scope is set to not change indentation, otherwise the alignment of continuation lines would be messed up
+  style_file(files, strict = FALSE, scope = I(c("tokens", "line_breaks", "spaces")))
+  cat("Hint: In RStudio you can fix indentation in selected lines using ctrl + i.\n")
+
   if (lintAfterwards) {
     return(lint(files))
   }
