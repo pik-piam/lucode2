@@ -3,8 +3,8 @@
 #' Apply auto-formatting using styler::style_file to the given files. Does not change indentation.
 #'
 #' @param files A character vector of paths to files that should be auto-formatted.
-#' @param ignoreLintFreeFiles If set to TRUE only files with linter warnings are auto-formatted.
-#' @param lintAfterwards If set to TRUE return linter results of the auto-formatted files.
+#' @param ignoreLintFreeFiles If set to TRUE (the default) files without linter warnings are not auto-formatted.
+#' @param lintAfterwards If set to TRUE (the default) return linter results for the auto-formatted files.
 #'
 #' @author Pascal Führlich
 #' @seealso \code{\link{getFilesToLint}}
