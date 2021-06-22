@@ -2,12 +2,14 @@
 #'
 #' Check the given files for linter warnings using lintr::lint.
 #'
-#' Returns a named list, where the names are the paths to the linted files and the values are lists containing the
-#' linter warnings.
+#' For files in the tests folder less strict rules are applied, e.g. using ::: usually leads to a linter warning, but
+#' not in tests.
 #'
 #' @param files A character vector of paths to files that should be checked by the linter. If set to "."
 #' the whole package is linted.
-#'
+#' @return A named list, where the names are the paths to the linted files and the values are lists containing the
+#' linter warnings.
+
 #' @author Pascal Führlich
 #' @seealso \code{\link{getFilesToLint}}, \code{\link{autoFormat}}, \code{\link[lintr]{lint}}
 #' @importFrom lintr lint_package

@@ -2,9 +2,10 @@
 #'
 #' Get the R files the current git user is responsible for to pass them to the auto-formatter and/or linter.
 #'
-#' The files of interest are identified using git via system(). All currently untracked files and changed files (both
-#' staged and unstaged) are collected, as well as files that were changed in a non-merge commit authored by the current
-#' git user within the last 30 days. Of those the absolute paths to .R, .Rmd and .Rnw files are returned as a character
+#' The files of interest are identified using git via system() (and shell() for windows). All currently untracked files
+#' and changed files (both staged and unstaged) are collected, as well as files that were changed in non-merge commits
+#' authored by the current git user since the last version commit (a commit where .buildLibrary was changed, presumably
+#' to increase the version number). Of those the absolute paths to .R, .Rmd and .Rnw files are returned as a character
 #' vector.
 #'
 #' @author Pascal Führlich
