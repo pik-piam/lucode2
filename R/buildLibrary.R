@@ -30,7 +30,7 @@
 #' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Führlich
 #' @seealso \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
 #' @importFrom citation package2zenodo
-#' @importFrom yaml read_yaml write_yaml
+#' @importFrom yaml write_yaml
 #' @examples
 #' \dontrun{
 #' buildLibrary()
@@ -52,75 +52,32 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
 
   askYesNo <- function(question) {
     cat(paste(question, "(yes/no)"))
-    s <- getLine()
-    if (!(tolower(s) %in% c("y", "yes"))) {
-      return(FALSE)
-    }
-    return(TRUE)
+    return(isTRUE(tolower(getLine()) %in% c("y", "yes")))
   }
 
-  didYouPull <- function() {
-    if (!askYesNo("Is your repository up-to-date? Did you pull immediately before running this check?")) {
-      stop("Please update your repository first, before you proceed!")
-    }
+  # did user pull?
+  if (!askYesNo("Is your repository up-to-date? Did you pull immediately before running this check?")) {
+    stop("Please update your repository first, before you proceed!")
   }
-  didYouPull()
-
-  thisdir <- getwd()
-  if (lib != ".") setwd(lib)
-  on.exit(setwd(thisdir))
 
   ####################################################################
   # Remove the auxiliary Rcheck folders
   ###################################################################
-  rcheckfolders <- grep(".Rcheck$", base::list.dirs(full.names = FALSE, recursive = FALSE), value = TRUE)
+  rcheckfolders <- grep(".Rcheck$", list.dirs(path = lib, full.names = FALSE, recursive = FALSE), value = TRUE)
   unlink(rcheckfolders, recursive = TRUE)
 
   ####################################################################
   # Check if roxygen is used and run roxygenize if required
   ###################################################################
-  descfile <- readLines("DESCRIPTION")
+  descfile <- readLines(file.path(lib, "DESCRIPTION"))
   if (any(grepl("RoxygenNote", descfile))) {
-    devtools::document(pkg = ".", roclets = c("rd", "collate", "namespace", "vignette"))
+    devtools::document(pkg = lib, roclets = c("rd", "collate", "namespace", "vignette"))
   }
 
   ############################################################
   # load/create .buildLibrary file
   ############################################################
-  if (!file.exists(".buildlibrary")) {
-    # if not yet available, add .buildlibrary and add to .Rbuildignore
-    cfg <- list(
-      ValidationKey = 0,
-      AutocreateReadme = TRUE,
-      AcceptedWarnings = c(
-        "Warning: package '.*' was built under R version",
-        "Warning: namespace '.*' is not available and has been replaced"
-      ),
-      AcceptedNotes = NULL,
-      allowLinterWarnings = TRUE
-    )
-    write_yaml(cfg, ".buildlibrary")
-    message("Created .buildlibrary config file and added it to .Rbuildignore. Please add it to your next commit!")
-    if (file.exists(".Rbuildignore")) {
-      a <- c(readLines(".Rbuildignore"), "^\\.buildlibrary$")
-      if (anyDuplicated(a)) a <- a[!duplicated(a)]
-    } else {
-      a <- "^\\.buildlibrary$"
-    }
-    writeLines(a, ".Rbuildignore")
-  }
-
-  cfg <- read_yaml(".buildlibrary")
-
-  if (is.null(cfg$AutocreateReadme)) {
-    cfg$AutocreateReadme <- TRUE # nolint
-  }
-  if (is.null(cfg$UseGithubActions) && askYesNo("Do you want to use GitHub Actions for package testing?")) {
-    cfg$UseGithubActions <- TRUE # nolint
-  }
-  if (is.null(cfg$allowLinterWarnings)) {
-    cfg$allowLinterWarnings <- TRUE
-  }
+  cfg <- loadBuildLibraryConfig(lib)
 
   ############################################################
   # linter
@@ -128,10 +85,10 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   linterResult <- lint()
   if (length(linterResult) > 0) {
     warning(paste(
-      "There were linter warnings, run lucode2::lint() to see them. You need to address these before submission!",
-      "Running lucode2::autoFormat() might fix some warnings.",
-      "In exceptional cases disabling the linter for some lines might be okay, see ?lintr::exclude on how to do that.",
-      sep = "\n"
+      "There were linter warnings. It is not mandatory to fix them, they do not prevent buildLibrary from finishing ",
+      "normally. Still, please fix all linter warnings in new code and ideally also some in old code. Running",
+      "lucode2::autoFormat() might fix some warnings. If really needed, see ?lintr::exclude on how to disable the",
+      "linter for some lines."
     ))
     if (isFALSE(cfg$allowLinterWarnings)) {
       return(linterResult)
@@ -143,28 +100,13 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ############################################################
   if (isTRUE(cfg$UseGithubActions)) {
     addGitHubActions(lib)
-    # remove travis related parts
-    travisfile <- paste0(lib, "/.travis.yml")
-    if (file.exists(travisfile)) {
-      file.remove(travisfile)
-      rbuildignore <- paste0(lib, "/.Rbuildignore")
-      if (file.exists(rbuildignore)) {
-        a <- readLines(rbuildignore)
-        writeLines(grep("travis", a, value = TRUE, invert = TRUE), rbuildignore)
-      }
-      testfolder <- paste0(lib, "/tests/testthat")
-      if (!file.exists(testfolder)) dir.create(testfolder, recursive = TRUE)
-      travistest <- paste0(lib, "/tests/testthat/test-travisCI.R")
-      if (file.exists(travistest)) file.remove(travistest)
-      if (length(dir(testfolder) == 0)) writeLines('skip("dummy test")', paste0(testfolder, "/test-dummy.R"))
-    }
   }
 
   ############################################################
   # check the library
   ############################################################
 
-  ck <- devtools::check(".", cran = cran)
+  ck <- devtools::check(lib, cran = cran)
 
   # Filter warnings and notes which are accepted
   for (aw in cfg$AcceptedWarnings) {
@@ -192,7 +134,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ##########################################################
   # Version number in the man file
   # Version number in the description file
-  descfile <- readLines("DESCRIPTION")
+  descfile <- readLines(file.path(lib, "DESCRIPTION"))
   descfileVersion <- sub(
     pattern = "[^(0-9)]*$", replacement = "", perl = TRUE,
     x = sub(
@@ -202,24 +144,6 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   )
 
   version <- descfileVersion
-
-  autoversion <- function(oldVersion, upt, defLengths = 3) {
-    oldVersion <- numeric_version(oldVersion)
-    if (upt == 0) {
-      return(oldVersion)
-    }
-    for (i in 1:upt) if (is.na(oldVersion[1, i])) oldVersion[1, i] <- 0
-    if (oldVersion[1, upt] == 0 & upt == 4) oldVersion[1, upt] <- 9000
-    oldVersion[1, upt] <- as.numeric(oldVersion[1, i]) + 1
-    if (defLengths > upt) {
-      for (i in (upt + 1):defLengths) {
-        oldVersion[1, i] <- 0
-      }
-    }
-    oldVersion <- oldVersion[1, 1:max(upt, defLengths)]
-    return(oldVersion)
-  }
-
 
   chooseModule <- function(title = "Package check successful! Please choose an update type") {
     updateType <- c(
@@ -261,7 +185,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
       chooseModule()
     )
   }
-  version <- autoversion(version, updateType)
+  version <- incrementVersion(version, updateType)
 
   # Change the version in descfile
   descfile[grep("Version", descfile)] <- sub(descfileVersion, version, descfile[grep("Version", descfile)])
@@ -279,11 +203,8 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ############################################################
   # Update validation key
   ############################################################
-  if (cran) {
-    cfg$ValidationKey <- as.character(validationkey(version, dateToday)) # nolint
-  } else {
-    cfg$ValidationKey <- as.character(0) # nolint
-  }
+  cfg$ValidationKey <- as.character(if (cran) validationkey(version, dateToday) else 0) # nolint
+
   if (any(grepl("ValidationKey:", descfile))) {
     descfile <- descfile[!grepl("ValidationKey:", descfile)]
   }
@@ -291,10 +212,12 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ##################################################################
   # Write the modified description files, update metadata and readme
   ##################################################################
-  writeLines(descfile, "DESCRIPTION")
-  write_yaml(cfg, ".buildlibrary")
-  package2zenodo(".")
-  if (isTRUE(cfg$AutocreateReadme)) package2readme(".")
+  writeLines(descfile, file.path(lib, "DESCRIPTION"))
+  write_yaml(cfg, file.path(lib, ".buildlibrary"))
+  package2zenodo(lib)
+  if (isTRUE(cfg$AutocreateReadme)) {
+    package2readme(lib)
+  }
 
   ############################################################
   # Verbosity for version information and git commands
@@ -302,18 +225,20 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
 
   if (updateType != 0) {
     cat(paste0("* updating from version"), descfileVersion, "to version", toString(version), "... OK\n")
-    if (file.exists(".git")) {
+    if (file.exists(file.path(lib, ".git"))) {
       if (gitpush) {
-        system(paste0('git add . && git commit -m "', commitmessage, " and type ", updateType, ' upgrade" && git push'))
+        system(paste0('cd "', lib, '" && git add . && git commit -m "', commitmessage, " and type ", updateType,
+                      ' upgrade" && git push && cd -'))
       } else {
         cat("* git repository detected... OK\n")
         cat("* command suggestions for updating your git repository:\n")
-        cat(rep("=", options()$width), "\n", sep = "")
+        cat(rep("=", getOption("width")), "\n", sep = "")
+        cat(paste0('change into the package dir: $ cd "', lib, '"\n'))
         cat(paste0('adding and committing: $ git add . && git commit -m "type ', updateType, ' upgrade"\n'))
         cat(paste0("version tagging: $ git tag ", version, "\n"))
         cat("push commits to github: $ git push <remote> <branch>\n")
         cat("push new tag to github: $ git push --tags\n")
-        cat(rep("=", options()$width), "\n", sep = "")
+        cat(rep("=", getOption("width")), "\n", sep = "")
       }
     }
   }

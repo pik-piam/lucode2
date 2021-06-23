@@ -26,10 +26,10 @@ lint <- function(files = getFilesToLint()) {
   linterArgsForTests <- list(
     absolute_path_linter = lintr::absolute_path_linter(),
     line_length_linter = lintr::line_length_linter(120),
-    nonportable_path_linter = lintr::nonportable_path_linter(),
     object_name_linter = lintr::object_name_linter(styles = "camelCase"),
     todo_comment_linter = lintr::todo_comment_linter(),
-    undesirable_function_linter = lintr::undesirable_function_linter(deprecatedFunctions)
+    undesirable_function_linter = lintr::undesirable_function_linter(deprecatedFunctions),
+    cyclocomp_linter = lintr::cyclocomp_linter(25)
   )
   lintersForTests <- do.call(lintr::with_defaults, linterArgsForTests)
 
