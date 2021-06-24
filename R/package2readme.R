@@ -8,13 +8,13 @@
 #' @importFrom desc desc
 #' @importFrom utils citation vignette
 #' @importFrom usethis git_remotes
+#' @importFrom withr with_dir with_options
 #' @examples
-#'
 #' package2readme("lucode2")
 #' @export
 package2readme <- function(package = ".") {
-  if (file.exists(paste0(package, "/DESCRIPTION"))) {
-    d <- desc(file = paste0(package, "/DESCRIPTION"))
+  if (file.exists(file.path(package, "DESCRIPTION"))) {
+    d <- desc(file = file.path(package, "DESCRIPTION"))
     folder <- package
   } else {
     d <- desc(package = package)
@@ -26,39 +26,44 @@ package2readme <- function(package = ".") {
       return(sub("\\.git$", "", sub(":", "/", sub("^[^@]*@", "", sub("https://", "", x)))))
     }
     z <- grep("github", d$get_urls(), value = TRUE)
-    if (length(z) > 0) return(.harmonize(z[1]))
-    if (is.null(folder)) return(NULL)
-    cwd <- getwd()
-    on.exit(setwd(cwd))
-    setwd(folder)
-    out <- try(usethis::git_remotes(), silent = TRUE)
-    if ("try-error" %in% class(out)) return(NULL)
+    if (length(z) > 0) {
+      return(.harmonize(z[1]))
+    }
+    if (is.null(folder)) {
+      return(NULL)
+    }
+    with_dir(folder, {
+      out <- try(usethis::git_remotes(), silent = TRUE)
+    })
+    if ("try-error" %in% class(out)) {
+      return(NULL)
+    }
     out <- ifelse("origin" %in% names(out), out[["origin"]], out[[1]])
     return(.harmonize(out))
   }
 
   withTravis <- function(folder) {
-    travisfile <- paste0(folder, "/.travis.yml")
+    travisfile <- file.path(folder, ".travis.yml")
     if (!is.null(folder) && file.exists(travisfile)) return(TRUE)
     return(FALSE)
   }
 
   withGithubActions <- function(folder) {
-    ghactionsfile <- Sys.glob(paste0(folder, "/.github/workflows/*.y*ml"))
+    ghactionsfile <- Sys.glob(file.path(folder, ".github", "workflows", "*.y*ml"))
     if (length(ghactionsfile) > 0) return(TRUE)
     return(FALSE)
   }
 
   withCodecov <- function(folder) {
     if (withTravis(folder)) {
-      travisfile <- paste0(folder, "/.travis.yml")
+      travisfile <- file.path(folder, ".travis.yml")
       if (file.exists(travisfile)) {
         tmp <- readLines(travisfile)
         if (any(grepl("codecov", tmp))) return(TRUE)
       }
     }
     if (withGithubActions(folder)) {
-      ghafile <- Sys.glob(paste0(folder, "/.github/workflows/*.y*ml"))
+      ghafile <- Sys.glob(file.path(folder, ".github", "workflows", "*.y*ml"))
       if (length(ghafile) > 0) {
         for (f in ghafile) {
           tmp <- readLines(f)
@@ -118,10 +123,13 @@ package2readme <- function(package = ".") {
 
 
   fillCite <- function(d) {
-    out <- c("\nTo cite package **", d$get("Package"), "** in publications use:\n\n",
-             format(citation(package = d$get("Package")), style = "text"),
-             "\n\nA BibTeX entry for LaTeX users is\n\n ```latex\n",
-             format(citation(package = d$get("Package")), style = "bibtex"), "\n```")
+    # the format function wraps lines according to the width option, set explicitly so it is always the same
+    with_options(list(width = 1000), {
+      out <- c("\nTo cite package **", d$get("Package"), "** in publications use:\n\n",
+               format(citation(package = d$get("Package")), style = "text"),
+               "\n\nA BibTeX entry for LaTeX users is\n\n ```latex\n",
+               format(citation(package = d$get("Package")), style = "bibtex"), "\n```")
+    })
     return(paste(out, collapse = ""))
   }
 
@@ -130,8 +138,8 @@ package2readme <- function(package = ".") {
       v <- vignette(package = d$get("Package"))$results
     } else {
       v <- matrix(nrow = 0, ncol = 2, dimnames = list(NULL, c("Item", "Title")))
-      path <- paste0(folder, "/vignettes/")
-      vig <- dir(path, pattern = "*.Rmd")
+      path <- file.path(folder, "vignettes")
+      vig <- list.files(path, pattern = "*.Rmd")
       for (i in vig) {
         tmp <- readLines(paste0(path, i), n = 5)
         tmp <- c(Item = sub(".Rmd", "", i, fixed = TRUE),
@@ -186,9 +194,13 @@ package2readme <- function(package = ".") {
   out <- fillTemplate(template, fill)
 
   if (!is.null(folder)) {
-    readmefile <- paste0(folder, "/README.md")
-    if (file.exists(readmefile)) message("Updated README.md file")
-    else message("Added README.md file")
+    readmefile <- file.path(folder, "README.md")
+    if (file.exists(readmefile)) {
+      message("Updated README.md file")
+    }
+    else {
+      message("Added README.md file")
+    }
     writeLines(out, readmefile)
   } else {
     message(paste(out, collapse = "\n"))
