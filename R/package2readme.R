@@ -141,7 +141,7 @@ package2readme <- function(package = ".") {
       path <- file.path(folder, "vignettes")
       vig <- list.files(path, pattern = "*.Rmd")
       for (i in vig) {
-        tmp <- readLines(paste0(path, i), n = 5)
+        tmp <- readLines(file.path(path, i), n = 5)
         tmp <- c(Item = sub(".Rmd", "", i, fixed = TRUE),
                  Title = gsub("title: \"(.*)\"$", "\\1", grep("title:", tmp, value = TRUE)))
         v <- rbind(v, tmp)
