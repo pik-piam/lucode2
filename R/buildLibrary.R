@@ -84,14 +84,20 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ############################################################
   linterResult <- lint()
   if (length(linterResult) > 0) {
-    warning(paste(
-      "There were linter warnings. It is not mandatory to fix them, they do not prevent buildLibrary from finishing",
-      "normally. Still, please fix all linter warnings in new code and ideally also some in old code. Running",
-      "lucode2::autoFormat() might fix some warnings. If really needed, see ?lintr::exclude on how to disable the",
-      "linter for some lines."
-    ))
     if (isFALSE(cfg$allowLinterWarnings)) {
+      warning(paste(
+        "There were linter warnings. They have to be fixed to successfully complete lucode2::buildLibrary. Running",
+        "lucode2::autoFormat() might fix some warnings. If really needed (e.g. to prevent breaking an interface), see",
+        "?lintr::exclude on how to disable the linter for some lines."
+      ))
       return(linterResult)
+    } else {
+      warning(paste(
+        "There were linter warnings. It is not mandatory to fix them, they do not prevent buildLibrary from finishing",
+        "normally. Still, please fix all linter warnings in new code and ideally also some in old code. Running",
+        "lucode2::autoFormat() might fix some warnings. If really needed (e.g. to prevent breaking an interface), see",
+        "?lintr::exclude on how to disable the linter for some lines."
+      ))
     }
   }
 
