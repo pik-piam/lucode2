@@ -122,7 +122,8 @@ package2readme <- function(package = ".") { #nolint
   }
 
   fillRUniverse <- function(nameOfPackage) {
-    return(paste0("![r-universe](https://pik-piam.r-universe.dev/badges/", nameOfPackage, ")"))
+    return(paste0("![[r-universe](https://pik-piam.r-universe.dev/badges/", nameOfPackage,
+                  ")](https://pik-piam.r-universe.dev/ui#builds)"))
   }
 
   fillCite <- function(d) {
