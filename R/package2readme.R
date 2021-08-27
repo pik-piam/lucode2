@@ -122,8 +122,12 @@ package2readme <- function(package = ".") { #nolint
   }
 
   fillRUniverse <- function(nameOfPackage) {
-    return(paste0("[![r-universe](https://pik-piam.r-universe.dev/badges/", nameOfPackage,
-                  ")](https://pik-piam.r-universe.dev/ui#builds)"))
+    pikPiamRUniversePackages <- suppressWarnings(readLines("https://pik-piam.r-universe.dev/packages"))
+    pikPiamRUniversePackages <- gsub('[\\", ]', "", pikPiamRUniversePackages)
+    return(ifelse(nameOfPackage %in% pikPiamRUniversePackages,
+                  paste0("[![r-universe](https://pik-piam.r-universe.dev/badges/", nameOfPackage,
+                         ")](https://pik-piam.r-universe.dev/ui#builds)"),
+                  ""))
   }
 
   fillCite <- function(d) {
