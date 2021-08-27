@@ -122,6 +122,7 @@ package2readme <- function(package = ".") { #nolint
   }
 
   fillRUniverse <- function(nameOfPackage) {
+    # suppress warning about missing trailing newline
     pikPiamRUniversePackages <- suppressWarnings(readLines("https://pik-piam.r-universe.dev/packages"))
     pikPiamRUniversePackages <- gsub('[\\", ]', "", pikPiamRUniversePackages)
     return(ifelse(nameOfPackage %in% pikPiamRUniversePackages,

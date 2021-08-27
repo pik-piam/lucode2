@@ -8,11 +8,15 @@
 #' to increase the version number). Of those the absolute paths to .R, .Rmd and .Rnw files are returned as a character
 #' vector.
 #'
+#' @param pathToGitRepo path to a git repository
+#'
 #' @author Pascal Führlich
 #' @seealso \code{\link{lint}}, \code{\link{autoFormat}}
+#' @importFrom withr local_dir
 #' @examples
 #' lucode2:::getFilesToLint()
-getFilesToLint <- function() {
+getFilesToLint <- function(pathToGitRepo = ".") {
+  local_dir(pathToGitRepo)
   # use git status to get all changed (untracked, unstaged and staged) files
   recentlyChanged <- substring(system("git status --porcelain", intern = TRUE), 4)
 
@@ -20,9 +24,10 @@ getFilesToLint <- function() {
   lastVersionTime <- system(paste0('git log -1 --format=format:"%at" "', gitRootPath, '/.buildlibrary"'), intern = TRUE)
   lastVersionTime <- as.double(lastVersionTime) + 1 # add 1 second, we want only commits that are actually newer
   if (identical(Sys.info()[["sysname"]], "Windows")) {
+    # on windows the global gitconfig is usually not found, so suppress warning
     gitUserMail <- suppressWarnings(system("git config user.email", intern = TRUE))
     if (!identical(attr(gitUserMail, "status"), NULL)) {
-      # the global gitconfig is not found on some Windows systems -> pass path to it explicitly
+      # pass path to global gitconfig explicitly
       gitUserMail <- shell("git config -f %UserProfile%/.gitconfig user.email", intern = TRUE) # nolint
     }
   } else {

@@ -4,7 +4,10 @@
 \alias{getFilesToLint}
 \title{getFilesToLint}
 \usage{
-getFilesToLint()
+getFilesToLint(pathToGitRepo = ".")
+}
+\arguments{
+\item{pathToGitRepo}{path to a git repository}
 }
 \description{
 Get the R files the current git user is responsible for to pass them to the auto-formatter and/or linter.

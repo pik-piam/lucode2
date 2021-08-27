@@ -1,5 +1,3 @@
-context("automatic readme creation for package")
-
 test_that("readme can be created from package", {
   expect_invisible(r <- package2readme("lucode2"))
   expect_gt(length(grep("lucode2", r)), 0)

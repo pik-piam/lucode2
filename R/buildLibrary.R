@@ -53,8 +53,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
 
   # did user pull?
   if (!askYesNo("Is your repository up-to-date? Did you pull immediately before running this check?",
-                default = FALSE,
-                prompts = "y/n/c")) {
+                prompts = "Y/n/c")) {
     stop("Please update your repository first, before you proceed!")
   }
 
@@ -80,7 +79,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ############################################################
   # linter
   ############################################################
-  linterResult <- lint()
+  linterResult <- lint(getFilesToLint(lib))
   if (length(linterResult) > 0) {
     if (isFALSE(cfg$allowLinterWarnings)) {
       warning(paste(
@@ -107,10 +106,34 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   }
 
   ############################################################
+  # run tests
+  ############################################################
+  testResults <- devtools::test(lib) %>%
+    lapply(function(x) x[["results"]]) %>%
+    Reduce(f = append, init = list()) # combine results from all tests
+
+  if (any(vapply(testResults, function(testResult) inherits(testResult, "error"), logical(1)))) {
+    stop("Some tests failed, please fix them first.")
+  }
+
+  unacceptedWarnings <- testResults %>%
+    Filter(f = function(result) inherits(result, c("warning", "expectation_warning"))) %>% # keep only warnings
+    Filter(f = function(aWarning) { # filter accepted warnings
+      return(!any(vapply(cfg[["AcceptedWarnings"]],
+                         function(acceptedWarning) grepl(acceptedWarning, aWarning[["message"]]),
+                         logical(1))))
+    })
+  if (length(unacceptedWarnings) > 0) {
+    stop("The package tests produced warnings. Before submission you need to take care of the following warnings:\n",
+         unacceptedWarnings %>%
+           vapply(function(x) paste0('test "', x[["test"]], '": ', x[["message"]]), character(1)) %>%
+           paste(collapse = "\n"))
+  }
+
+  ############################################################
   # check the library
   ############################################################
-
-  ck <- devtools::check(lib, cran = cran)
+  ck <- devtools::check(lib, cran = cran, args = "--no-tests")
 
   # Filter warnings and notes which are accepted
   for (aw in cfg$AcceptedWarnings) {
@@ -228,17 +251,17 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ###################################################################
   gitignore <- readLines(".gitignore")
   if ("*.Rd" %in% gitignore || file.exists(file.path("man", ".gitignore"))) {
-    cat("*.Rd files are currently ignored, but they should be commited.\n")
+    message("*.Rd files are currently ignored, but they should be commited.")
 
     if ("*.Rd" %in% gitignore) {
-      cat('removing "*.Rd" from .gitignore\n')
+      message('removing "*.Rd" from .gitignore')
       writeLines(gitignore[gitignore != "*.Rd" &
                              gitignore != "# Help files (because they will be created automatically by roxygen)"],
                  ".gitignore")
     }
 
     if (file.exists(file.path("man", ".gitignore"))) {
-      cat("removing man/.gitignore\n")
+      message("removing man/.gitignore")
       file.remove(file.path("man", ".gitignore"))
     }
   }
