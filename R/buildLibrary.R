@@ -31,12 +31,13 @@
 #' @seealso \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
 #' @importFrom citation package2zenodo
 #' @importFrom yaml write_yaml
+#' @importFrom utils askYesNo
 #' @examples
 #' \dontrun{
 #' buildLibrary()
 #' }
 #' @export
-buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FALSE, commitmessage = NULL) {
+buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FALSE, commitmessage = NULL) { # nolint
   getLine <- function() {
     # gets characters (line) from the terminal or from a connection
     # and returns it
@@ -50,13 +51,10 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
     return(s)
   }
 
-  askYesNo <- function(question) {
-    cat(paste(question, "(yes/no)"))
-    return(isTRUE(tolower(getLine()) %in% c("y", "yes")))
-  }
-
   # did user pull?
-  if (!askYesNo("Is your repository up-to-date? Did you pull immediately before running this check?")) {
+  if (!askYesNo("Is your repository up-to-date? Did you pull immediately before running this check?",
+                default = FALSE,
+                prompts = "y/n/c")) {
     stop("Please update your repository first, before you proceed!")
   }
 
@@ -223,6 +221,26 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   package2zenodo(lib)
   if (isTRUE(cfg$AutocreateReadme)) {
     package2readme(lib)
+  }
+
+  ####################################################################
+  # Make sure man/*.Rd files are not ignored
+  ###################################################################
+  gitignore <- readLines(".gitignore")
+  if ("*.Rd" %in% gitignore || file.exists(file.path("man", ".gitignore"))) {
+    cat("*.Rd files are currently ignored, but they should be commited.\n")
+
+    if ("*.Rd" %in% gitignore) {
+      cat('removing "*.Rd" from .gitignore\n')
+      writeLines(gitignore[gitignore != "*.Rd" &
+                             gitignore != "# Help files (because they will be created automatically by roxygen)"],
+                 ".gitignore")
+    }
+
+    if (file.exists(file.path("man", ".gitignore"))) {
+      cat("removing man/.gitignore\n")
+      file.remove(file.path("man", ".gitignore"))
+    }
   }
 
   ############################################################
