@@ -19,7 +19,10 @@
 lint <- function(files = getFilesToLint()) {
   # names = deprecated functions, values = replacement hint
   deprecatedFunctions <- list(
-    fulldim = "use magclass::getItems()"
+    fulldim = "use magclass::getItems()",
+    getRegionList = "use magclass::getItems()",
+    getRegions = "use magclass::getItems()",
+    `getRegions<-` = "use magclass::getItems()"
   )
 
   # in tests undesirable functions (excepted deprecated ones) and undesirable operators are ok

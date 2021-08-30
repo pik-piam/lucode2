@@ -12,7 +12,7 @@
 #' @examples
 #' package2readme("lucode2")
 #' @export
-package2readme <- function(package = ".") {
+package2readme <- function(package = ".") { #nolint
   if (file.exists(file.path(package, "DESCRIPTION"))) {
     d <- desc(file = file.path(package, "DESCRIPTION"))
     folder <- package
@@ -121,6 +121,15 @@ package2readme <- function(package = ".") {
     return(out)
   }
 
+  fillRUniverse <- function(nameOfPackage) {
+    # suppress warning about missing trailing newline
+    pikPiamRUniversePackages <- suppressWarnings(readLines("https://pik-piam.r-universe.dev/packages"))
+    pikPiamRUniversePackages <- gsub('[\\", ]', "", pikPiamRUniversePackages)
+    return(ifelse(nameOfPackage %in% pikPiamRUniversePackages,
+                  paste0("[![r-universe](https://pik-piam.r-universe.dev/badges/", nameOfPackage,
+                         ")](https://pik-piam.r-universe.dev/ui#builds)"),
+                  ""))
+  }
 
   fillCite <- function(d) {
     # the format function wraps lines according to the width option, set explicitly so it is always the same
@@ -176,8 +185,6 @@ package2readme <- function(package = ".") {
     return(x)
   }
 
-  template <- readLines(system.file("extdata", "README_template.md", package = "lucode2"))
-
   fill <- list(title         = d$get("Title"),
                package       = d$get("Package"),
                description   = d$get("Description"),
@@ -188,17 +195,18 @@ package2readme <- function(package = ".") {
                travis        = fillTravis(d, folder),
                githubactions = fillGithubActions(d, folder),
                codecov       = fillCodecov(d, folder),
+               runiverse     = fillRUniverse(d$get("Package")),
                cite          = fillCite(d),
                vignette      = fillVignette(d, folder))
 
+  template <- readLines(system.file("extdata", "README_template.md", package = "lucode2"))
   out <- fillTemplate(template, fill)
 
   if (!is.null(folder)) {
     readmefile <- file.path(folder, "README.md")
     if (file.exists(readmefile)) {
       message("Updated README.md file")
-    }
-    else {
+    } else {
       message("Added README.md file")
     }
     writeLines(out, readmefile)
