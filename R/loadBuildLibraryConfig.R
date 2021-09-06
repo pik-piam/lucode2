@@ -38,8 +38,8 @@ loadBuildLibraryConfig <- function(lib) {
   if (is.null(cfg$AutocreateReadme)) {
     cfg$AutocreateReadme <- TRUE # nolint
   }
-  if (is.null(cfg$UseGithubActions) && askYesNo("Do you want to use GitHub Actions for package testing?",
-                                                prompts = "Y/n/c")) {
+  if (is.null(cfg$UseGithubActions) &&
+      readline("Do you want to use GitHub Actions for package testing? (y/n)") %in% c("y", "yes")) {
     cfg$UseGithubActions <- TRUE # nolint
   }
   if (is.null(cfg$allowLinterWarnings)) {

@@ -31,7 +31,6 @@
 #' @seealso \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
 #' @importFrom citation package2zenodo
 #' @importFrom yaml write_yaml
-#' @importFrom utils askYesNo
 #' @examples
 #' \dontrun{
 #' buildLibrary()
@@ -52,8 +51,8 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   }
 
   # did user pull?
-  if (!askYesNo("Is your repository up-to-date? Did you pull immediately before running this check?",
-                prompts = "Y/n/c")) {
+  didYouPullQuestion <- "Is your repository up-to-date? Did you pull immediately before running this check? (Y/n)"
+  if (!(readline(didYouPullQuestion) %in% c("", "y", "yes"))) {
     stop("Please update your repository first, before you proceed!")
   }
 
