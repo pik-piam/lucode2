@@ -18,7 +18,7 @@ loadBuildLibraryConfig <- function(lib) {
         "Warning: namespace '.*' is not available and has been replaced"
       ),
       AcceptedNotes = NULL,
-      allowLinterWarnings = TRUE
+      allowLinterWarnings = FALSE
     )
     write_yaml(cfg, file.path(lib, ".buildlibrary"))
     message("Created .buildlibrary config file and added it to .Rbuildignore. Please add it to your next commit!")
@@ -38,8 +38,8 @@ loadBuildLibraryConfig <- function(lib) {
   if (is.null(cfg$AutocreateReadme)) {
     cfg$AutocreateReadme <- TRUE # nolint
   }
-  gitHubActionsQuestion <- "Do you want to use GitHub Actions for package testing? (yes/no)"
-  if (is.null(cfg$UseGithubActions) && isTRUE(tolower(readline(gitHubActionsQuestion)) %in% c("y", "yes"))) {
+  if (is.null(cfg$UseGithubActions) && askYesNo("Do you want to use GitHub Actions for package testing?",
+                                                prompts = "Y/n/c")) {
     cfg$UseGithubActions <- TRUE # nolint
   }
   if (is.null(cfg$allowLinterWarnings)) {
