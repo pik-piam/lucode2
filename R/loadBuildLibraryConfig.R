@@ -33,14 +33,16 @@ loadBuildLibraryConfig <- function(lib) {
     writeLines(a, file.path(lib, ".Rbuildignore"))
   }
 
-  cfg <- read_yaml(file.path(lib, ".buildlibrary"))
+  buildLibraryConfigPath <- file.path(lib, ".buildlibrary")
+
+  # remove superfluous UseGithubActions setting from .buildLibrary
+  writeLines(grep("UseGithubActions", readLines(buildLibraryConfigPath), value = TRUE, invert = TRUE),
+             buildLibraryConfigPath)
+
+  cfg <- read_yaml(buildLibraryConfigPath)
 
   if (is.null(cfg$AutocreateReadme)) {
     cfg$AutocreateReadme <- TRUE # nolint
-  }
-  if (is.null(cfg$UseGithubActions) &&
-      readline("Do you want to use GitHub Actions for package testing? (y/n)") %in% c("y", "yes")) {
-    cfg$UseGithubActions <- TRUE # nolint
   }
   if (is.null(cfg$allowLinterWarnings)) {
     cfg$allowLinterWarnings <- TRUE

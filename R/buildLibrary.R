@@ -31,12 +31,19 @@
 #' @seealso \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
 #' @importFrom citation package2zenodo
 #' @importFrom yaml write_yaml
+#' @importFrom utils old.packages update.packages
 #' @examples
 #' \dontrun{
 #' buildLibrary()
 #' }
 #' @export
 buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FALSE, commitmessage = NULL) { # nolint
+  if (!is.null(old.packages(instPkgs = installed.packages()["lucode2", , drop = FALSE]))) {
+    cat("A new version of lucode2 is available, please install it before running buildLibrary.\n")
+    update.packages(oldPkgs = "lucode2")
+    return()
+  }
+
   getLine <- function() {
     # gets characters (line) from the terminal or from a connection
     # and returns it
@@ -100,9 +107,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ############################################################
   # GitHub actions
   ############################################################
-  if (isTRUE(cfg$UseGithubActions)) {
-    addGitHubActions(lib)
-  }
+  addGitHubActions(lib)
 
   ############################################################
   # run tests

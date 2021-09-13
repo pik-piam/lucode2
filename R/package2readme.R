@@ -42,12 +42,6 @@ package2readme <- function(package = ".") { #nolint
     return(.harmonize(out))
   }
 
-  withTravis <- function(folder) {
-    travisfile <- file.path(folder, ".travis.yml")
-    if (!is.null(folder) && file.exists(travisfile)) return(TRUE)
-    return(FALSE)
-  }
-
   withGithubActions <- function(folder) {
     ghactionsfile <- Sys.glob(file.path(folder, ".github", "workflows", "*.y*ml"))
     if (length(ghactionsfile) > 0) return(TRUE)
@@ -55,13 +49,6 @@ package2readme <- function(package = ".") { #nolint
   }
 
   withCodecov <- function(folder) {
-    if (withTravis(folder)) {
-      travisfile <- file.path(folder, ".travis.yml")
-      if (file.exists(travisfile)) {
-        tmp <- readLines(travisfile)
-        if (any(grepl("codecov", tmp))) return(TRUE)
-      }
-    }
     if (withGithubActions(folder)) {
       ghafile <- Sys.glob(file.path(folder, ".github", "workflows", "*.y*ml"))
       if (length(ghafile) > 0) {
@@ -72,17 +59,6 @@ package2readme <- function(package = ".") { #nolint
       }
     }
     return(FALSE)
-  }
-
-  fillTravis <- function(d, folder) {
-    if (!withTravis(folder)) return("")
-    z <- getGitHubRepo(d, folder)
-    if (is.null(z)) return("")
-    path <- sub("^[^/]*", "", z)
-    out <- paste0("[![Travis build status](https://travis-ci.com",
-                  path, ".svg?branch=master)](https://travis-ci.com",
-                  path, ")")
-    return(out)
   }
 
   fillGithubActions <- function(d, folder) {
@@ -192,7 +168,6 @@ package2readme <- function(package = ".") { #nolint
                maintainer    = d$get_maintainer(),
                cran          = fillCRAN(d),
                zenodo        = fillZenodo(d),
-               travis        = fillTravis(d, folder),
                githubactions = fillGithubActions(d, folder),
                codecov       = fillCodecov(d, folder),
                runiverse     = fillRUniverse(d$get("Package")),

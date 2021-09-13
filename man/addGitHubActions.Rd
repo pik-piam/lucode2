@@ -4,12 +4,10 @@
 \alias{addGitHubActions}
 \title{addGitHubActions}
 \usage{
-addGitHubActions(lib = ".", removeTravis = TRUE)
+addGitHubActions(lib = ".")
 }
 \arguments{
 \item{lib}{Path to the package}
-
-\item{removeTravis}{If TRUE try to remove existing travis configuration and files.}
 }
 \description{
 adds GitHubActions with a standard workflow including codecov to the package. It will add a standard
