@@ -19,6 +19,7 @@
 #' }
 #' @export
 addGitHubActions <- function(lib = ".") {
+  unlink(file.path(lib, ".github", "workflows", "test-buildlibrary.yaml"))
   unlink(file.path(lib, ".github", "workflows", "lucode2-check.yaml"))
   use_github_action("lucode2-check.yaml", system.file(file.path("extdata", "lucode2-check.yaml"), package = "lucode2"))
 
