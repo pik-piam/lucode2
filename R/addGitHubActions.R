@@ -19,9 +19,8 @@
 #' }
 #' @export
 addGitHubActions <- function(lib = ".") {
-  unlink(file.path(lib, ".github", "workflows", "test-buildlibrary.yaml"))
-  use_github_action("test-buildlibrary.yaml",
-                    system.file(file.path("extdata", "test-buildlibrary.yaml"), package = "lucode2"))
+  unlink(file.path(lib, ".github", "workflows", "lucode2-check.yaml"))
+  use_github_action("lucode2-check.yaml", system.file(file.path("extdata", "lucode2-check.yaml"), package = "lucode2"))
 
   if (!file.exists(file.path(lib, "codecov.yml"))) {
     use_coverage("codecov")
