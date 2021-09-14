@@ -39,9 +39,11 @@
 #' @export
 buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FALSE, commitmessage = NULL) { # nolint
   if (!is.null(old.packages(instPkgs = installed.packages()["lucode2", , drop = FALSE]))) {
-    cat("A new version of lucode2 is available, please install it before running buildLibrary.\n")
+    cat("A new version of lucode2 is available, please update.\n")
     update.packages(oldPkgs = "lucode2")
-    return()
+    cat("Please restart your R session (in RStudio: Ctrl+Shift+F10) to make sure that the new lucode2 version is",
+        "loaded. Then run\nlucode2::buildLibrary()\n")
+    return(invisible(NULL))
   }
 
   getLine <- function() {
