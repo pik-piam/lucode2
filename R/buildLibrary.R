@@ -38,12 +38,15 @@
 #' }
 #' @export
 buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FALSE, commitmessage = NULL) { # nolint
+  cat("Checking for lucode2 update... ")
   if (!is.null(old.packages(instPkgs = installed.packages()["lucode2", , drop = FALSE]))) {
     cat("A new version of lucode2 is available, please update.\n")
     update.packages(oldPkgs = "lucode2")
     cat("Please restart your R session (in RStudio: Ctrl+Shift+F10) to make sure that the new lucode2 version is",
         "loaded. Then run\nlucode2::buildLibrary()\n")
     return(invisible(NULL))
+  } else {
+    cat("You're running the newest lucode2 version.\n")
   }
 
   getLine <- function() {
@@ -61,9 +64,20 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
 
   # did user pull?
   didYouPullQuestion <- "Is your repository up-to-date? Did you pull immediately before running this check? (Y/n)"
-  if (!(readline(didYouPullQuestion) %in% c("", "y", "yes"))) {
+  if (!(tolower(readline(didYouPullQuestion)) %in% c("", "y", "yes"))) {
     stop("Please update your repository first, before you proceed!")
   }
+
+  ############################################################
+  # load/create .buildLibrary file
+  ############################################################
+  cfg <- loadBuildLibraryConfig(lib)
+
+  ####################################################################
+  # Run checks, tests and linter
+  ###################################################################
+
+  check(lib = lib, cran = cran, config = cfg)
 
   ####################################################################
   # Remove the auxiliary Rcheck folders
@@ -80,86 +94,9 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   }
 
   ############################################################
-  # load/create .buildLibrary file
-  ############################################################
-  cfg <- loadBuildLibraryConfig(lib)
-
-  ############################################################
-  # linter
-  ############################################################
-  linterResult <- lint(getFilesToLint(lib))
-  if (length(linterResult) > 0) {
-    if (isFALSE(cfg$allowLinterWarnings)) {
-      warning(paste(
-        "There were linter warnings. They have to be fixed to successfully complete lucode2::buildLibrary. Running",
-        "lucode2::autoFormat() might fix some warnings. If really needed (e.g. to prevent breaking an interface), see",
-        "?lintr::exclude on how to disable the linter for some lines."
-      ))
-      return(linterResult)
-    } else {
-      warning(paste(
-        "There were linter warnings. It is not mandatory to fix them, they do not prevent buildLibrary from finishing",
-        "normally. Still, please fix all linter warnings in new code and ideally also some in old code. Running",
-        "lucode2::autoFormat() might fix some warnings. If really needed (e.g. to prevent breaking an interface), see",
-        "?lintr::exclude on how to disable the linter for some lines."
-      ))
-    }
-  }
-
-  ############################################################
   # GitHub actions
   ############################################################
   addGitHubActions(lib)
-
-  ############################################################
-  # run tests
-  ############################################################
-  testResults <- as.data.frame(devtools::test(lib))
-
-  if (sum(testResults[["failed"]]) > 0 || any(testResults[["error"]])) {
-    stop("Some tests failed, please fix them first.")
-  }
-
-  unacceptedWarnings <- testResults[["result"]] %>%
-    Reduce(f = append, init = list()) %>% # combine results from all tests
-    Filter(f = function(result) inherits(result, c("warning", "expectation_warning"))) %>% # keep only warnings
-    Filter(f = function(aWarning) { # filter accepted warnings
-      return(!any(vapply(cfg[["AcceptedWarnings"]],
-                         function(acceptedWarning) grepl(acceptedWarning, aWarning[["message"]]),
-                         logical(1))))
-    })
-  if (length(unacceptedWarnings) > 0) {
-    stop("The package tests produced warnings. Before submission you need to take care of the following warnings:\n",
-         unacceptedWarnings %>%
-           vapply(function(x) paste0('test "', x[["test"]], '": ', x[["message"]]), character(1)) %>%
-           paste(collapse = "\n"))
-  }
-
-  ############################################################
-  # check the library
-  ############################################################
-  ck <- devtools::check(lib, cran = cran, args = "--no-tests")
-
-  # Filter warnings and notes which are accepted
-  for (aw in cfg$AcceptedWarnings) {
-    ck$warnings <- grep(aw, ck$warnings, value = TRUE, invert = TRUE)
-  }
-  for (aw in cfg$AcceptedNotes) {
-    ck$notes <- grep(aw, ck$notes, value = TRUE, invert = TRUE)
-  }
-  print(ck)
-
-  if (length(ck$errors) > 0) {
-    stop("The package check showed errors. You need to fix these errors first before submission!")
-  }
-
-  if (length(ck$warnings) > 0) {
-    stop("The package check showed warnings. You need to take care of these warnings first before submission!")
-  }
-
-  if (length(ck$notes) > 0) {
-    stop("The package check showed notes. You need to take care of these notes first before submission!")
-  }
 
   ##########################################################
   # Check for version numbers
@@ -295,5 +232,4 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
     }
   }
   cat("done\n")
-  return(linterResult)
 }
