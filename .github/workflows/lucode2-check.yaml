@@ -1,6 +1,6 @@
 # Run CI for R using https://eddelbuettel.github.io/r-ci/
 
-name: ci
+name: lucode2-check
 
 on:
   push:
@@ -48,4 +48,3 @@ jobs:
 
       - name: Coverage
         run: ./run.sh coverage
-
