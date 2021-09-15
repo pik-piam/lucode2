@@ -51,7 +51,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   }
 
   # did user pull?
-  didYouPullQuestion <- "Is your repository up-to-date? Did you pull immediately before running this check? (Y/n)"
+  didYouPullQuestion <- "Is your repository up-to-date? Did you pull immediately before running this check? (y/n)"
   if (!(readline(didYouPullQuestion) %in% c("", "y", "yes"))) {
     stop("Please update your repository first, before you proceed!")
   }
