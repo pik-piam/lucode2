@@ -4,7 +4,12 @@
 \alias{check}
 \title{check}
 \usage{
-check(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib))
+check(
+  lib = ".",
+  cran = TRUE,
+  config = loadBuildLibraryConfig(lib),
+  runLinter = TRUE
+)
 }
 \arguments{
 \item{lib}{Path to the package}
@@ -13,6 +18,8 @@ check(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib))
 
 \item{config}{A configuration defining AcceptedWarnings, AcceptedNotes, and allowLinterWarnings. By default the
 .buildLibrary file is read.}
+
+\item{runLinter}{Set to FALSE to skip the linter.}
 }
 \description{
 Runs devtools::test(), devtools::check() (without tests), and lucode2::lint()

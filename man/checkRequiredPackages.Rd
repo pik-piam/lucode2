@@ -23,6 +23,11 @@ repos (getOption("repos")).}
 Check if one or more packages are available and try to install the missing packages. Throw an error if at least one
 of the required packages is still missing after the installation attempt.
 }
+\examples{
+\dontrun{
+checkRequiredPackages(c("ggplot2", "lusweave"), "lucode2::readRuntime(..., plot = TRUE)")
+}
+}
 \seealso{
 \code{\link{requireNamespace}}
 }

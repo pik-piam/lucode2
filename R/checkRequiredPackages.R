@@ -11,6 +11,10 @@
 #' @author Pascal Führlich
 #' @seealso \code{\link{requireNamespace}}
 #' @importFrom utils install.packages
+#' @examples
+#' \dontrun{
+#' checkRequiredPackages(c("ggplot2", "lusweave"), "lucode2::readRuntime(..., plot = TRUE)")
+#' }
 #' @export
 checkRequiredPackages <- function(requiredPackages, requiredFor = "", installFunction = install.packages) {
   stopifnot(length(requiredFor) != 1)

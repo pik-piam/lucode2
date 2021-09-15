@@ -6,6 +6,7 @@
 #' @param cran If cran-like test is needed
 #' @param config A configuration defining AcceptedWarnings, AcceptedNotes, and allowLinterWarnings. By default the
 #' .buildLibrary file is read.
+#' @param runLinter Set to FALSE to skip the linter.
 #'
 #' @author Jan Philipp Dietrich, Pascal Führlich
 #' @examples
@@ -16,7 +17,7 @@
 #' @seealso \code{\link{buildLibrary}}, \code{\link{lint}}
 #' @seealso \code{\link[devtools]{check}}, \code{\link[devtools]{test}}
 #' @export
-check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib)) {
+check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), runLinter = TRUE) {
   ########### Run checks ###########
   checkResults <- devtools::check(lib, cran = cran, args = "--no-tests")
 
@@ -66,22 +67,23 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib)) 
 
 
   ########### Run linter ###########
-  linterResult <- lint(getFilesToLint(lib))
-  print(linterResult)
-  if (length(linterResult) > 0) {
-    if (isFALSE(config[["allowLinterWarnings"]])) {
-      stop(paste(
-        "There were linter warnings. They have to be fixed to successfully complete lucode2::buildLibrary. Running",
-        "lucode2::autoFormat() might fix some warnings. If really needed (e.g. to prevent breaking an interface), see",
-        "?lintr::exclude on how to disable the linter for some lines."
-      ))
+  if (runLinter) {
+    linterResult <- lint(getFilesToLint(lib))
+    print(linterResult)
+    if (length(linterResult) > 0) {
+      autoFormatExcludeInfo <- paste("Running lucode2::autoFormat() might fix some warnings. If really needed (e.g.",
+                                     "to prevent breaking an interface), see ?lintr::exclude on how to disable the",
+                                     "linter for some lines.")
+      if (isFALSE(config[["allowLinterWarnings"]])) {
+        stop(paste("There were linter warnings. They have to be fixed to successfully complete lucode2::buildLibrary.",
+                   autoFormatExcludeInfo))
+      } else {
+        warning(paste("There were linter warnings. It is not mandatory to fix them, they do not prevent buildLibrary",
+                      "from finishing normally. Still, please fix all linter warnings in new code and ideally also",
+                      "some in old code.", autoFormatExcludeInfo))
+      }
     } else {
-      warning(paste(
-        "There were linter warnings. It is not mandatory to fix them, they do not prevent buildLibrary from finishing",
-        "normally. Still, please fix all linter warnings in new code and ideally also some in old code. Running",
-        "lucode2::autoFormat() might fix some warnings automatically. If really needed (e.g. to prevent breaking an",
-        "interface), see ?lintr::exclude on how to disable the linter for some lines."
-      ))
+      message("No linter warnings - great :D")
     }
   }
 }
