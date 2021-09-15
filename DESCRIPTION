@@ -12,18 +12,18 @@ Authors@R: c(person("Jan Philipp", "Dietrich", email = "dietrich@pik-potsdam.de"
              person("Pascal", "Führlich", role = "aut"))
 Description: A collection of tools which allow to manipulate and analyze code.
 Imports:
-    citation, 
-    data.table, 
-    desc, 
-    dplyr, 
+    citation,
+    data.table,
+    desc,
+    devtools,
+    dplyr,
     rlang,
     usethis,
     yaml,
     styler,
     lintr,
     withr
-Suggests: 
-    devtools,
+Suggests:
     ggplot2,
     gtools,
     lusweave,

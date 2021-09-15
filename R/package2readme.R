@@ -33,7 +33,7 @@ package2readme <- function(package = ".") { #nolint
       return(NULL)
     }
     with_dir(folder, {
-      out <- try(usethis::git_remotes(), silent = TRUE)
+      out <- try(git_remotes(), silent = TRUE)
     })
     if ("try-error" %in% class(out)) {
       return(NULL)

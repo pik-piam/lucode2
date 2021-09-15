@@ -6,6 +6,7 @@
 #'
 #' @param libpath Parent path of the library folder
 #' @author Jan Philipp Dietrich
+#' @importFrom withr local_dir
 #' @export
 #' @seealso \code{\link{buildLibrary}}
 #' @examples
@@ -13,14 +14,15 @@
 #' maintain_libraries()
 #' }
 #'
-maintain_libraries <- function(libpath = ".") {
-  dd <- getwd()
-  setwd(libpath)
+maintain_libraries <- function(libpath = ".") { # nolint
+  checkRequiredPackages("gtools", "lucode2::maintain_libraries()")
+
+  local_dir(libpath)
 
   system("svn update")
 
   # Remove all existing Rcheck-folders
-  rcheckfolders <- grep(".Rcheck$", base::list.dirs(full.names = FALSE, recursive = FALSE), value = TRUE)
+  rcheckfolders <- grep(".Rcheck$", list.dirs(full.names = FALSE, recursive = FALSE), value = TRUE)
   unlink(rcheckfolders, recursive = TRUE)
 
   # Remove older packages
@@ -29,8 +31,8 @@ maintain_libraries <- function(libpath = ".") {
   tmp <- grep("^(\\?|D)", tmp, value = TRUE, invert = TRUE)
   # remove unneeded information
   tmp <- sub("^.* ([^ ]*)$", "\\1", tmp)
-  managedLibraries <- base::list.dirs(
-    full.names = FALSE, recursive = FALSE)[base::list.dirs(full.names = FALSE, recursive = FALSE) %in% tmp]
+  managedLibraries <- list.dirs(
+    full.names = FALSE, recursive = FALSE)[list.dirs(full.names = FALSE, recursive = FALSE) %in% tmp]
   for (m in managedLibraries) {
     cat("check", m, "...\n")
     packages <- gtools::mixedsort(grep(paste(m, "_", sep = ""), tmp, value = TRUE))
@@ -62,6 +64,5 @@ maintain_libraries <- function(libpath = ".") {
       }
     }
   }
-  setwd(dd)
   cat("done!\n")
 }

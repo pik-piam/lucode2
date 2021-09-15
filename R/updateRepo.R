@@ -18,13 +18,14 @@
 #' have this working.
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{buildLibrary}}
+#' @importFrom devtools install_deps document build
+#' @importFrom tools write_PACKAGES
+#' @importFrom withr local_dir local_envvar
 #' @export
 
-updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = FALSE, pidfile = NULL) {
+updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = FALSE, pidfile = NULL) { # nolint
   cat(date(), "\n")
-  cwd <- getwd()
-  on.exit(setwd(cwd))
-  setwd(path)
+  local_dir(path)
 
   if (!is.null(pidfile)) {
     if (file.exists(pidfile)) {
@@ -37,7 +38,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
     writeLines(as.character(Sys.getpid()), pidfile)
   }
   if (file.exists("/webservice")) {
-    Sys.setenv("RSTUDIO_PANDOC" = "/usr/local/bin/pandoc")
+    local_envvar(c(RSTUDIO_PANDOC = "/usr/local/bin/pandoc")) # nolint
   }
   if (dir.exists(".svn")) {
     if (clean) system("svn revert -Rq .")
@@ -51,7 +52,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
   updatePACKAGES <- FALSE
   for (d in dirs) {
     if (d %in% c("Archive", "gdxrrw")) next
-    setwd(d)
+    local_dir(d)
     if (dir.exists(".svn")) {
       if (clean) {
         system("svn revert -Rq .; svn update -q", wait = FALSE)
@@ -66,7 +67,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
         system("git pull -q", wait = FALSE)
       }
     }
-    setwd("..")
+    local_dir("..")
   }
   dirs <- dirs[order(tolower(dirs))]
   for (d in dirs) {
@@ -75,7 +76,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
     curversion <- tryCatch(ap[d, "Version"], error = function(e) {
       return(0)
     })
-    setwd(d)
+    local_dir(d)
     vkey <- validkey()
     pattern <- paste0("^", d, "_(.*)\\.tar\\.gz")
     buildVersion <- max(as.numeric_version(sub(pattern, "\\1", dir("..", pattern = pattern))))
@@ -129,10 +130,10 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
       }
       message(".:: ", fd, " ", format(curversion, width = 10), " ok ::.", craninfo)
     }
-    setwd("..")
+    local_dir("..")
   }
   if (updatePACKAGES) {
-    tools::write_PACKAGES(unpacked = TRUE)
+    write_PACKAGES(unpacked = TRUE)
     for (d in dirs) {
       if (d %in% c("Archive", "gdxrrw")) next
       targz <- grep(paste0("^", d, "_.*.tar.gz"), dir(), value = TRUE)

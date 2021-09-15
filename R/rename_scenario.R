@@ -11,7 +11,7 @@
 #'                        name or not (default = FALSE).
 #' @author David Klein
 #' @export
-rename_scenario <- function(map, keep_time_stamp = FALSE) {
+rename_scenario <- function(map, keep_time_stamp = FALSE) { # nolint
   if (any(duplicated(map))) {
     stop("The list of new names contains duplicates which would cause overwrites, aborting.")
   }
@@ -56,9 +56,7 @@ rename_scenario <- function(map, keep_time_stamp = FALSE) {
       }
 
       if (file.exists(mifName)) {
-        if (!requireNamespace("magclass", quietly = TRUE)) {
-          stop("The package magclass is required for scenario renaming!")
-        }
+        checkRequiredPackages("magclass", "lucode2::rename_scenario()")
         cat("mif      from:", mifName, "\n           -> ", newMifName, "\n")
         a <- magclass::read.report(mifName, as.list = F)
         magclass::getNames(a, dim = 1) <- gsub("\\.", "", newScenario)

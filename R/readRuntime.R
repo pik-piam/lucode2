@@ -19,8 +19,13 @@
 #' @author David Klein
 #' @importFrom rlang .data
 #' @importFrom dplyr %>% group_by summarize arrange rename mutate
+#' @importFrom utils install.packages
+#' @importFrom withr local_dir
 #' @export
-readRuntime <- function(path, plot = FALSE, types = NULL, coupled = FALSE, outfname = NULL) {
+readRuntime <- function(path, plot = FALSE, types = NULL, coupled = FALSE, outfname = NULL) { # nolint
+  if (plot) {
+    checkRequiredPackages(c("ggplot2", "lusweave"), "lucode2::readRuntime(..., plot = TRUE)")
+  }
   runtime <- NULL
   maindir <- getwd()
 
@@ -69,7 +74,7 @@ readRuntime <- function(path, plot = FALSE, types = NULL, coupled = FALSE, outfn
     # if no start and end was extractable from runstatistics.rda
     # conclude it from timestamps of the files in the results folder
     if (is.null(end) & is.null(timePrepareEnd) & is.null(timeGAMSEnd) & is.null(timeOutputEnd)) {
-      setwd(d)
+      local_dir(d)
       # find all files
       info <- file.info(dir())
       # sort files in info by mtime
@@ -90,7 +95,7 @@ readRuntime <- function(path, plot = FALSE, types = NULL, coupled = FALSE, outfn
         cat("Using", runfolder, "full.lst as end\n")
         end <- info["full.lst", ]$mtime
       }
-      setwd(maindir)
+      local_dir(maindir)
     }
 
     # if (total) runtime data was found

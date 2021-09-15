@@ -32,6 +32,7 @@
 #' @importFrom citation package2zenodo
 #' @importFrom yaml write_yaml
 #' @importFrom utils old.packages update.packages
+#' @importFrom devtools document
 #' @examples
 #' \dontrun{
 #' buildLibrary()
@@ -89,7 +90,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ###################################################################
   descfile <- readLines(file.path(lib, "DESCRIPTION"))
   if (any(grepl("RoxygenNote", descfile))) {
-    devtools::document(pkg = lib, roclets = c("rd", "collate", "namespace", "vignette"))
+    document(pkg = lib, roclets = c("rd", "collate", "namespace", "vignette"))
   }
 
   ############################################################

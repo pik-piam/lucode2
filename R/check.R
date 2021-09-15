@@ -12,7 +12,7 @@
 #' \dontrun{
 #' lucode2::check()
 #' }
-#' #' @importFrom devtools check test
+#' @importFrom devtools check test
 #' @seealso \code{\link{buildLibrary}}, \code{\link{lint}}
 #' @seealso \code{\link[devtools]{check}}, \code{\link[devtools]{test}}
 #' @export

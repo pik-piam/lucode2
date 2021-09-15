@@ -21,7 +21,6 @@ Runs devtools::test(), devtools::check() (without tests), and lucode2::lint()
 \dontrun{
 lucode2::check()
 }
-#' @importFrom devtools check test
 }
 \seealso{
 \code{\link{buildLibrary}}, \code{\link{lint}}
