@@ -15,7 +15,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - {os: macOS-latest}
           - {os: ubuntu-latest}
 
     runs-on: ${{ matrix.os }}
@@ -28,9 +27,25 @@ jobs:
           curl -OLs https://eddelbuettel.github.io/r-ci/run.sh
           chmod 0755 run.sh
           ./run.sh bootstrap
+
+      - name: Use pik-piam r-universe
+        run: echo 'options(repos = c(universe = "https://pik-piam.r-universe.dev", CRAN = "https://cloud.r-project.org"))' > .Rprofile
+
       - name: Dependencies
         run: ./run.sh install_all
 
-      - name: Test
-        run: ./run.sh run_tests
+      - uses: r-lib/actions/setup-pandoc@v1
+
+      - name: Verify ValidationKey
+        run: lucode2:::validkey(stopIfInvalid = TRUE)
+        shell: Rscript {0}
+
+      - name: Checks, Tests, Linter
+        run: |
+          options(crayon.enabled = TRUE)
+          lucode2::check()
+        shell: Rscript {0}
+
+      - name: Coverage
+        run: ./run.sh coverage
 
