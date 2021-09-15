@@ -1,0 +1,47 @@
+# Run CI for R using https://eddelbuettel.github.io/r-ci/
+
+name: ci
+
+on:
+  push:
+  pull_request:
+
+env:
+  USE_BSPM: "true"
+  _R_CHECK_FORCE_SUGGESTS_: "false"
+
+jobs:
+  ci:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Bootstrap
+        run: |
+          curl -OLs https://eddelbuettel.github.io/r-ci/run.sh
+          chmod 0755 run.sh
+         ./run.sh bootstrap
+
+        uses: r-lib/actions/setup-pandoc@v1
+
+        name: Use pik-piam r-universe
+        shell: bash
+        run: echo 'options(repos = c(universe = "https://pik-piam.r-universe.dev", CRAN = "https://cloud.r-project.org"))' > .Rprofile
+
+      - name: Dependencies
+        run: ./run.sh install_deps
+
+        name: Verify ValidationKey
+        run: lucode2:::validkey(stopIfInvalid = TRUE)
+        shell: Rscript {0}
+
+      - name: Checks, Tests, Linter
+        run: |
+          options(crayon.enabled = TRUE)
+          lucode2::check()
+        shell: Rscript {0}
+
+      - name: Test coverage
+        run: ./run.sh coverage
+
