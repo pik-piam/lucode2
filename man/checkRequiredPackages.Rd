@@ -7,7 +7,8 @@
 checkRequiredPackages(
   requiredPackages,
   requiredFor = "",
-  installFunction = install.packages
+  installFunction = install.packages,
+  readlineFunction = readline
 )
 }
 \arguments{
@@ -15,9 +16,11 @@ checkRequiredPackages(
 
 \item{requiredFor}{Optional single character. What the packages are required for, usually the name of a function.}
 
-\item{installFunction}{Optional function. Will be called during checkRequiredPackages like this:
-installFunction(missingPackages). Only needed if the required packages are not available on CRAN or the configured
-repos (getOption("repos")).}
+\item{installFunction}{Optional function, default NULL means install.packages. Will be called during
+checkRequiredPackages like this: installFunction(missingPackages). Only needed if the required packages are not
+available on CRAN or the configured repos (getOption("repos")).}
+
+\item{readlineFunction}{Only used for testing. A function to get an answer from the user.}
 }
 \description{
 Check if one or more packages are available and try to install the missing packages. Throw an error if at least one

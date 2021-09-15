@@ -29,7 +29,8 @@ Suggests:
     lusweave,
     magclass,
     testthat,
-    covr
+    covr,
+    waldo
 URL: https://github.com/pik-piam/lucode2, https://doi.org/10.5281/zenodo.4389418
 BugReports: https://github.com/pik-piam/lucode2/issues
 License: BSD_2_clause + file LICENSE
