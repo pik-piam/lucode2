@@ -109,7 +109,7 @@ package2readme <- function(package = ".") { #nolint
 
   fillCite <- function(d) {
     # the format function wraps lines according to the width option, set explicitly so it is always the same
-    local_options(list(width = 500))
+    local_options(list(width = 664)) # 664 * 0.75 is <= 500; will get deparse cutoff warning if > 500
     out <- c("\nTo cite package **", d$get("Package"), "** in publications use:\n\n",
              format(citation(package = d$get("Package")), style = "text"),
              "\n\nA BibTeX entry for LaTeX users is\n\n ```latex\n",
