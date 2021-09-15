@@ -33,18 +33,20 @@ jobs:
           ./run.sh install_all
           # ./run.sh install_r lucode2
           ./run.sh install_github pfuehrlich-pik/lucode2
+          ./run.sh install_r covr
 
       - name: Verify ValidationKey
-        run: lucode2:::validkey(stopIfInvalid = TRUE)
         shell: Rscript {0}
+        run: lucode2:::validkey(stopIfInvalid = TRUE)
 
       - uses: r-lib/actions/setup-pandoc@v1
 
       - name: Checks, Tests, Linter
+        shell: Rscript {0}
         run: |
           options(crayon.enabled = TRUE)
           lucode2::check()
-        shell: Rscript {0}
 
-      - name: Coverage
-        run: ./run.sh coverage
+      - name: Test coverage
+        shell: Rscript {0}
+        run: covr::codecov(quiet = FALSE)

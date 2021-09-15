@@ -8,7 +8,7 @@
 #' @importFrom desc desc
 #' @importFrom utils citation vignette
 #' @importFrom usethis git_remotes
-#' @importFrom withr with_dir with_options
+#' @importFrom withr with_dir local_options
 #' @examples
 #' package2readme("lucode2")
 #' @export
@@ -109,12 +109,11 @@ package2readme <- function(package = ".") { #nolint
 
   fillCite <- function(d) {
     # the format function wraps lines according to the width option, set explicitly so it is always the same
-    with_options(list(width = 1000), {
-      out <- c("\nTo cite package **", d$get("Package"), "** in publications use:\n\n",
-               format(citation(package = d$get("Package")), style = "text"),
-               "\n\nA BibTeX entry for LaTeX users is\n\n ```latex\n",
-               format(citation(package = d$get("Package")), style = "bibtex"), "\n```")
-    })
+    local_options(list(width = 500))
+    out <- c("\nTo cite package **", d$get("Package"), "** in publications use:\n\n",
+             format(citation(package = d$get("Package")), style = "text"),
+             "\n\nA BibTeX entry for LaTeX users is\n\n ```latex\n",
+             format(citation(package = d$get("Package")), style = "bibtex"), "\n```")
     return(paste(out, collapse = ""))
   }
 
