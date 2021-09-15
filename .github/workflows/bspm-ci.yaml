@@ -34,11 +34,15 @@ jobs:
       - name: Dependencies
         run: ./run.sh install_all
 
-      - uses: r-lib/actions/setup-pandoc@v1
+      - name: Install additional dependencies
+        run: install.packages("lucode2")
+        shell: Rscript {0}
 
       - name: Verify ValidationKey
         run: lucode2:::validkey(stopIfInvalid = TRUE)
         shell: Rscript {0}
+
+      - uses: r-lib/actions/setup-pandoc@v1
 
       - name: Checks, Tests, Linter
         run: |
