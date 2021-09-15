@@ -31,9 +31,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
-          extra-packages: |
-            lucode2
-            covr
+          extra-packages: covr
 
       - name: Verify ValidationKey
         run: lucode2:::validkey(stopIfInvalid = TRUE)
