@@ -53,4 +53,6 @@ test_that("checkRequiredPackages works", {
                           }),
     paste("The following package is required for something important, but it is still not available:",
           "- covr", sep = "\n"))
+  unlink(tempdir(), recursive = TRUE)
+  tempdir(TRUE)
 })

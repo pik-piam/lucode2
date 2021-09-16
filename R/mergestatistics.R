@@ -19,6 +19,7 @@
 #' @author Jan Philipp Dietrich
 #' @importFrom data.table as.data.table rbindlist
 #' @importFrom utils type.convert
+#' @importFrom withr local_dir
 #' @export
 mergestatistics <- function(dir = ".", file = NULL, renew = FALSE, quickcheck = FALSE, pattern = "*\\.[rR]da") {
   if (quickcheck && file.exists(file) && all(file.info(Sys.glob(paste0(dir, "/*")))$mtime < file.info(file)$mtime)) {
@@ -33,8 +34,7 @@ mergestatistics <- function(dir = ".", file = NULL, renew = FALSE, quickcheck = 
     id <- out$.id
   }
   cwd <- getwd()
-  on.exit(setwd(cwd))
-  setwd(dir)
+  local_dir(dir)
   files <- list.files(pattern = pattern, recursive = TRUE)
   if (length(id) > 0) {
     names(files) <- gsub("\\.[rR]da", "", files)
@@ -68,7 +68,7 @@ mergestatistics <- function(dir = ".", file = NULL, renew = FALSE, quickcheck = 
   out <- as.data.table(lapply(out, function(x) return(type.convert(as.character(x), as.is = TRUE))))
   names(out) <- make.unique(names(out))
   out <- out[!is.na(out$user), ]
-  setwd(cwd)
+  local_dir(cwd)
   if (!is.null(file)) {
     saveRDS(out, file = file, version = 2)
   }
