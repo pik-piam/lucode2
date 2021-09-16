@@ -15,18 +15,18 @@ test_that("checkRequiredPackages works", {
                "The following package is required, but it is still not available:\n- gtools")
 
   expect_error(
-    checkRequiredPackages(c("gtools", "covr"), requiredFor = "something nice",
+    checkRequiredPackages(c("gtools", "ggplot2"), requiredFor = "something nice",
                           readlineFunction = function(question) {
                             expect_identical(question, paste(
                               "The following currently not installed packages are required for something nice:",
                               "- gtools",
-                              "- covr",
+                              "- ggplot2",
                               "Do you want to install them now? (y/N)", sep = "\n"))
                             return("")
                           }),
     paste("The following packages are required for something nice, but they are still not available:",
           "- gtools",
-          "- covr", sep = "\n"))
+          "- ggplot2", sep = "\n"))
 
   expect_false(requireNamespace("gtools", quietly = TRUE))
 
@@ -43,16 +43,16 @@ test_that("checkRequiredPackages works", {
   expect_true(requireNamespace("gtools", quietly = TRUE))
 
   expect_error(
-    checkRequiredPackages(c("gtools", "covr"), requiredFor = "something important",
+    checkRequiredPackages(c("gtools", "ggplot2"), requiredFor = "something important",
                           readlineFunction = function(question) {
                             expect_identical(question, paste(
                               "The following currently not installed package is required for something important:",
-                              "- covr",
+                              "- ggplot2",
                               "Do you want to install it now? (y/N)", sep = "\n"))
                             return("anything")
                           }),
     paste("The following package is required for something important, but it is still not available:",
-          "- covr", sep = "\n"))
+          "- ggplot2", sep = "\n"))
   unlink(tempdir(), recursive = TRUE)
   tempdir(TRUE)
 })
