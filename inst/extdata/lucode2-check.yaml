@@ -42,8 +42,8 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v1
 
-      - name: Remove bspm
-        run: sudo sed -i /bspm::enable()/d /etc/R/Rprofile.site
+      - name: Remove bspm # to get rid of error when running install.packages
+        run: sudo sed -i '/bspm::enable()/d' /etc/R/Rprofile.site
 
       - name: Checks
         shell: Rscript {0}
