@@ -14,11 +14,12 @@ checkRequiredPackages(
 \arguments{
 \item{requiredPackages}{One or more names of packages that are checked using requireNamespace.}
 
-\item{requiredFor}{Optional single character. What the packages are required for, usually the name of a function.}
+\item{requiredFor}{Optional single string. What the packages are required for, usually the name of a function.}
 
-\item{installFunction}{Optional function, default NULL means install.packages. Will be called during
+\item{installFunction}{Optional function, defaults to install.packages. Will be called during
 checkRequiredPackages like this: installFunction(missingPackages). Only needed if the required packages are not
-available on CRAN or the configured repos (getOption("repos")).}
+available on CRAN or the configured repos (getOption("repos")). In that case you might want to use something like
+function(missingPackages) remotes::install_github("USDA-ERS/MTED-HARr").}
 
 \item{readlineFunction}{Only used for testing. A function to get an answer from the user.}
 }
