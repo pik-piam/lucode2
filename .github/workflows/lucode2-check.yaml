@@ -48,11 +48,14 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v1
 
       - name: Remove bspm
-        run: sudo sed -i '/trace(utils::install.packages, quote({ if (!is.null(repos)) { pikCranPackages <- c("madrat", "magclass", "citation", "gms", "goxygen"); pkgs <- c(bspm::install_sys(pkgs[!pkgs %in% pikCranPackages]), pkgs[pkgs %in% pikCranPackages]) }}), print=FALSE)/d' /etc/R/Rprofile.site
+        run: |
+          sudo sed -i '/trace(utils::install.packages, quote({ if (!is.null(repos)) { pikCranPackages <- c("madrat", "magclass", "citation", "gms", "goxygen"); pkgs <- c(bspm::install_sys(pkgs[!pkgs %in% pikCranPackages]), pkgs[pkgs %in% pikCranPackages]) }}), print=FALSE)/d' /etc/R/Rprofile.site
+          cat /etc/R/Rprofile.site
 
       - name: Checks
         shell: Rscript {0}
         run: |
+          untrace(utils::install.packages)
           options(crayon.enabled = TRUE)
           lucode2::check(runLinter = FALSE)
 
