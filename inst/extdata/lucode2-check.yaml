@@ -25,8 +25,19 @@ jobs:
           chmod 0755 run.sh
           ./run.sh bootstrap
 
-      - name: Use pik-piam r-universe
-        run: echo 'options(repos = c(universe = "https://pik-piam.r-universe.dev", CRAN = "https://cloud.r-project.org"))' > .Rprofile
+      - name: Modify Setup
+        run: |
+          echo 'options(repos = c(universe = "https://pik-piam.r-universe.dev", CRAN = "https://cloud.r-project.org"))' >> .Rprofile
+          cat .Rprofile
+          sudo sed -i '/bspm::enable()/d' /etc/R/Rprofile.site
+          sudo echo 'trace(utils::install.packages, quote({' >> /etc/R/Rprofile.site
+          sudo echo '  if (!is.null(repos)) {' >> /etc/R/Rprofile.site
+          sudo echo '    pikCranPackages <- c("madrat", "magclass", "citation", "gms", "goxygen")' >> /etc/R/Rprofile.site
+          sudo echo '    pkgs <- c(bspm::install_sys(pkgs[!pkgs %in% pikCranPackages]),' >> /etc/R/Rprofile.site
+          sudo echo '              pkgs[pkgs %in% pikCranPackages])' >> /etc/R/Rprofile.site
+          sudo echo '  }' >> /etc/R/Rprofile.site
+          sudo echo '}), print=FALSE)' >> /etc/R/Rprofile.site
+          cat /etc/R/Rprofile.site
 
       - name: Dependencies
         run: |
