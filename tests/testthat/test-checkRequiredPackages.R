@@ -2,7 +2,7 @@ test_that("checkRequiredPackages works", {
   requireNamespace("waldo", quietly = TRUE) # load waldo package needed for expect_false before setting .libPaths
   originalLibPaths <- .libPaths()
   on.exit(.libPaths(originalLibPaths))
-  .libPaths(tempdir(), FALSE)
+  .libPaths(withr::local_tempdir(), FALSE)
   # setting readlineFunction so that the answer is returned without asking
   expect_error(checkRequiredPackages("nonexistantpackage", readlineFunction = function(x) "n"),
                "The following package is required, but it is still not available:\n- nonexistantpackage")
@@ -53,6 +53,4 @@ test_that("checkRequiredPackages works", {
                           }),
     paste("The following package is required for something important, but it is still not available:",
           "- ggplot2", sep = "\n"))
-  unlink(tempdir(), recursive = TRUE)
-  tempdir(TRUE)
 })
