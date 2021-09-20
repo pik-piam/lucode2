@@ -1,8 +1,7 @@
 #' Update package repository
 #'
 #' Function to update an package repository. Run this function on a folder which contains
-#' packages sources as subfolders. Packages should be either managed via svn or git
-#' in order to be updated properly.
+#' packages sources as subfolders. Packages should be managed via git in order to be updated properly.
 #' To add a new package to the repo just checkout/clone it into this folder. The
 #' function will automatically detect the new package and add it.
 #'
@@ -24,6 +23,8 @@
 #' @export
 
 updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = FALSE, pidfile = NULL) { # nolint
+  skipFolders <- c("Archive", "gdxrrw", "HARr")
+
   cat(date(), "\n")
   local_dir(path)
 
@@ -40,10 +41,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
   if (file.exists("/webservice")) {
     local_envvar(c(RSTUDIO_PANDOC = "/usr/local/bin/pandoc")) # nolint
   }
-  if (dir.exists(".svn")) {
-    if (clean) system("svn revert -Rq .")
-    system("svn update -q")
-  }
+
   ap <- suppressWarnings(available.packages(paste0("file:", getwd()), filters = "duplicates"))
   apCRAN <- suppressWarnings(available.packages("https://cloud.r-project.org/src/contrib", filters = "duplicates"))
 
@@ -51,15 +49,9 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
   nchar <- max(nchar(dirs))
   updatePACKAGES <- FALSE
   for (d in dirs) {
-    if (d %in% c("Archive", "gdxrrw")) next
+    if (d %in% skipFolders) next
     local_dir(d)
-    if (dir.exists(".svn")) {
-      if (clean) {
-        system("svn revert -Rq .; svn update -q", wait = FALSE)
-      } else {
-        system("svn update -q", wait = FALSE)
-      }
-    }
+
     if (dir.exists(".git")) {
       if (clean) {
         system("git reset --hard HEAD -q; git clean -fxq; git pull -q", wait = FALSE)
@@ -71,7 +63,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
   }
   dirs <- dirs[order(tolower(dirs))]
   for (d in dirs) {
-    if (d %in% c("Archive", "gdxrrw")) next
+    if (d %in% skipFolders) next
     fd <- format(d, width = nchar)
     curversion <- tryCatch(ap[d, "Version"], error = function(e) {
       return(0)
@@ -135,7 +127,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
   if (updatePACKAGES) {
     write_PACKAGES(unpacked = TRUE)
     for (d in dirs) {
-      if (d %in% c("Archive", "gdxrrw")) next
+      if (d %in% skipFolders) next
       targz <- grep(paste0("^", d, "_.*.tar.gz"), dir(), value = TRUE)
       if (length(targz) > 1) {
         newest <- max(numeric_version(sub("^.*_", "", sub(".tar.gz$", "", targz))))
