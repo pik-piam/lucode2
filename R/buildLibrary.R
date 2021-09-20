@@ -31,7 +31,7 @@
 #' @seealso \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
 #' @importFrom citation package2zenodo
 #' @importFrom yaml write_yaml
-#' @importFrom utils old.packages update.packages
+#' @importFrom utils old.packages update.packages packageVersion
 #' @importFrom devtools document
 #' @examples
 #' \dontrun{
@@ -39,12 +39,17 @@
 #' }
 #' @export
 buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FALSE, commitmessage = NULL) { # nolint
+  pleaseRestartSession <- paste("Please restart your R session (in RStudio: Ctrl+Shift+F10) to make sure that the",
+                                "newest lucode2 version is loaded. Then try again:\nlucode2::buildLibrary()")
+  if (.__NAMESPACE__.$spec[[2]] != packageVersion("lucode2")) {
+    # the loaded lucode2 version (.__NAMESPACE__.$spec[[2]]) is different from the version available on disk
+    stop(pleaseRestartSession)
+  }
   cat("Checking for lucode2 update... ")
   if (!is.null(old.packages(instPkgs = installed.packages()["lucode2", , drop = FALSE]))) {
     cat("A new version of lucode2 is available, please update.\n")
     update.packages(oldPkgs = "lucode2")
-    stop("Please restart your R session (in RStudio: Ctrl+Shift+F10) to make sure that the new lucode2 version is",
-         "loaded. Then run\nlucode2::buildLibrary()")
+    stop(pleaseRestartSession)
   } else {
     cat("You're running the newest lucode2 version.\n")
   }
