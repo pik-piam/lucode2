@@ -2,7 +2,7 @@ Package: lucode2
 Type: Package
 Title: Code Manipulation and Analysis Tools
 Version: 1.0.0
-Date: 2021-09-20
+Date: 2021-09-21
 Authors@R: c(person("Jan Philipp", "Dietrich", email = "dietrich@pik-potsdam.de", role = c("aut","cre")),
              person("David", "Klein", role = "aut"),
              person("Anastasis", "Giannousakis", role = "aut"),
@@ -24,12 +24,13 @@ Imports:
     lintr,
     withr
 Suggests:
+    covr,
     ggplot2,
     gtools,
     lusweave,
     magclass,
+    pkgload,
     testthat,
-    covr,
     waldo
 URL: https://github.com/pik-piam/lucode2, https://doi.org/10.5281/zenodo.4389418
 BugReports: https://github.com/pik-piam/lucode2/issues

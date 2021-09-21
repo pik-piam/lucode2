@@ -1,4 +1,10 @@
 test_that("checkRequiredPackages works", {
+  if (isNamespaceLoaded("gtools")) {
+    pkgload::unload("gtools", quiet = TRUE)
+  }
+  if (isNamespaceLoaded("ggplot2")) {
+    pkgload::unload("ggplot2")
+  }
   requireNamespace("waldo", quietly = TRUE) # load waldo package needed for expect_false before setting .libPaths
   originalLibPaths <- .libPaths()
   on.exit(.libPaths(originalLibPaths))
