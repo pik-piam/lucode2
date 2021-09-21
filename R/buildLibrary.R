@@ -16,6 +16,7 @@
 #' @param cran If cran-like test is needed
 #' @param gitpush If a git commit should happen automatically
 #' @param commitmessage Your commit message
+#' @param checkForUpdates Check for lucode2 updates (default TRUE). Set FALSE in case of problems with the new version.
 #' @param updateType Either an integer or character string:
 #'
 #'   | **number**  | **string**    | **description**                          |
@@ -38,20 +39,23 @@
 #' buildLibrary()
 #' }
 #' @export
-buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FALSE, commitmessage = NULL) { # nolint
-  pleaseRestartSession <- paste("Please restart your R session (in RStudio: Ctrl+Shift+F10) to make sure that the",
-                                "newest lucode2 version is loaded. Then try again:\nlucode2::buildLibrary()")
-  if (.__NAMESPACE__.$spec[[2]] != packageVersion("lucode2")) {
-    # the loaded lucode2 version (.__NAMESPACE__.$spec[[2]]) is different from the version available on disk
-    stop(pleaseRestartSession)
-  }
-  cat("Checking for lucode2 update... ")
-  if (!is.null(old.packages(instPkgs = installed.packages()["lucode2", , drop = FALSE]))) {
-    cat("A new version of lucode2 is available, please update.\n")
-    update.packages(oldPkgs = "lucode2")
-    stop(pleaseRestartSession)
-  } else {
-    cat("You're running the newest lucode2 version.\n")
+buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FALSE, commitmessage = NULL, # nolint
+                         checkForUpdates = TRUE) {
+  if (checkForUpdates) {
+    pleaseRestartSession <- paste("Please restart your R session (in RStudio: Ctrl+Shift+F10) to make sure that the",
+                                  "newest lucode2 version is loaded. Then try again:\nlucode2::buildLibrary()")
+    if (.__NAMESPACE__.$spec[[2]] != packageVersion("lucode2")) {
+      # the loaded lucode2 version (.__NAMESPACE__.$spec[[2]]) is different from the version available on disk
+      stop(pleaseRestartSession)
+    }
+    cat("Checking for lucode2 update... ")
+    if (!is.null(old.packages(instPkgs = installed.packages()["lucode2", , drop = FALSE]))) {
+      cat("A new version of lucode2 is available, please update.\n")
+      update.packages(oldPkgs = "lucode2")
+      stop(pleaseRestartSession)
+    } else {
+      cat("You're running the newest lucode2 version.\n")
+    }
   }
 
   getLine <- function() {
