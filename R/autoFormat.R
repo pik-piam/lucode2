@@ -26,6 +26,6 @@ autoFormat <- function(files = getFilesToLint(), ignoreLintFreeFiles = TRUE, lin
   message("Hint: In RStudio you can fix indentation in selected lines using ctrl + i.")
 
   if (lintAfterwards) {
-    return(lint(files))
+    print(lint(files))
   }
 }
