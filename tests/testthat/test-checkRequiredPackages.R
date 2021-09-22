@@ -1,23 +1,17 @@
 test_that("checkRequiredPackages works", {
-  if (isNamespaceLoaded("gtools")) {
-    pkgload::unload("gtools", quiet = TRUE)
-  }
-  if (isNamespaceLoaded("ggplot2")) {
-    pkgload::unload("ggplot2")
-  }
-  requireNamespace("waldo", quietly = TRUE) # load waldo package needed for expect_false before setting .libPaths
-  originalLibPaths <- .libPaths()
-  on.exit(.libPaths(originalLibPaths))
-  .libPaths(withr::local_tempdir(), FALSE)
   # setting readlineFunction so that the answer is returned without asking
-  expect_error(checkRequiredPackages("nonexistantpackage", readlineFunction = function(x) "n"),
-               "The following package is required, but it is still not available:\n- nonexistantpackage")
-  expect_error(checkRequiredPackages("nonexistantpackage",
-                                     installFunction = function(x) 0,
-                                     readlineFunction = function(x) "y"),
-               "The following package is required, but it is still not available:\n- nonexistantpackage")
+  expect_error(checkRequiredPackages("nonexistentpackage", readlineFunction = function(question) "n"),
+               "The following package is required, but it is still not available:\n- nonexistentpackage")
+  expect_error(checkRequiredPackages("nonexistentpackage",
+                                     installFunction = function(...) 0, # do nothing to mimic failed installation
+                                     readlineFunction = function(question) "y"),
+               "The following package is required, but it is still not available:\n- nonexistentpackage")
 
-  expect_error(checkRequiredPackages("gtools", readlineFunction = function(x) "n"),
+  temporaryLibPath <- withr::local_tempdir()
+  unloadNamespace("gtools")
+  unloadNamespace("ggplot2")
+
+  expect_error(checkRequiredPackages("gtools", readlineFunction = function(question) "n", libPaths = temporaryLibPath),
                "The following package is required, but it is still not available:\n- gtools")
 
   expect_error(
@@ -28,13 +22,14 @@ test_that("checkRequiredPackages works", {
                               "- gtools",
                               "- ggplot2",
                               "Do you want to install them now? (y/N)", sep = "\n"))
-                            return("")
-                          }),
+                            return("") # answer = "" should trigger the default (FALSE)
+                          },
+                          libPaths = temporaryLibPath),
     paste("The following packages are required for something nice, but they are still not available:",
           "- gtools",
           "- ggplot2", sep = "\n"))
 
-  expect_false(requireNamespace("gtools", quietly = TRUE))
+  expect_false(requireNamespace("gtools", lib.loc = temporaryLibPath, quietly = TRUE))
 
   withr::local_options(c(repos = "https://cran.rstudio.com/"))
   checkRequiredPackages("gtools", requiredFor = "something cool",
@@ -45,18 +40,20 @@ test_that("checkRequiredPackages works", {
                             "Do you want to install it now? (y/N)", sep = "\n"))
                           return("y")
                         },
-                        installFunction = function(...) install.packages(..., quiet = TRUE))
-  expect_true(requireNamespace("gtools", quietly = TRUE))
+                        installFunction = function(...) install.packages(..., quiet = TRUE),
+                        libPaths = temporaryLibPath)
+  expect_true(requireNamespace("gtools", lib.loc = temporaryLibPath, quietly = TRUE))
 
   expect_error(
     checkRequiredPackages(c("gtools", "ggplot2"), requiredFor = "something important",
                           readlineFunction = function(question) {
                             expect_identical(question, paste(
                               "The following currently not installed package is required for something important:",
-                              "- ggplot2",
+                              "- ggplot2", # gtools was already installed, so only ggplot2 missing
                               "Do you want to install it now? (y/N)", sep = "\n"))
-                            return("anything")
-                          }),
+                            return("anything") # any answer except y/yes -> FALSE
+                          },
+                          libPaths = temporaryLibPath),
     paste("The following package is required for something important, but it is still not available:",
-          "- ggplot2", sep = "\n"))
+          "- ggplot2", sep = "\n")) # gtools was already installed, so only ggplot2 missing
 })
