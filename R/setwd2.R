@@ -8,12 +8,12 @@
 #'         but path transformed.
 #' @author Benjamin Leon Bodirsky
 #' @export
-setwd2 <- function(return_only = FALSE) {
+setwd2 <- function(return_only = FALSE) { # nolint
   cat("Please enter URL here:")
   x <- readline()
   x <- gsub("\\\\", "/", x)
   if (return_only == FALSE) {
-    setwd(x)
+    setwd(x) # nolint
   } else {
     return(x)
   }

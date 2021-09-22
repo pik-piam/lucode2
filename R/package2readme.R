@@ -8,7 +8,7 @@
 #' @importFrom desc desc
 #' @importFrom utils citation vignette
 #' @importFrom usethis git_remotes
-#' @importFrom withr with_dir with_options
+#' @importFrom withr with_dir local_options
 #' @examples
 #' package2readme("lucode2")
 #' @export
@@ -33,19 +33,13 @@ package2readme <- function(package = ".") { #nolint
       return(NULL)
     }
     with_dir(folder, {
-      out <- try(usethis::git_remotes(), silent = TRUE)
+      out <- try(git_remotes(), silent = TRUE)
     })
     if ("try-error" %in% class(out)) {
       return(NULL)
     }
     out <- ifelse("origin" %in% names(out), out[["origin"]], out[[1]])
     return(.harmonize(out))
-  }
-
-  withTravis <- function(folder) {
-    travisfile <- file.path(folder, ".travis.yml")
-    if (!is.null(folder) && file.exists(travisfile)) return(TRUE)
-    return(FALSE)
   }
 
   withGithubActions <- function(folder) {
@@ -55,13 +49,6 @@ package2readme <- function(package = ".") { #nolint
   }
 
   withCodecov <- function(folder) {
-    if (withTravis(folder)) {
-      travisfile <- file.path(folder, ".travis.yml")
-      if (file.exists(travisfile)) {
-        tmp <- readLines(travisfile)
-        if (any(grepl("codecov", tmp))) return(TRUE)
-      }
-    }
     if (withGithubActions(folder)) {
       ghafile <- Sys.glob(file.path(folder, ".github", "workflows", "*.y*ml"))
       if (length(ghafile) > 0) {
@@ -72,17 +59,6 @@ package2readme <- function(package = ".") { #nolint
       }
     }
     return(FALSE)
-  }
-
-  fillTravis <- function(d, folder) {
-    if (!withTravis(folder)) return("")
-    z <- getGitHubRepo(d, folder)
-    if (is.null(z)) return("")
-    path <- sub("^[^/]*", "", z)
-    out <- paste0("[![Travis build status](https://travis-ci.com",
-                  path, ".svg?branch=master)](https://travis-ci.com",
-                  path, ")")
-    return(out)
   }
 
   fillGithubActions <- function(d, folder) {
@@ -133,12 +109,11 @@ package2readme <- function(package = ".") { #nolint
 
   fillCite <- function(d) {
     # the format function wraps lines according to the width option, set explicitly so it is always the same
-    with_options(list(width = 1000), {
-      out <- c("\nTo cite package **", d$get("Package"), "** in publications use:\n\n",
-               format(citation(package = d$get("Package")), style = "text"),
-               "\n\nA BibTeX entry for LaTeX users is\n\n ```latex\n",
-               format(citation(package = d$get("Package")), style = "bibtex"), "\n```")
-    })
+    local_options(list(width = 664)) # 664 * 0.75 is <= 500; will get deparse cutoff warning if > 500
+    out <- c("\nTo cite package **", d$get("Package"), "** in publications use:\n\n",
+             format(citation(package = d$get("Package")), style = "text"),
+             "\n\nA BibTeX entry for LaTeX users is\n\n ```latex\n",
+             format(citation(package = d$get("Package")), style = "bibtex"), "\n```")
     return(paste(out, collapse = ""))
   }
 
@@ -192,7 +167,6 @@ package2readme <- function(package = ".") { #nolint
                maintainer    = d$get_maintainer(),
                cran          = fillCRAN(d),
                zenodo        = fillZenodo(d),
-               travis        = fillTravis(d, folder),
                githubactions = fillGithubActions(d, folder),
                codecov       = fillCodecov(d, folder),
                runiverse     = fillRUniverse(d$get("Package")),

@@ -6,6 +6,7 @@
 #' @param tmpLib temporary library directory where the package should be installed
 #' @param ... additional arguments forwarded to \code{devtools::install_github}
 #' @author Jan Philipp Dietrich
+#' @importFrom devtools install_github
 #' @export
 #' @examples
 #' \dontrun{
@@ -15,7 +16,8 @@
 testPackage <- function(repo, tmpLib = tempdir(), ...) {
   dir.create(tmpLib, recursive = TRUE)
   tmpLib <- normalizePath(tmpLib)
-  .libPaths(c(tmpLib, .libPaths()))
-  devtools::install_github(repo, ...)
+  .libPaths(c(tmpLib, .libPaths())) # nolint
+  warning(paste0(".libPaths was changed: .libPaths(", paste('"', .libPaths(), '"', collapse = ",\n"), ")")) # nolint
+  install_github(repo, ...)
   return(tmpLib)
 }

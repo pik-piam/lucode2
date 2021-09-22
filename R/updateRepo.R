@@ -1,8 +1,7 @@
 #' Update package repository
 #'
 #' Function to update an package repository. Run this function on a folder which contains
-#' packages sources as subfolders. Packages should be either managed via svn or git
-#' in order to be updated properly.
+#' packages sources as subfolders. Packages should be managed via git in order to be updated properly.
 #' To add a new package to the repo just checkout/clone it into this folder. The
 #' function will automatically detect the new package and add it.
 #'
@@ -18,13 +17,16 @@
 #' have this working.
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{buildLibrary}}
+#' @importFrom devtools install_deps document build
+#' @importFrom tools write_PACKAGES
+#' @importFrom withr local_dir local_envvar
 #' @export
 
-updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = FALSE, pidfile = NULL) {
+updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = FALSE, pidfile = NULL) { # nolint
+  skipFolders <- c("Archive", "gdxrrw", "HARr")
+
   cat(date(), "\n")
-  cwd <- getwd()
-  on.exit(setwd(cwd))
-  setwd(path)
+  local_dir(path)
 
   if (!is.null(pidfile)) {
     if (file.exists(pidfile)) {
@@ -37,12 +39,9 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
     writeLines(as.character(Sys.getpid()), pidfile)
   }
   if (file.exists("/webservice")) {
-    Sys.setenv("RSTUDIO_PANDOC" = "/usr/local/bin/pandoc")
+    local_envvar(c(RSTUDIO_PANDOC = "/usr/local/bin/pandoc")) # nolint
   }
-  if (dir.exists(".svn")) {
-    if (clean) system("svn revert -Rq .")
-    system("svn update -q")
-  }
+
   ap <- suppressWarnings(available.packages(paste0("file:", getwd()), filters = "duplicates"))
   apCRAN <- suppressWarnings(available.packages("https://cloud.r-project.org/src/contrib", filters = "duplicates"))
 
@@ -50,15 +49,9 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
   nchar <- max(nchar(dirs))
   updatePACKAGES <- FALSE
   for (d in dirs) {
-    if (d %in% c("Archive", "gdxrrw")) next
-    setwd(d)
-    if (dir.exists(".svn")) {
-      if (clean) {
-        system("svn revert -Rq .; svn update -q", wait = FALSE)
-      } else {
-        system("svn update -q", wait = FALSE)
-      }
-    }
+    if (d %in% skipFolders) next
+    local_dir(d)
+
     if (dir.exists(".git")) {
       if (clean) {
         system("git reset --hard HEAD -q; git clean -fxq; git pull -q", wait = FALSE)
@@ -66,16 +59,16 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
         system("git pull -q", wait = FALSE)
       }
     }
-    setwd("..")
+    local_dir("..")
   }
   dirs <- dirs[order(tolower(dirs))]
   for (d in dirs) {
-    if (d %in% c("Archive", "gdxrrw")) next
+    if (d %in% skipFolders) next
     fd <- format(d, width = nchar)
     curversion <- tryCatch(ap[d, "Version"], error = function(e) {
       return(0)
     })
-    setwd(d)
+    local_dir(d)
     vkey <- validkey()
     pattern <- paste0("^", d, "_(.*)\\.tar\\.gz")
     buildVersion <- max(as.numeric_version(sub(pattern, "\\1", dir("..", pattern = pattern))))
@@ -129,12 +122,12 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
       }
       message(".:: ", fd, " ", format(curversion, width = 10), " ok ::.", craninfo)
     }
-    setwd("..")
+    local_dir("..")
   }
   if (updatePACKAGES) {
-    tools::write_PACKAGES(unpacked = TRUE)
+    write_PACKAGES(unpacked = TRUE)
     for (d in dirs) {
-      if (d %in% c("Archive", "gdxrrw")) next
+      if (d %in% skipFolders) next
       targz <- grep(paste0("^", d, "_.*.tar.gz"), dir(), value = TRUE)
       if (length(targz) > 1) {
         newest <- max(numeric_version(sub("^.*_", "", sub(".tar.gz$", "", targz))))

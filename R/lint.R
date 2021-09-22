@@ -12,7 +12,9 @@
 
 #' @author Pascal Führlich
 #' @seealso \code{\link{getFilesToLint}}, \code{\link{autoFormat}}, \code{\link[lintr]{lint}}
-#' @importFrom lintr lint_package
+#' @importFrom lintr lint_package with_defaults absolute_path_linter line_length_linter object_name_linter
+#' todo_comment_linter undesirable_function_linter cyclocomp_linter default_undesirable_functions
+#' undesirable_operator_linter
 #' @examples
 #' lucode2::lint()
 #' @export
@@ -27,20 +29,20 @@ lint <- function(files = getFilesToLint()) {
 
   # in tests undesirable functions (excepted deprecated ones) and undesirable operators are ok
   linterArgsForTests <- list(
-    absolute_path_linter = lintr::absolute_path_linter(),
-    line_length_linter = lintr::line_length_linter(120),
-    object_name_linter = lintr::object_name_linter(styles = "camelCase"),
-    todo_comment_linter = lintr::todo_comment_linter(),
-    undesirable_function_linter = lintr::undesirable_function_linter(deprecatedFunctions),
-    cyclocomp_linter = lintr::cyclocomp_linter(25)
+    absolute_path_linter = absolute_path_linter(),
+    line_length_linter = line_length_linter(120),
+    object_name_linter = object_name_linter(styles = "camelCase"),
+    todo_comment_linter = todo_comment_linter(),
+    undesirable_function_linter = undesirable_function_linter(deprecatedFunctions),
+    cyclocomp_linter = cyclocomp_linter(25)
   )
-  lintersForTests <- do.call(lintr::with_defaults, linterArgsForTests)
+  lintersForTests <- do.call(with_defaults, linterArgsForTests)
 
   linterArgs <- linterArgsForTests
   linterArgs$undesirable_function_linter <- # nolint
-    lintr::undesirable_function_linter(c(lintr::default_undesirable_functions, deprecatedFunctions))
-  linterArgs$undesirable_operator_linter <- lintr::undesirable_operator_linter() # nolint
-  linters <- do.call(lintr::with_defaults, linterArgs)
+    undesirable_function_linter(c(default_undesirable_functions, deprecatedFunctions))
+  linterArgs$undesirable_operator_linter <- undesirable_operator_linter() # nolint
+  linters <- do.call(with_defaults, linterArgs)
 
   if (identical(files, ".")) {
     files <- list.files(path = c("tests", "R", "inst"), pattern = "\\.R(md|nw)?$", recursive = TRUE, full.names = TRUE)

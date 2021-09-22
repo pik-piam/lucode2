@@ -5,7 +5,7 @@
 #' @author Jan Philipp Dietrich, David Klein
 #' @export
 getfiledestinations <- function() {
-  folders <- base::list.dirs(recursive = FALSE, full.names = FALSE)
+  folders <- list.dirs(recursive = FALSE, full.names = FALSE)
   folders <- grep("^(\\.|225|output|calib_run|figure)", folders, invert = TRUE, value = TRUE)
   files <- NULL
   for (f in folders) files <- c(files, dir(path = f, pattern = "^files$", recursive = TRUE, full.names = TRUE))

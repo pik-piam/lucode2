@@ -9,12 +9,10 @@
 #'
 #' @param folder R folder of the package
 #' @author Jan Philipp Dietrich
+#' @importFrom withr local_dir
 #' @export
-#'
 getPackageAuthors <- function(folder = "R") {
-  cwd <- getwd()
-  on.exit(setwd(cwd))
-  setwd(folder)
+  local_dir(folder)
 
   files <- dir(".")
   authors <- NULL

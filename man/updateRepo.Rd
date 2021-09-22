@@ -29,8 +29,7 @@ have this working.}
 }
 \description{
 Function to update an package repository. Run this function on a folder which contains
-packages sources as subfolders. Packages should be either managed via svn or git
-in order to be updated properly.
+packages sources as subfolders. Packages should be managed via git in order to be updated properly.
 To add a new package to the repo just checkout/clone it into this folder. The
 function will automatically detect the new package and add it.
 }

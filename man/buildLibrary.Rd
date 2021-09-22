@@ -9,7 +9,8 @@ buildLibrary(
   cran = TRUE,
   updateType = NULL,
   gitpush = FALSE,
-  commitmessage = NULL
+  commitmessage = NULL,
+  checkForUpdates = TRUE
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ buildLibrary(
 \item{gitpush}{If a git commit should happen automatically}
 
 \item{commitmessage}{Your commit message}
+
+\item{checkForUpdates}{Check for lucode2 updates (default TRUE). Set FALSE in case of problems with the new version.}
 }
 \description{
 Builds R libraries. Includes checks for consistency.

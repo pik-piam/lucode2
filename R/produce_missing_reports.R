@@ -7,12 +7,11 @@
 #' #'
 #' @param modeldir Path to the main folder of REMIND or MAgPIE.
 #' @importFrom utils read.delim
+#' @importFrom withr local_dir
 #' @author David Klein
 #' @export
-produce_missing_reports <- function(modeldir = "./") {
-  maindir <- getwd()
-  on.exit(setwd(maindir))
-  setwd(modeldir)
+produce_missing_reports <- function(modeldir = "./") { # nolint
+  local_dir(modeldir)
 
   allruns <- findIterations(findCoupledruns("output"), "output", latest = TRUE)
   running <- system("squeue -u $USER -o \"%Z %j\"", intern = TRUE)
@@ -50,7 +49,7 @@ produce_missing_reports <- function(modeldir = "./") {
     cat("Missing reports found for\n")
     print(produceReport)
     sw <- readline("Do you want to produce the output for these runs now? (y/n): ")
-    if (sw == "y") {
+    if (tolower(sw) %in% c("y", "yes")) {
       # nolint start
       # MAGPIE
       comp <- FALSE

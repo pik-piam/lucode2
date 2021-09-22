@@ -4,10 +4,12 @@
 \alias{validkey}
 \title{validkey}
 \usage{
-validkey(package = ".")
+validkey(package = ".", stopIfInvalid = FALSE)
 }
 \arguments{
 \item{package}{Path to the package}
+
+\item{stopIfInvalid}{logical; whether to stop if the key is invalid.}
 }
 \value{
 list with version, date and result of validation test
