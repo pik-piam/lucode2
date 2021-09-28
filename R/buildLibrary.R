@@ -33,7 +33,6 @@
 #' @importFrom citation package2zenodo
 #' @importFrom yaml write_yaml
 #' @importFrom utils old.packages update.packages packageVersion
-#' @importFrom devtools document
 #' @examples
 #' \dontrun{
 #' buildLibrary()
@@ -85,7 +84,6 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ####################################################################
   # Run checks, tests and linter
   ###################################################################
-
   check(lib = lib, cran = cran, config = cfg)
 
   ####################################################################
@@ -93,14 +91,6 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ###################################################################
   rcheckfolders <- grep(".Rcheck$", list.dirs(path = lib, full.names = FALSE, recursive = FALSE), value = TRUE)
   unlink(rcheckfolders, recursive = TRUE)
-
-  ####################################################################
-  # Check if roxygen is used and run roxygenize if required
-  ###################################################################
-  descfile <- readLines(file.path(lib, "DESCRIPTION"))
-  if (any(grepl("RoxygenNote", descfile))) {
-    document(pkg = lib, roclets = c("rd", "collate", "namespace", "vignette"))
-  }
 
   ############################################################
   # GitHub actions

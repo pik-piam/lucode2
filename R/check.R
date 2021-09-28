@@ -13,13 +13,15 @@
 #' \dontrun{
 #' lucode2::check()
 #' }
-#' @importFrom devtools check test
+#' @importFrom devtools document check test
 #' @seealso \code{\link{buildLibrary}}, \code{\link{lint}}
 #' @seealso \code{\link[devtools]{check}}, \code{\link[devtools]{test}}
 #' @export
 check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), runLinter = TRUE) {
+  document(pkg = lib, roclets = c("rd", "collate", "namespace", "vignette"))
+
   ########### Run checks ###########
-  checkResults <- devtools::check(lib, cran = cran, args = "--no-tests")
+  checkResults <- devtools::check(lib, document = FALSE, cran = cran, args = "--no-tests")
 
   # Filter warnings and notes which are accepted
   for (acceptedWarning in config[["AcceptedWarnings"]]) {
