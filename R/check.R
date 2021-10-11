@@ -46,7 +46,10 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
 
 
   ########### Run tests ###########
-  testResults <- as.data.frame(devtools::test(lib))
+  testResultsRds <- withr::local_tempfile()
+  system(paste0("Rscript -e 'options(crayon.enabled = TRUE); saveRDS(devtools::test(\"", lib, "\"), file = \"",
+                testResultsRds, "\")'"))
+  testResults <- as.data.frame(readRDS(testResultsRds))
 
   if (sum(testResults[["failed"]]) > 0 || any(testResults[["error"]])) {
     stop("Some tests failed, please fix them first.")
