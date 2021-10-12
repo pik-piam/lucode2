@@ -22,7 +22,13 @@ check(
 \item{runLinter}{Set to FALSE to skip the linter.}
 }
 \description{
-Runs devtools::test(), devtools::check() (without tests), and lucode2::lint()
+Builds documentation and runs checks, tests, and linter.
+}
+\details{
+This function builds documentation including vignettes via devtools::document(). It runs devtools::check()
+(without tests), then in a separate clean R session it runs devtools::test(), and finally lucode2::lint(). Warnings
+and notes in checks and tests are only allowed if the given config defines them as accepted, otherwise this function
+will stop.
 }
 \examples{
 \dontrun{
