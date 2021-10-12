@@ -1,6 +1,11 @@
 #' check
 #'
-#' Runs devtools::test(), devtools::check() (without tests), and lucode2::lint()
+#' Builds documentation and runs checks, tests, and linter.
+#'
+#' This function builds documentation including vignettes via devtools::document(). It runs devtools::check()
+#' (without tests), then in a separate clean R session it runs devtools::test(), and finally lucode2::lint(). Warnings
+#' and notes in checks and tests are only allowed if the given config defines them as accepted, otherwise this function
+#' will stop.
 #'
 #' @param lib Path to the package
 #' @param cran If cran-like test is needed
@@ -13,11 +18,13 @@
 #' \dontrun{
 #' lucode2::check()
 #' }
-#' @importFrom devtools document check test
+#' @importFrom devtools document check
+#' @importFrom withr local_tempdir
 #' @seealso \code{\link{buildLibrary}}, \code{\link{lint}}
 #' @seealso \code{\link[devtools]{check}}, \code{\link[devtools]{test}}
 #' @export
 check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), runLinter = TRUE) {
+  lib <- normalizePath(lib, winslash = "/")
   document(pkg = lib, roclets = c("rd", "collate", "namespace", "vignette"))
 
   ########### Run checks ###########
@@ -46,9 +53,10 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
 
 
   ########### Run tests ###########
-  testResultsRds <- withr::local_tempfile()
-  system(paste0("Rscript -e 'options(crayon.enabled = TRUE); saveRDS(devtools::test(\"", lib, "\"), file = \"",
-                testResultsRds, "\")'"))
+  testResultsRds <- normalizePath(file.path(local_tempdir(), "testResults.rds"),
+                                  winslash = "/", mustWork = FALSE)
+  system(paste0("Rscript -e \"options(crayon.enabled = TRUE); saveRDS(devtools::test('", lib, "'), file = '",
+                testResultsRds, "')\""))
   testResults <- as.data.frame(readRDS(testResultsRds))
 
   if (sum(testResults[["failed"]]) > 0 || any(testResults[["error"]])) {
