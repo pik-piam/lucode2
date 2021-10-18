@@ -10,10 +10,10 @@ addGitHubActions(lib = ".")
 \item{lib}{Path to the package}
 }
 \description{
-adds GitHubActions with a standard workflow including codecov to the package. It will add a standard
-Github action "test-buildlibrary.yml" to the project which performs standard tests as well as
-creates a coverage report. This file is overwritten automatically each time this function is run and
-should not be edited by hand. Additional Github actions can be added as separate files.
+This function adds a standard Github action workflow called "lucode2-check.yaml" to the project which runs
+lucode2::check(), checks the validation key, and creates a coverage report using codecov. This file is overwritten
+automatically each time this function is run and should not be edited by hand. Additional Github actions can be
+added as separate files.
 }
 \details{
 In addition, this function adds a codecov.yml to the repository, if not already existing. This file
