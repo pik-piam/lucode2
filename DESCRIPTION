@@ -25,6 +25,7 @@ Imports:
     withr
 Suggests:
     covr,
+    gert,
     ggplot2,
     gtools,
     lusweave,
