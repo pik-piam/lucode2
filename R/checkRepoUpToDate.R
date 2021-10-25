@@ -1,4 +1,5 @@
 #' @importFrom usethis git_default_branch
+#' @importFrom withr local_dir
 checkRepoUpToDate <- function(pathToRepo = ".") {
   # asking the user is fallback if automatic check does not work
   askUser <- function(ignoredParameter) {
@@ -11,25 +12,31 @@ checkRepoUpToDate <- function(pathToRepo = ".") {
 
   tryCatch({
     checkRequiredPackages("gert", "automatically checking if the git repo is up-to-date")
-    withr::local_dir(pathToRepo)
+    message("Checking if your repository is up-to-date...")
+    local_dir(pathToRepo)
 
     if (!"upstream" %in% gert::git_remote_list()[["name"]]) {
-      remoteUrl <- gert::git_remote_info()[["url"]]
-      gert::git_remote_add(url = sub("[^/:]*/", "pik-piam/", remoteUrl), name = "upstream")
+      remoteUrl <- sub("[^/:]*/", "pik-piam/", gert::git_remote_info()[["url"]])
+      message("Creating a git remote called 'upstream' pointing to ", remoteUrl)
+      gert::git_remote_add(url = remoteUrl, name = "upstream")
     }
+
+    gert::git_fetch()
+    behindTracking <- gert::git_ahead_behind()[["behind"]]
 
     gert::git_fetch("upstream")
-    gert::git_fetch()
+    behindUpstream <- gert::git_ahead_behind(upstream = paste0("upstream/", git_default_branch()))[["behind"]]
 
-    behindMessage <- "Your repo is not up-to-date. Please run the following:"
-    if (gert::git_ahead_behind(upstream = paste0("upstream/", git_default_branch()))[["behind"]] > 0) {
-      behindMessage <- paste0(behindMessage, "\ngit pull upstream ", git_default_branch())
-    }
-    if (gert::git_ahead_behind()[["behind"]] > 0) {
-      behindMessage <- paste0(behindMessage, "\ngit pull")
-    }
-    if (behindMessage != "Your repo is not up-to-date. Please run the following:") {
-      stop(behindMessage)
+    if (behindUpstream > 0 || behindTracking > 0) {
+      errorMessage <- "Your repo is not up-to-date."
+      if (behindTracking > 0) {
+        errorMessage <- paste0(errorMessage, "\nYou are ", behindTracking, " commits behind. Please run:\ngit pull")
+      }
+      if (behindUpstream > 0) {
+        errorMessage <- paste0(errorMessage, "\nYou are ", behindUpstream, " commits behind upstream. ",
+                               "Please run:\ngit pull upstream ", git_default_branch())
+      }
+      stop(errorMessage)
     } else {
       message("Your repo is up-to-date.")
     }
