@@ -40,7 +40,7 @@
 #'                                    (autocompletion via asterisks allowed)
 #' * **AcceptedNotes** (optional): a list of Notes which should be ignored by `buildLibrary`
 #'                                    (autocompletion via asterisks allowed)
-#' * **allowLinterWarnings**: yes/no - decides whether linter warnings should stop the build process or not
+#' * **allowLinterWarnings**: yes/no - If set to "no" linter warnings will stop the build process.
 #'                            (default: yes)
 #' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Führlich
 #' @seealso \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}

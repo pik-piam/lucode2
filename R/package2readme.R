@@ -161,13 +161,12 @@ package2readme <- function(package = ".", add = NULL) { # nolint
     for (a in add) {
       if (file.exists(file.path(folder, a))) a <- file.path(folder, a)
       if (file.exists(a)) {
-        fType <- tail(strsplit(a, "\\.")[[1]], 1)
+        fileType <- tools::file_ext(a)
         if (tolower(fType) == "rmd") {
           checkRequiredPackages("knitr")
-          tmpFile <- tempfile()
+          tmpFile <- withr::local_tempfile()
           knitr::knit(a, output = tmpFile)
           a <- readLines(tmpFile)
-          unlink(tmpFile)
         } else if (tolower(fType) == "md") {
           a <- readLines(a)
         } else {
