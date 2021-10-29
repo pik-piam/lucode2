@@ -1,8 +1,8 @@
 #' @importFrom usethis git_default_branch
 #' @importFrom withr local_dir
-checkRepoUpToDate <- function(pathToRepo = ".") {
+checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
   # asking the user is fallback if automatic check does not work
-  askUser <- function(ignoredParameter) {
+  askUser <- function(ignoredParameter) { # a warning/error which we don't need is passed by tryCatch
     didYouPullQuestion <- paste("Automatic up-to-date check failed. Is your repository up-to-date?",
                                 "Did you pull immediately before running this check? (Y/n) ")
     if (!(tolower(readline(didYouPullQuestion)) %in% c("", "y", "yes"))) {
@@ -10,10 +10,22 @@ checkRepoUpToDate <- function(pathToRepo = ".") {
     }
   }
 
+  if (isFALSE(autoCheckRepoUpToDate)) {
+    askUser(NULL)
+    return(invisible(NULL))
+  }
+
   tryCatch({
     checkRequiredPackages("gert", "automatically checking if the git repo is up-to-date")
     message("Checking if your repository is up-to-date...")
     local_dir(pathToRepo)
+
+    # check whether we are merging
+    gitStatus <- system2("git", "status", stdout = TRUE)
+    if ("You have unmerged paths." %in% gitStatus ||
+        "All conflicts fixed but you are still merging." %in% gitStatus) {
+      stop("Cannot check if repo is up-to-date during merge.") # this will not actually stop, but run askUser
+    }
 
     if (!"upstream" %in% gert::git_remote_list()[["name"]]) {
       remoteUrl <- sub("[^/:]*/", "pik-piam/", gert::git_remote_info()[["url"]])

@@ -17,6 +17,7 @@
 #' @param gitpush If a git commit should happen automatically
 #' @param commitmessage Your commit message
 #' @param checkForUpdates Check for lucode2 updates (default TRUE). Set FALSE in case of problems with the new version.
+#' @param autoCheckRepoUpToDate Automatically check if your repository is up to date. If FALSE the user is simply asked.
 #' @param updateType Either an integer or character string:
 #'
 #'   | **number**  | **string**    | **description**                          |
@@ -39,7 +40,7 @@
 #' }
 #' @export
 buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FALSE, commitmessage = NULL, # nolint
-                         checkForUpdates = TRUE) {
+                         checkForUpdates = TRUE, autoCheckRepoUpToDate = TRUE) {
   if (checkForUpdates) {
     pleaseRestartSession <- paste("Please restart your R session (in RStudio: Ctrl+Shift+F10) to make sure that the",
                                   "newest lucode2 version is loaded. Then try again:\nlucode2::buildLibrary()")
@@ -70,7 +71,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
     return(s)
   }
 
-  checkRepoUpToDate(lib)
+  checkRepoUpToDate(lib, autoCheckRepoUpToDate)
 
   ############################################################
   # load/create .buildLibrary file
