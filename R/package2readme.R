@@ -162,15 +162,15 @@ package2readme <- function(package = ".", add = NULL) { # nolint
       if (file.exists(file.path(folder, a))) a <- file.path(folder, a)
       if (file.exists(a)) {
         fileType <- tools::file_ext(a)
-        if (tolower(fType) == "rmd") {
+        if (tolower(fileType) == "rmd") {
           checkRequiredPackages("knitr")
           tmpFile <- withr::local_tempfile()
           knitr::knit(a, output = tmpFile)
           a <- readLines(tmpFile)
-        } else if (tolower(fType) == "md") {
+        } else if (tolower(fileType) == "md") {
           a <- readLines(a)
         } else {
-          stop("Unsupported file type \"", fType, "\"")
+          stop("Unsupported file type \"", fileType, "\"")
         }
       }
       out <- c(out, a)

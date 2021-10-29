@@ -60,7 +60,7 @@ in markdown format or as paths to RMarkdown (Rmd) or Markdown (md) files
 (autocompletion via asterisks allowed)
 \item \strong{AcceptedNotes} (optional): a list of Notes which should be ignored by \code{buildLibrary}
 (autocompletion via asterisks allowed)
-\item \strong{allowLinterWarnings}: yes/no - decides whether linter warnings should stop the build process or not
+\item \strong{allowLinterWarnings}: yes/no - If set to "no" linter warnings will stop the build process.
 (default: yes)
 }
 }
