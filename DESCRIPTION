@@ -18,7 +18,7 @@ Imports:
     devtools,
     dplyr,
     rlang,
-    usethis,
+    usethis (>= 2.1.0),
     yaml,
     styler,
     tools,
