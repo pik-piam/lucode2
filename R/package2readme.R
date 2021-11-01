@@ -4,15 +4,18 @@
 #'
 #' @param package either the path to the main folder of a package (containing a DESCRIPTION file)
 #' or the name of the package
+#' @param add a character vector with additions to the README file. Each element of the vector can be either
+#' 1) a line of markdown code, 2) a path to a markdown file, or 3) a path to a Rmarkdown file
 #' @author Jan Philipp Dietrich
 #' @importFrom desc desc
 #' @importFrom utils citation vignette
 #' @importFrom usethis git_remotes
-#' @importFrom withr with_dir local_options
+#' @importFrom withr with_dir local_options local_tempfile
+#' @importFrom tools file_ext
 #' @examples
 #' package2readme("lucode2")
 #' @export
-package2readme <- function(package = ".") { #nolint
+package2readme <- function(package = ".", add = NULL) { # nolint
   if (file.exists(file.path(package, "DESCRIPTION"))) {
     d <- desc(file = file.path(package, "DESCRIPTION"))
     folder <- package
@@ -153,8 +156,33 @@ package2readme <- function(package = ".") { #nolint
     return(paste(out, collapse = ""))
   }
 
+  fillAdditions <- function(add, folder) {
+    if (is.null(add)) return("")
+    out <- NULL
+    for (a in add) {
+      if (file.exists(file.path(folder, a))) a <- file.path(folder, a)
+      if (file.exists(a)) {
+        fileType <- tools::file_ext(a)
+        if (tolower(fileType) == "rmd") {
+          checkRequiredPackages("knitr")
+          tmpFile <- withr::local_tempfile()
+          knitr::knit(a, output = tmpFile)
+          a <- readLines(tmpFile)
+        } else if (tolower(fileType) == "md") {
+          a <- readLines(a)
+        } else {
+          stop("Unsupported file type \"", fileType, "\"")
+        }
+      }
+      out <- c(out, a)
+    }
+    out <- paste(out, collapse = "\n")
+    return(out)
+  }
+
   fillTemplate <- function(x, fill) {
     for (what in names(fill)) {
+      if (is.null(fill[[what]])) fill[[what]] <- ""
       x <- gsub(paste0("[:", what, ":]"), fill[[what]], x, fixed = TRUE)
     }
     return(x)
@@ -163,6 +191,7 @@ package2readme <- function(package = ".") { #nolint
   fill <- list(title         = d$get("Title"),
                package       = d$get("Package"),
                description   = d$get("Description"),
+               additions     = fillAdditions(add, folder),
                version       = d$get("Version"),
                maintainer    = d$get_maintainer(),
                cran          = fillCRAN(d),

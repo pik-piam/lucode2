@@ -4,11 +4,14 @@
 \alias{package2readme}
 \title{package2readme}
 \usage{
-package2readme(package = ".")
+package2readme(package = ".", add = NULL)
 }
 \arguments{
 \item{package}{either the path to the main folder of a package (containing a DESCRIPTION file)
 or the name of the package}
+
+\item{add}{a character vector with additions to the README file. Each element of the vector can be either
+1) a line of markdown code, 2) a path to a markdown file, or 3) a path to a Rmarkdown file}
 }
 \description{
 Creates a README.md for a R package.

@@ -7,7 +7,7 @@ R package **[:package:]**, version **[:version:]**
 ## Purpose and Functionality
 
 [:description:]
-
+[:additions:]
 
 ## Installation
 

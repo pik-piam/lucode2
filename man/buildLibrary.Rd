@@ -46,6 +46,24 @@ following steps: \itemize{
 Under linux, only the .tar.gz package is built. }
 The commit has to be performed by the user still.
 }
+\note{
+The behavior of buildLibrary can be configured via the \code{.buildLibrary} file in the
+main folder of the package. It uses YAML format and can contain the following entries:
+\itemize{
+\item \strong{ValidationKey}: This entry always exists and is written automatically by \code{buildLibrary}
+It confirms that the package has been successfully build via the function.
+\item \strong{AutocreateReadme} (optional): yes/no - decides whether \code{buildLibrary} automatically updates
+the README.md file or not (default: yes)
+\item \strong{AddInReadme} (optional): Additional entries to be added to the autocreated README. Provided either
+in markdown format or as paths to RMarkdown (Rmd) or Markdown (md) files
+\item \strong{AcceptedWarnings} (optional): a list of Warnings which should be ignored by \code{buildLibrary}
+(autocompletion via asterisks allowed)
+\item \strong{AcceptedNotes} (optional): a list of Notes which should be ignored by \code{buildLibrary}
+(autocompletion via asterisks allowed)
+\item \strong{allowLinterWarnings}: yes/no - If set to "no" linter warnings will stop the build process.
+(default: yes)
+}
+}
 \examples{
 \dontrun{
 buildLibrary()

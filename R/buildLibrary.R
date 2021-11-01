@@ -27,7 +27,21 @@
 #'   | 4           | `development` | only for packages in development stage   |
 #'
 #' @md
+#' @note The behavior of buildLibrary can be configured via the `.buildLibrary` file in the
+#' main folder of the package. It uses YAML format and can contain the following entries:
 #'
+#' * **ValidationKey**: This entry always exists and is written automatically by `buildLibrary`
+#'                      It confirms that the package has been successfully build via the function.
+#' * **AutocreateReadme** (optional): yes/no - decides whether `buildLibrary` automatically updates
+#'                                    the README.md file or not (default: yes)
+#' * **AddInReadme** (optional): Additional entries to be added to the autocreated README. Provided either
+#'                               in markdown format or as paths to RMarkdown (Rmd) or Markdown (md) files
+#' * **AcceptedWarnings** (optional): a list of Warnings which should be ignored by `buildLibrary`
+#'                                    (autocompletion via asterisks allowed)
+#' * **AcceptedNotes** (optional): a list of Notes which should be ignored by `buildLibrary`
+#'                                    (autocompletion via asterisks allowed)
+#' * **allowLinterWarnings**: yes/no - If set to "no" linter warnings will stop the build process.
+#'                            (default: yes)
 #' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Führlich
 #' @seealso \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
 #' @importFrom citation package2zenodo
@@ -184,7 +198,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   write_yaml(cfg, file.path(lib, ".buildlibrary"))
   package2zenodo(lib)
   if (isTRUE(cfg$AutocreateReadme)) {
-    package2readme(lib)
+    package2readme(lib, add = cfg$AddInReadme)
   }
 
   ####################################################################
