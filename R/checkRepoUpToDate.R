@@ -1,4 +1,4 @@
-#' @importFrom usethis git_default_branch
+#' @importFrom utils packageVersion
 #' @importFrom withr local_dir
 checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
   # asking the user is fallback if automatic check does not work
@@ -16,6 +16,10 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
   }
 
   tryCatch({
+    if (packageVersion("usethis") < "2.1.0") {
+      message("usethis >= 2.1.0 is needed for automatically checking if repo is up-to-date")
+      stop()
+    }
     checkRequiredPackages("gert", "automatically checking if the git repo is up-to-date")
     message("Checking if your repository is up-to-date...")
     local_dir(pathToRepo)
@@ -37,7 +41,7 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
     behindTracking <- gert::git_ahead_behind()[["behind"]]
 
     gert::git_fetch("upstream")
-    behindUpstream <- gert::git_ahead_behind(upstream = paste0("upstream/", git_default_branch()))[["behind"]]
+    behindUpstream <- gert::git_ahead_behind(upstream = paste0("upstream/", usethis::git_default_branch()))[["behind"]]
 
     if (behindUpstream > 0 || behindTracking > 0) {
       errorMessage <- "Your repo is not up-to-date."
@@ -46,7 +50,7 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
       }
       if (behindUpstream > 0) {
         errorMessage <- paste0(errorMessage, "\nYou are ", behindUpstream, " commits behind upstream. ",
-                               "Please run:\ngit pull upstream ", git_default_branch())
+                               "Please run:\ngit pull upstream ", usethis::git_default_branch())
       }
       stop(errorMessage)
     } else {
