@@ -12,6 +12,7 @@
 #'
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{buildLibrary}}
+#' @importFrom desc desc
 #' @importFrom usethis use_github_action use_coverage
 #' @examples
 #' \dontrun{
@@ -20,9 +21,14 @@
 #' @export
 addGitHubActions <- function(lib = ".") {
   unlink(file.path(lib, ".github", "workflows", "test-buildlibrary.yaml")) # the old workflow, remove this at some point
-  unlink(file.path(lib, ".github", "workflows", "lucode2-check.yaml"))
-  use_github_action(
-    url = "https://raw.githubusercontent.com/pik-piam/lucode2/master/.github/workflows/lucode2-check.yaml")
+
+  # do not overwrite workflow file in lucode2, otherwise a workflow file change would be overwritten by buildLibrary
+  if (!file.exists(file.path(lib, "DESCRIPTION")) ||
+      desc(file = file.path(lib, "DESCRIPTION"))[["get"]]("Package") != "lucode2") {
+    unlink(file.path(lib, ".github", "workflows", "lucode2-check.yaml"))
+    use_github_action(
+      url = "https://raw.githubusercontent.com/pik-piam/lucode2/master/.github/workflows/lucode2-check.yaml")
+  }
 
   if (!file.exists(file.path(lib, "codecov.yml"))) {
     use_coverage("codecov")
