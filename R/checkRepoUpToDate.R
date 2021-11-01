@@ -28,7 +28,8 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
     gitStatus <- system2("git", "status", stdout = TRUE)
     if ("You have unmerged paths." %in% gitStatus ||
         "All conflicts fixed but you are still merging." %in% gitStatus) {
-      stop("Cannot check if repo is up-to-date during merge.") # this will not actually stop, but run askUser
+      # gert::git_ahead_behind will say we are behind during merge, so cannot use auto check
+      stop()
     }
 
     if (!"upstream" %in% gert::git_remote_list()[["name"]]) {
