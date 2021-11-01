@@ -10,7 +10,8 @@ buildLibrary(
   updateType = NULL,
   gitpush = FALSE,
   commitmessage = NULL,
-  checkForUpdates = TRUE
+  checkForUpdates = TRUE,
+  autoCheckRepoUpToDate = TRUE
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ buildLibrary(
 \item{commitmessage}{Your commit message}
 
 \item{checkForUpdates}{Check for lucode2 updates (default TRUE). Set FALSE in case of problems with the new version.}
+
+\item{autoCheckRepoUpToDate}{Automatically check if your repository is up to date. If FALSE the user is simply asked.}
 }
 \description{
 Builds R libraries. Includes checks for consistency.

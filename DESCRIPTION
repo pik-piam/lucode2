@@ -1,7 +1,7 @@
 Package: lucode2
 Type: Package
 Title: Code Manipulation and Analysis Tools
-Version: 0.17.0
+Version: 0.17.1
 Date: 2021-11-01
 Authors@R: c(person("Jan Philipp", "Dietrich", email = "dietrich@pik-potsdam.de", role = c("aut","cre")),
              person("David", "Klein", role = "aut"),
@@ -26,6 +26,7 @@ Imports:
     withr
 Suggests:
     covr,
+    gert,
     ggplot2,
     gtools,
     lusweave,
