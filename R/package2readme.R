@@ -10,7 +10,8 @@
 #' @importFrom desc desc
 #' @importFrom utils citation vignette
 #' @importFrom usethis git_remotes
-#' @importFrom withr with_dir local_options
+#' @importFrom withr with_dir local_options local_tempfile
+#' @importFrom tools file_ext
 #' @examples
 #' package2readme("lucode2")
 #' @export
