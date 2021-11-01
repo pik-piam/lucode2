@@ -1,4 +1,4 @@
-#' @importFrom usethis git_default_branch
+#' @importFrom utils packageVersion
 #' @importFrom withr local_dir
 checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
   # asking the user is fallback if automatic check does not work
@@ -16,6 +16,10 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
   }
 
   tryCatch({
+    if (packageVersion("usethis") < "2.1.0") {
+      message("usethis >= 2.1.0 is needed for automatically checking if repo is up-to-date")
+      stop()
+    }
     checkRequiredPackages("gert", "automatically checking if the git repo is up-to-date")
     message("Checking if your repository is up-to-date...")
     local_dir(pathToRepo)
@@ -24,7 +28,8 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
     gitStatus <- system2("git", "status", stdout = TRUE)
     if ("You have unmerged paths." %in% gitStatus ||
         "All conflicts fixed but you are still merging." %in% gitStatus) {
-      stop("Cannot check if repo is up-to-date during merge.") # this will not actually stop, but run askUser
+      # gert::git_ahead_behind will say we are behind during merge, so cannot use auto check
+      stop()
     }
 
     if (!"upstream" %in% gert::git_remote_list()[["name"]]) {
@@ -37,7 +42,7 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
     behindTracking <- gert::git_ahead_behind()[["behind"]]
 
     gert::git_fetch("upstream")
-    behindUpstream <- gert::git_ahead_behind(upstream = paste0("upstream/", git_default_branch()))[["behind"]]
+    behindUpstream <- gert::git_ahead_behind(upstream = paste0("upstream/", usethis::git_default_branch()))[["behind"]]
 
     if (behindUpstream > 0 || behindTracking > 0) {
       errorMessage <- "Your repo is not up-to-date."
@@ -46,7 +51,7 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
       }
       if (behindUpstream > 0) {
         errorMessage <- paste0(errorMessage, "\nYou are ", behindUpstream, " commits behind upstream. ",
-                               "Please run:\ngit pull upstream ", git_default_branch())
+                               "Please run:\ngit pull upstream ", usethis::git_default_branch())
       }
       stop(errorMessage)
     } else {
