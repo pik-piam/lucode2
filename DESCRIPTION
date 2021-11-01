@@ -21,6 +21,7 @@ Imports:
     usethis,
     yaml,
     styler,
+    tools,
     lintr,
     withr
 Suggests:
@@ -29,6 +30,7 @@ Suggests:
     ggplot2,
     gtools,
     lusweave,
+    knitr,
     magclass,
     testthat
 URL: https://github.com/pik-piam/lucode2, https://doi.org/10.5281/zenodo.4389418
