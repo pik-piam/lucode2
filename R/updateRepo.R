@@ -79,7 +79,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
         error <- NULL
         error <- try(devtools::install_deps(upgrade = "never"))
         if (vkey$roxygen && !("try-error" %in% class(error))) {
-          error <- try(devtools::document(pkg = ".", roclets = c("rd", "collate", "namespace", "vignette")))
+          error <- try(devtools::document(pkg = ".", roclets = c("rd", "collate", "namespace")))
         }
         if (!("try-error" %in% class(error))) error <- try(devtools::build())
         if ("try-error" %in% class(error)) {
