@@ -81,7 +81,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
         if (vkey$roxygen && !("try-error" %in% class(error))) {
           error <- try(devtools::document(pkg = ".", roclets = c("rd", "collate", "namespace")))
         }
-        if (!("try-error" %in% class(error))) error <- try(devtools::build())
+        if (!("try-error" %in% class(error))) error <- try(devtools::build(vignettes = FALSE))
         if ("try-error" %in% class(error)) {
           message(".:: ", fd, " ", curversion, " -> ", vkey$version, " build failed ::.")
           if (dir.exists(".git")) system("git --no-pager show -s --format='(%h) %s \n%an <%ae>' HEAD")
@@ -99,7 +99,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
     } else if (as.numeric_version(curversion) == as.numeric_version(vkey$version) &&
       as.numeric_version(curversion) > buildVersion) {
       error <- try(devtools::install_deps(upgrade = "never"))
-      if (!("try-error" %in% class(error))) error <- try(devtools::build())
+      if (!("try-error" %in% class(error))) error <- try(devtools::build(vignettes = FALSE))
       if ("try-error" %in% class(error)) {
         message(".:: ", fd, " ", curversion, " -> package build failed ::.")
         if (dir.exists(".git")) system("git --no-pager show -s --format='(%h) %s \n%an <%ae>' HEAD")
