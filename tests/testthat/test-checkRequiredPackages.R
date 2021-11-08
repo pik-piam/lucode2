@@ -32,7 +32,7 @@ test_that("checkRequiredPackages works", {
   expect_false(requireNamespace("gtools", lib.loc = temporaryLibPath, quietly = TRUE))
 
   withr::local_options(c(repos = "https://cran.rstudio.com/"))
-  on.exit({
+  withr::defer({
     unloadNamespace("gtools") # prevent warning; temporaryLibPath (where gtools is loaded from) will be deleted
   })
   checkRequiredPackages("gtools", requiredFor = "something cool",

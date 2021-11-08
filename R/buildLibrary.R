@@ -48,6 +48,7 @@
 #' @importFrom citation package2zenodo
 #' @importFrom yaml write_yaml
 #' @importFrom utils old.packages update.packages packageVersion
+#' @importFrom withr defer
 #' @examples
 #' \dontrun{
 #' buildLibrary()
@@ -79,8 +80,10 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
       s <- readline()
     } else {
       con <- file("stdin")
+      defer({
+        close(con)
+      })
       s <- readLines(con, 1, warn = FALSE)
-      on.exit(close(con))
     }
     return(s)
   }
