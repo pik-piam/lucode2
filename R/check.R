@@ -27,31 +27,6 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
   lib <- normalizePath(lib, winslash = "/")
   document(pkg = lib, roclets = c("rd", "collate", "namespace", "vignette"))
 
-  ########### Run checks ###########
-  checkResults <- devtools::check(lib, document = FALSE, cran = cran, args = "--no-tests")
-
-  # Filter warnings and notes which are accepted
-  for (acceptedWarning in config[["AcceptedWarnings"]]) {
-    checkResults[["warnings"]] <- grep(acceptedWarning, checkResults[["warnings"]], value = TRUE, invert = TRUE)
-  }
-  for (acceptedNote in config[["AcceptedNotes"]]) {
-    checkResults[["notes"]] <- grep(acceptedNote, checkResults[["notes"]], value = TRUE, invert = TRUE)
-  }
-  print(checkResults)
-
-  if (length(checkResults[["errors"]]) > 0) {
-    stop("The package check showed errors. You need to fix these errors first before submission!")
-  }
-
-  if (length(checkResults[["warnings"]]) > 0) {
-    stop("The package check showed warnings. You need to take care of these warnings first before submission!")
-  }
-
-  if (length(checkResults[["notes"]]) > 0) {
-    stop("The package check showed notes. You need to take care of these notes first before submission!")
-  }
-
-
   ########### Run tests ###########
   testResultsRds <- normalizePath(file.path(local_tempdir(), "testResults.rds"),
                                   winslash = "/", mustWork = FALSE)
@@ -78,7 +53,6 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
            paste(collapse = "\n"))
   }
 
-
   ########### Run linter ###########
   if (runLinter) {
     linterResult <- lint(getFilesToLint(lib))
@@ -98,5 +72,29 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
     } else {
       message("No linter warnings - great :D")
     }
+  }
+
+  ########### Run checks ###########
+  checkResults <- devtools::check(lib, document = FALSE, cran = cran, args = "--no-tests")
+
+  # Filter warnings and notes which are accepted
+  for (acceptedWarning in config[["AcceptedWarnings"]]) {
+    checkResults[["warnings"]] <- grep(acceptedWarning, checkResults[["warnings"]], value = TRUE, invert = TRUE)
+  }
+  for (acceptedNote in config[["AcceptedNotes"]]) {
+    checkResults[["notes"]] <- grep(acceptedNote, checkResults[["notes"]], value = TRUE, invert = TRUE)
+  }
+  print(checkResults)
+
+  if (length(checkResults[["errors"]]) > 0) {
+    stop("The package check showed errors. You need to fix these errors first before submission!")
+  }
+
+  if (length(checkResults[["warnings"]]) > 0) {
+    stop("The package check showed warnings. You need to take care of these warnings first before submission!")
+  }
+
+  if (length(checkResults[["notes"]]) > 0) {
+    stop("The package check showed notes. You need to take care of these notes first before submission!")
   }
 }

@@ -21,6 +21,7 @@
 lint <- function(files = getFilesToLint()) {
   # names = deprecated functions, values = replacement hint
   deprecatedFunctions <- list(
+    `on.exit` = "use withr::defer",
     fulldim = "use magclass::getItems()",
     getRegionList = "use magclass::getItems()",
     getRegions = "use magclass::getItems()",
