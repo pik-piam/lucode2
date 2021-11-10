@@ -96,6 +96,18 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   cfg <- loadBuildLibraryConfig(lib)
 
   ####################################################################
+  # Run checks, tests and linter
+  ###################################################################
+  testfolder <- file.path(lib, "tests", "testthat")
+  if (!file.exists(testfolder)) {
+    dir.create(testfolder, recursive = TRUE)
+  }
+  if (length(dir(testfolder)) == 0) {
+    writeLines('skip("dummy test")', file.path(testfolder, "test-dummy.R"))
+  }
+  check(lib = lib, cran = cran, config = cfg)
+
+  ####################################################################
   # Remove the auxiliary Rcheck folders
   ###################################################################
   rcheckfolders <- grep(".Rcheck$", list.dirs(path = lib, full.names = FALSE, recursive = FALSE), value = TRUE)
@@ -105,11 +117,6 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   # GitHub actions
   ############################################################
   addGitHubActions(lib)
-
-  ####################################################################
-  # Run checks, tests and linter
-  ###################################################################
-  check(lib = lib, cran = cran, config = cfg)
 
   ##########################################################
   # Check for version numbers
