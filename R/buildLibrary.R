@@ -96,11 +96,6 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   cfg <- loadBuildLibraryConfig(lib)
 
   ####################################################################
-  # Run checks, tests and linter
-  ###################################################################
-  check(lib = lib, cran = cran, config = cfg)
-
-  ####################################################################
   # Remove the auxiliary Rcheck folders
   ###################################################################
   rcheckfolders <- grep(".Rcheck$", list.dirs(path = lib, full.names = FALSE, recursive = FALSE), value = TRUE)
@@ -110,6 +105,11 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   # GitHub actions
   ############################################################
   addGitHubActions(lib)
+
+  ####################################################################
+  # Run checks, tests and linter
+  ###################################################################
+  check(lib = lib, cran = cran, config = cfg)
 
   ##########################################################
   # Check for version numbers
