@@ -9,7 +9,8 @@ mergestatistics(
   file = NULL,
   renew = FALSE,
   quickcheck = FALSE,
-  pattern = "*\\\\.[rR]da"
+  pattern = "*\\\\.[rR]da",
+  removeCols = NULL
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ frequently and execution time plays a role, but might lead to cases in which the
 even if the merge statistics are incomplete.}
 
 \item{pattern}{detection pattern for rda files that should be merged}
+
+\item{removeCols}{vector of columns that will be filtered out}
 }
 \value{
 A data table containing the merged run statistics or NULL in case the data was not recalculated
