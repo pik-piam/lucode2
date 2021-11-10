@@ -116,7 +116,9 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ############################################################
   # GitHub actions
   ############################################################
-  addGitHubActions(lib)
+  tryCatch(addGitHubActions(lib), error = function(error) {
+    message("Could not add GitHub Actions:", error)
+  })
 
   ##########################################################
   # Check for version numbers
