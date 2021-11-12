@@ -98,6 +98,13 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ####################################################################
   # Run checks, tests and linter
   ###################################################################
+  testfolder <- file.path(lib, "tests", "testthat")
+  if (!file.exists(testfolder)) {
+    dir.create(testfolder, recursive = TRUE)
+  }
+  if (length(dir(testfolder)) == 0) {
+    writeLines('skip("dummy test")', file.path(testfolder, "test-dummy.R"))
+  }
   check(lib = lib, cran = cran, config = cfg)
 
   ####################################################################
@@ -109,7 +116,9 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ############################################################
   # GitHub actions
   ############################################################
-  addGitHubActions(lib)
+  tryCatch(addGitHubActions(lib), error = function(error) {
+    message("Could not add GitHub Actions:", error)
+  })
 
   ##########################################################
   # Check for version numbers
