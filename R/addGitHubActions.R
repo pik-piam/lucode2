@@ -36,12 +36,4 @@ addGitHubActions <- function(lib = ".") {
               file.path(lib, "codecov.yml"),
               overwrite = TRUE)
   }
-
-  testfolder <- file.path(lib, "tests", "testthat")
-  if (!file.exists(testfolder)) {
-    dir.create(testfolder, recursive = TRUE)
-  }
-  if (length(dir(testfolder)) == 0) {
-    writeLines('skip("dummy test")', file.path(testfolder, "test-dummy.R"))
-  }
 }
