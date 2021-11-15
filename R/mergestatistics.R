@@ -15,13 +15,15 @@
 #' frequently and execution time plays a role, but might lead to cases in which the function is not run
 #' even if the merge statistics are incomplete.
 #' @param pattern detection pattern for rda files that should be merged
+#' @param removeCols vector of columns that will be filtered out
 #' @return A data table containing the merged run statistics or NULL in case the data was not recalculated
 #' @author Jan Philipp Dietrich
 #' @importFrom data.table as.data.table rbindlist
 #' @importFrom utils type.convert
 #' @importFrom withr local_dir
 #' @export
-mergestatistics <- function(dir = ".", file = NULL, renew = FALSE, quickcheck = FALSE, pattern = "*\\.[rR]da") {
+mergestatistics <- function(dir = ".", file = NULL, renew = FALSE, quickcheck = FALSE, pattern = "*\\.[rR]da",
+                            removeCols = NULL) {
   if (quickcheck && file.exists(file) && all(file.info(Sys.glob(paste0(dir, "/*")))$mtime < file.info(file)$mtime)) {
     return(NULL)
   }
@@ -62,7 +64,7 @@ mergestatistics <- function(dir = ".", file = NULL, renew = FALSE, quickcheck = 
     outlist[[stats$id]] <- as.data.table(t(unlist(c(
       stats[c("user", "date", "version_management", "revision", "revision_date", "solution")],
       runtime = as.numeric(stats[["runtime"]], units = "hours"),
-      stats$config))))
+      stats$config[!(names(stats$config) %in% removeCols)]))))
   }
   out <- rbind(out, rbindlist(outlist, fill = TRUE, idcol = TRUE), fill = TRUE)
   out <- as.data.table(lapply(out, function(x) return(type.convert(as.character(x), as.is = TRUE))))
