@@ -21,17 +21,16 @@ loadBuildLibraryConfig <- function(lib) {
       allowLinterWarnings = FALSE
     )
     write_yaml(cfg, file.path(lib, ".buildlibrary"))
-    message("Created .buildlibrary config file and added it to .Rbuildignore. Please add it to your next commit!")
-    if (file.exists(file.path(lib, ".Rbuildignore"))) {
-      a <- c(readLines(file.path(lib, ".Rbuildignore")), "^\\.buildlibrary$")
-      if (anyDuplicated(a)) {
-        a <- a[!duplicated(a)]
-      }
-    } else {
-      a <- "^\\.buildlibrary$"
-    }
-    writeLines(a, file.path(lib, ".Rbuildignore"))
+    message("Created .buildlibrary config file. Please add it to your next commit!")
   }
+
+  rbuildIgnore <- c(
+    if (file.exists(file.path(lib, ".Rbuildignore"))) readLines(file.path(lib, ".Rbuildignore")) else NULL,
+    "^\\.buildlibrary$",
+    "^\\.pre-commit-config\\.yaml$"
+  )
+  rbuildIgnore <- rbuildIgnore[!duplicated(rbuildIgnore)]
+  writeLines(rbuildIgnore, file.path(lib, ".Rbuildignore"))
 
   buildLibraryConfigPath <- file.path(lib, ".buildlibrary")
 
