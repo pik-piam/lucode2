@@ -48,7 +48,7 @@
 #' @importFrom citation package2zenodo
 #' @importFrom yaml write_yaml
 #' @importFrom utils old.packages update.packages packageVersion
-#' @importFrom withr defer
+#' @importFrom withr defer with_connection
 #' @examples
 #' \dontrun{
 #' buildLibrary()
@@ -122,11 +122,12 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
 
   if (!file.exists(file.path(lib, "DESCRIPTION")) ||
       desc(file = file.path(lib, "DESCRIPTION"))[["get"]]("Package") != "lucode2") {
-    preCommitConfig <- readLines(
+    with_connection(
       # TODO url("https://raw.githubusercontent.com/pik-piam/lucode2/master/.pre-commit-config.yaml")
-      url("https://raw.githubusercontent.com/pfuehrlich-pik/lucode2/master/.pre-commit-config.yaml"))
-    preCommitConfig <- sub("autoupdate_schedule: weekly", "autoupdate_schedule: quarterly", preCommitConfig)
-    writeLines(preCommitConfig, file.path(lib, ".pre-commit-config.yaml"))
+      list(fileUrl = url("https://raw.githubusercontent.com/pfuehrlich-pik/lucode2/master/.pre-commit-config.yaml")), {
+        preCommitConfig <- sub("autoupdate_schedule: weekly", "autoupdate_schedule: quarterly", readLines(fileUrl))
+        writeLines(preCommitConfig, file.path(lib, ".pre-commit-config.yaml"))
+      })
   }
 
   ##########################################################
