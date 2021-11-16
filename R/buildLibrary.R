@@ -114,11 +114,20 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   unlink(rcheckfolders, recursive = TRUE)
 
   ############################################################
-  # GitHub actions
+  # add GitHub actions and pre-commit-config
   ############################################################
   tryCatch(addGitHubActions(lib), error = function(error) {
     message("Could not add GitHub Actions:", error)
   })
+
+  if (!file.exists(file.path(lib, "DESCRIPTION")) ||
+      desc(file = file.path(lib, "DESCRIPTION"))[["get"]]("Package") != "lucode2") {
+    preCommitConfig <- readLines(
+      # TODO url("https://raw.githubusercontent.com/pik-piam/lucode2/master/.pre-commit-config.yaml")
+      url("https://raw.githubusercontent.com/pfuehrlich-pik/lucode2/master/.pre-commit-config.yaml"))
+    preCommitConfig <- sub("autoupdate_schedule: weekly", "autoupdate_schedule: quarterly", preCommitConfig)
+    writeLines(preCommitConfig, file.path(lib, ".pre-commit-config.yaml"))
+  }
 
   ##########################################################
   # Check for version numbers
