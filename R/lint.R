@@ -2,8 +2,8 @@
 #'
 #' Check the given files for linter warnings using lintr::lint.
 #'
-#' For files in the tests folder less strict rules are applied, e.g. using ::: usually leads to a linter warning, but
-#' not in tests.
+#' For files in the vignettes and tests folder less strict rules are applied, e.g. using ::: usually leads to a linter
+#' warning, but not in vignettes/tests.
 #'
 #' @param files A character vector of paths to files that should be checked by the linter. If set to "."
 #' the whole package is linted.
@@ -28,8 +28,8 @@ lint <- function(files = getFilesToLint()) {
     `getRegions<-` = "use magclass::getItems()"
   )
 
-  # in tests undesirable functions (excepted deprecated ones) and undesirable operators are ok
-  linterArgsForTests <- list(
+  # in vignettes amd tests undesirable functions (except deprecated ones) and undesirable operators are ok
+  linterArgsForVignettesAndTests <- list(
     absolute_path_linter = absolute_path_linter(),
     line_length_linter = line_length_linter(120),
     object_name_linter = object_name_linter(styles = "camelCase"),
@@ -38,9 +38,9 @@ lint <- function(files = getFilesToLint()) {
     cyclocomp_linter = cyclocomp_linter(25),
     T_and_F_symbol_linter = T_and_F_symbol_linter
   )
-  lintersForTests <- do.call(with_defaults, linterArgsForTests)
+  lintersForVignettesAndTests <- do.call(with_defaults, linterArgsForVignettesAndTests)
 
-  linterArgs <- linterArgsForTests
+  linterArgs <- linterArgsForVignettesAndTests
   linterArgs$undesirable_function_linter <- # nolint
     undesirable_function_linter(c(default_undesirable_functions, deprecatedFunctions))
   linterArgs$undesirable_operator_linter <- undesirable_operator_linter() # nolint
@@ -51,12 +51,12 @@ lint <- function(files = getFilesToLint()) {
   }
 
   files <- normalizePath(files)
-  # use lintersForTests instead of linters if file is in testFiles
-  testFiles <- normalizePath(list.files(path = "tests", recursive = TRUE, full.names = TRUE))
+  # use lintersForVignettesAndTests instead of linters if file is in vignetteAndTestFiles
+  vignetteAndTestFiles <- normalizePath(list.files(path = c("tests", "vignettes"), recursive = TRUE, full.names = TRUE))
 
   linterWarnings <- lapply(files, function(aFile) {
     message('Running lucode2::lint("', aFile, '")')
-    return(lintr::lint(aFile, linters = if (aFile %in% testFiles) lintersForTests else linters))
+    return(lintr::lint(aFile, linters = if (aFile %in% vignetteAndTestFiles) lintersForVignettesAndTests else linters))
   })
 
   # combine the results of multiple calls to lintr::lint, taken from lintr:::flatten_lints

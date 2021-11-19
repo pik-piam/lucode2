@@ -18,8 +18,8 @@ linter warnings.
 Check the given files for linter warnings using lintr::lint.
 }
 \details{
-For files in the tests folder less strict rules are applied, e.g. using ::: usually leads to a linter warning, but
-not in tests.
+For files in the vignettes and tests folder less strict rules are applied, e.g. using ::: usually leads to a linter
+warning, but not in vignettes/tests.
 }
 \examples{
 lucode2::lint()
