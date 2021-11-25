@@ -12,14 +12,15 @@
 #' @param skipFolders Which folders/packages should not be built.
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{buildLibrary}}
-#' @importFrom devtools document install_deps install
+#' @importFrom devtools document install build
 #' @importFrom tools write_PACKAGES
 #' @importFrom withr local_dir local_envvar with_dir
 #' @export
 updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = FALSE, # nolint
                        skipFolders = c("Archive", "gdxrrw", "HARr")) {
-  message(date(), "\n")
+  path <- normalizePath(path)
   local_dir(path)
+  message(date(), "\n")
 
   # pull git repos
   dirs <- grep("^\\.", list.dirs(recursive = FALSE, full.names = FALSE), value = TRUE, invert = TRUE)
@@ -49,9 +50,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
       next
     }
     fd <- format(d, width = max(nchar(dirs)))
-    curversion <- tryCatch(availablePackages[d, "Version"], error = function(e) {
-      return(0)
-    })
+    curversion <- tryCatch(availablePackages[d, "Version"], error = function(e) 0)
     with_dir(d, {
       vkey <- validkey()
       pattern <- paste0("^", d, "_(.*)\\.tar\\.gz")
@@ -62,13 +61,12 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
 
       if (as.numeric_version(curversion) < as.numeric_version(vkey$version) || forceRebuild) {
         if (vkey$valid || !check || forceRebuild) {
-          error <- NULL
-          error <- try(devtools::install_deps())
+          error <- try(devtools::install())
           if (vkey$roxygen && !("try-error" %in% class(error))) {
             error <- try(devtools::document(pkg = ".", roclets = c("rd", "collate", "namespace", "vignette")))
           }
           if (!("try-error" %in% class(error))) {
-            error <- try(devtools::install(build = TRUE))
+            error <- try(devtools::build())
           }
           if ("try-error" %in% class(error)) {
             message(".:: ", fd, " ", curversion, " -> ", vkey$version, " build failed ::.")
@@ -90,9 +88,9 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
                 buildVersion, ") is already part of the repo ::.")
       } else if (as.numeric_version(curversion) == as.numeric_version(vkey$version) &&
                  as.numeric_version(curversion) > buildVersion) {
-        error <- try(devtools::install_deps())
+        error <- try(devtools::install())
         if (!("try-error" %in% class(error))) {
-          error <- try(devtools::install(build = TRUE))
+          error <- try(devtools::build())
         }
         if ("try-error" %in% class(error)) {
           message(".:: ", fd, " ", curversion, " -> package build failed ::.")
