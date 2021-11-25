@@ -30,9 +30,9 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
     with_dir(d, {
       if (dir.exists(".git")) {
         if (clean) {
-          system("git reset --hard HEAD -q; git clean -fxq; git pull -q", wait = FALSE)
+          system("git reset --hard HEAD -q; git clean -fxq; git pull -q")
         } else {
-          system("git pull -q", wait = FALSE)
+          system("git pull -q")
         }
       }
     })
