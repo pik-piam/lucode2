@@ -15,8 +15,7 @@ updateRepo(
 \arguments{
 \item{path}{Path to the repository}
 
-\item{check}{Boolean deciding whether package must have been checked or not
-in order to be distributed}
+\item{check}{Boolean deciding whether package must have been checked or not in order to be distributed}
 
 \item{forceRebuild}{Option to rebuild all packages from source}
 
