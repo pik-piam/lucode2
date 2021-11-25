@@ -12,7 +12,7 @@
 #' @param skipFolders Which folders/packages should not be built.
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{buildLibrary}}
-#' @importFrom devtools install_deps document build
+#' @importFrom devtools document install_deps install
 #' @importFrom tools write_PACKAGES
 #' @importFrom withr local_dir local_envvar with_dir
 #' @export
@@ -68,7 +68,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
             error <- try(devtools::document(pkg = ".", roclets = c("rd", "collate", "namespace", "vignette")))
           }
           if (!("try-error" %in% class(error))) {
-            error <- try(devtools::build())
+            error <- try(devtools::install(build = TRUE))
           }
           if ("try-error" %in% class(error)) {
             message(".:: ", fd, " ", curversion, " -> ", vkey$version, " build failed ::.")
@@ -92,7 +92,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
                  as.numeric_version(curversion) > buildVersion) {
         error <- try(devtools::install_deps())
         if (!("try-error" %in% class(error))) {
-          error <- try(devtools::build())
+          error <- try(devtools::install(build = TRUE))
         }
         if ("try-error" %in% class(error)) {
           message(".:: ", fd, " ", curversion, " -> package build failed ::.")
