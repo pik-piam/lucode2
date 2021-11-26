@@ -10,7 +10,7 @@
 #' @param forceRebuild Option to rebuild all packages from source
 #' @param clean Option to clean repos before updating/pulling to avoid merge conflicts
 #' @param skipFolders Which folders/packages should not be built.
-#' @author Jan Philipp Dietrich
+#' @author Jan Philipp Dietrich, Pascal Führlich
 #' @seealso \code{\link{buildLibrary}}
 #' @importFrom devtools document build install_deps
 #' @importFrom tools write_PACKAGES

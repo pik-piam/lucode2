@@ -33,5 +33,5 @@ function will automatically detect the new package and add it.
 \code{\link{buildLibrary}}
 }
 \author{
-Jan Philipp Dietrich
+Jan Philipp Dietrich, Pascal Führlich
 }
