@@ -5,142 +5,135 @@
 #' To add a new package to the repo just checkout/clone it into this folder. The
 #' function will automatically detect the new package and add it.
 #'
-#'
 #' @param path Path to the repository
-#' @param check Boolean deciding whether package must have been checked or not
-#' in order to be distributed
+#' @param check Boolean deciding whether package must have been checked or not in order to be distributed
 #' @param forceRebuild Option to rebuild all packages from source
 #' @param clean Option to clean repos before updating/pulling to avoid merge conflicts
-#' @param pidfile file name of a "process id" file containing the process id of the current
-#' process. If set this will make sure that the function is not run twice at the same time.
-#' If set to NULL this will be ignored. The OS needs to provide a "ps" command in order to
-#' have this working.
-#' @author Jan Philipp Dietrich
+#' @param skipFolders Which folders/packages should not be built.
+#' @author Jan Philipp Dietrich, Pascal Führlich
 #' @seealso \code{\link{buildLibrary}}
-#' @importFrom devtools install_deps document build
+#' @importFrom devtools document build install_deps
 #' @importFrom tools write_PACKAGES
-#' @importFrom withr local_dir local_envvar
+#' @importFrom withr local_dir local_envvar with_dir
 #' @export
-
-updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = FALSE, pidfile = NULL) { # nolint
-  skipFolders <- c("Archive", "gdxrrw", "HARr")
-
-  cat(date(), "\n")
+updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = FALSE, # nolint
+                       skipFolders = c("Archive", "gdxrrw", "HARr")) {
+  path <- normalizePath(path)
   local_dir(path)
+  message(date(), "\n")
 
-  if (!is.null(pidfile)) {
-    if (file.exists(pidfile)) {
-      pid <- readLines(pidfile)
-      if (any(grepl(paste0("^ *", pid, " "), system("ps -A", intern = TRUE)))) {
-        message("Process already running.")
-        return()
-      }
-    }
-    writeLines(as.character(Sys.getpid()), pidfile)
-  }
-  if (file.exists("/webservice")) {
-    local_envvar(c(RSTUDIO_PANDOC = "/usr/local/bin/pandoc")) # nolint
-  }
-
-  ap <- suppressWarnings(available.packages(paste0("file:", getwd()), filters = "duplicates"))
-  apCRAN <- suppressWarnings(available.packages("https://cloud.r-project.org/src/contrib", filters = "duplicates"))
-
+  # pull git repos
   dirs <- grep("^\\.", list.dirs(recursive = FALSE, full.names = FALSE), value = TRUE, invert = TRUE)
-  nchar <- max(nchar(dirs))
-  updatePACKAGES <- FALSE
   for (d in dirs) {
-    if (d %in% skipFolders) next
-    local_dir(d)
-
-    if (dir.exists(".git")) {
-      if (clean) {
-        system("git reset --hard HEAD -q; git clean -fxq; git pull -q", wait = FALSE)
-      } else {
-        system("git pull -q", wait = FALSE)
-      }
+    if (d %in% skipFolders) {
+      next
     }
-    local_dir("..")
+    with_dir(d, {
+      if (dir.exists(".git")) {
+        if (clean) {
+          system("git reset --hard HEAD -q; git clean -fxq; git pull -q")
+        } else {
+          system("git pull -q")
+        }
+      }
+    })
   }
+
+  # build new versions of packages including documentation
+  updatePACKAGES <- FALSE
+  availablePackages <- suppressWarnings(available.packages(paste0("file:", path), filters = "duplicates"))
+  availablePackagesOnCran <- suppressWarnings(available.packages("https://cloud.r-project.org/src/contrib",
+                                                                 filters = "duplicates"))
   dirs <- dirs[order(tolower(dirs))]
   for (d in dirs) {
-    if (d %in% skipFolders) next
-    fd <- format(d, width = nchar)
-    curversion <- tryCatch(ap[d, "Version"], error = function(e) {
-      return(0)
-    })
-    local_dir(d)
-    vkey <- validkey()
-    pattern <- paste0("^", d, "_(.*)\\.tar\\.gz")
-    buildVersion <- max(as.numeric_version(sub(pattern, "\\1", dir("..", pattern = pattern))))
-    if (length(buildVersion) == 0) buildVersion <- as.numeric_version(0)
-
-    if (as.numeric_version(curversion) < as.numeric_version(vkey$version) | forceRebuild) {
-      if (vkey$valid | !check | forceRebuild) {
-        error <- NULL
-        error <- try(devtools::install_deps(upgrade = "never"))
-        if (vkey$roxygen && !("try-error" %in% class(error))) {
-          error <- try(devtools::document(pkg = ".", roclets = c("rd", "collate", "namespace", "vignette")))
-        }
-        if (!("try-error" %in% class(error))) error <- try(devtools::build())
-        if ("try-error" %in% class(error)) {
-          message(".:: ", fd, " ", curversion, " -> ", vkey$version, " build failed ::.")
-          if (dir.exists(".git")) system("git --no-pager show -s --format='(%h) %s \n%an <%ae>' HEAD")
-        } else {
-          updatePACKAGES <- TRUE
-          message(".:: ", fd, " ", curversion, " -> ", vkey$version, " build success ::.")
-        }
-      } else {
-        message(".:: ", fd, " ", curversion, " -> ", vkey$version, " invalid commit ::.")
-        if (dir.exists(".git")) system("git --no-pager show -s --format='(%h) %s \n%an <%ae>' HEAD")
-      }
-    } else if (as.numeric_version(curversion) < buildVersion) {
-      message(".:: ", fd, " ", curversion, " -> not build as newer version (",
-              buildVersion, ") is already part of the repo ::.")
-    } else if (as.numeric_version(curversion) == as.numeric_version(vkey$version) &&
-      as.numeric_version(curversion) > buildVersion) {
-      error <- try(devtools::install_deps(upgrade = "never"))
-      if (!("try-error" %in% class(error))) error <- try(devtools::build())
-      if ("try-error" %in% class(error)) {
-        message(".:: ", fd, " ", curversion, " -> package build failed ::.")
-        if (dir.exists(".git")) system("git --no-pager show -s --format='(%h) %s \n%an <%ae>' HEAD")
-      } else {
-        message(".:: ", fd, " ", curversion, " -> package build success ::.")
-      }
-    } else {
-      craninfo <- ""
-      if (d %in% rownames(apCRAN)) {
-        cranversion <- apCRAN[d, "Version"]
-        if (as.numeric_version(cranversion) > as.numeric_version(curversion)) {
-          warning(
-            "Package version of package \"", d, "\" is newer on CRAN (", cranversion,
-            ") compared to PIK-CRAN (", curversion, ")! Check version on CRAN immediatly!"
-          )
-          craninfo <- paste0(" .::WARNING! CRAN: ", apCRAN[d, "Version"], " !WARNING::.")
-        } else {
-          craninfo <- paste0(" .::CRAN: ", apCRAN[d, "Version"], "::.")
-        }
-      }
-      message(".:: ", fd, " ", format(curversion, width = 10), " ok ::.", craninfo)
+    if (d %in% skipFolders) {
+      next
     }
-    local_dir("..")
+    fd <- format(d, width = max(nchar(dirs)))
+    curversion <- tryCatch(availablePackages[d, "Version"], error = function(e) 0)
+    with_dir(d, {
+      vkey <- validkey()
+      pattern <- paste0("^", d, "_(.*)\\.tar\\.gz")
+      buildVersion <- max(as.numeric_version(sub(pattern, "\\1", dir("..", pattern = pattern))))
+      if (length(buildVersion) == 0) {
+        buildVersion <- as.numeric_version(0)
+      }
+
+      if (as.numeric_version(curversion) < as.numeric_version(vkey$version) || forceRebuild) {
+        if (vkey$valid || !check || forceRebuild) {
+          error <- try(devtools::install_deps(upgrade = "always"))
+          if (vkey$roxygen && !("try-error" %in% class(error))) {
+            error <- try(devtools::document(pkg = ".", roclets = c("rd", "collate", "namespace", "vignette")))
+          }
+          if (!("try-error" %in% class(error))) {
+            error <- try(devtools::build())
+          }
+          if ("try-error" %in% class(error)) {
+            message(".:: ", fd, " ", curversion, " -> ", vkey$version, " build failed ::.")
+            if (dir.exists(".git")) {
+              system("git --no-pager show -s --format='(%h) %s \n%an <%ae>' HEAD")
+            }
+          } else {
+            updatePACKAGES <- TRUE
+            message(".:: ", fd, " ", curversion, " -> ", vkey$version, " build success ::.")
+          }
+        } else {
+          message(".:: ", fd, " ", curversion, " -> ", vkey$version, " invalid commit ::.")
+          if (dir.exists(".git")) {
+            system("git --no-pager show -s --format='(%h) %s \n%an <%ae>' HEAD")
+          }
+        }
+      } else if (as.numeric_version(curversion) < buildVersion) {
+        message(".:: ", fd, " ", curversion, " -> not build as newer version (",
+                buildVersion, ") is already part of the repo ::.")
+      } else if (as.numeric_version(curversion) == as.numeric_version(vkey$version) &&
+                 as.numeric_version(curversion) > buildVersion) {
+        error <- try(devtools::install_deps(upgrade = "always"))
+        if (!("try-error" %in% class(error))) {
+          error <- try(devtools::build())
+        }
+        if ("try-error" %in% class(error)) {
+          message(".:: ", fd, " ", curversion, " -> package build failed ::.")
+          if (dir.exists(".git")) {
+            system("git --no-pager show -s --format='(%h) %s \n%an <%ae>' HEAD")
+          }
+        } else {
+          message(".:: ", fd, " ", curversion, " -> package build success ::.")
+        }
+      } else {
+        craninfo <- ""
+        if (d %in% rownames(availablePackagesOnCran)) {
+          cranversion <- availablePackagesOnCran[d, "Version"]
+          if (as.numeric_version(cranversion) > as.numeric_version(curversion)) {
+            warning("Package version of package \"", d, "\" is newer on CRAN (", cranversion,
+                    ") compared to PIK-CRAN (", curversion, ")! Check version on CRAN immediatly!")
+            craninfo <- paste0(" .::WARNING! CRAN: ", availablePackagesOnCran[d, "Version"], " !WARNING::.")
+          } else {
+            craninfo <- paste0(" .::CRAN: ", availablePackagesOnCran[d, "Version"], "::.")
+          }
+        }
+        message(".:: ", fd, " ", format(curversion, width = 10), " ok ::.", craninfo)
+      }
+    })
   }
   if (updatePACKAGES) {
     write_PACKAGES(unpacked = TRUE)
     for (d in dirs) {
-      if (d %in% skipFolders) next
+      if (d %in% skipFolders) {
+        next
+      }
       targz <- grep(paste0("^", d, "_.*.tar.gz"), dir(), value = TRUE)
       if (length(targz) > 1) {
         newest <- max(numeric_version(sub("^.*_", "", sub(".tar.gz$", "", targz))))
         targz <- targz[-grep(newest, targz)]
-        if (file.exists(paste0("Archive/", d))) {
-          file.rename(targz, paste0("Archive/", d, "/", targz))
+        if (file.exists(file.path("Archive", d))) {
+          file.rename(targz, file.path("Archive", d, targz))
         } else {
-          dir.create(paste0("Archive/", d))
-          file.rename(targz, paste0("Archive/", d, "/", targz))
+          dir.create(file.path("Archive", d))
+          file.rename(targz, file.path("Archive", d, targz))
         }
       }
     }
   }
-  if (!is.null(pidfile)) file.remove(pidfile)
   message("done.")
 }

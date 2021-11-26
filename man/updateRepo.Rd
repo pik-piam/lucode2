@@ -9,23 +9,19 @@ updateRepo(
   check = TRUE,
   forceRebuild = FALSE,
   clean = FALSE,
-  pidfile = NULL
+  skipFolders = c("Archive", "gdxrrw", "HARr")
 )
 }
 \arguments{
 \item{path}{Path to the repository}
 
-\item{check}{Boolean deciding whether package must have been checked or not
-in order to be distributed}
+\item{check}{Boolean deciding whether package must have been checked or not in order to be distributed}
 
 \item{forceRebuild}{Option to rebuild all packages from source}
 
 \item{clean}{Option to clean repos before updating/pulling to avoid merge conflicts}
 
-\item{pidfile}{file name of a "process id" file containing the process id of the current
-process. If set this will make sure that the function is not run twice at the same time.
-If set to NULL this will be ignored. The OS needs to provide a "ps" command in order to
-have this working.}
+\item{skipFolders}{Which folders/packages should not be built.}
 }
 \description{
 Function to update an package repository. Run this function on a folder which contains
@@ -37,5 +33,5 @@ function will automatically detect the new package and add it.
 \code{\link{buildLibrary}}
 }
 \author{
-Jan Philipp Dietrich
+Jan Philipp Dietrich, Pascal Führlich
 }
