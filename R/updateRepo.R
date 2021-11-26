@@ -12,7 +12,7 @@
 #' @param skipFolders Which folders/packages should not be built.
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{buildLibrary}}
-#' @importFrom devtools document install build
+#' @importFrom devtools document install build install_deps
 #' @importFrom tools write_PACKAGES
 #' @importFrom withr local_dir local_envvar with_dir
 #' @export
@@ -61,7 +61,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
 
       if (as.numeric_version(curversion) < as.numeric_version(vkey$version) || forceRebuild) {
         if (vkey$valid || !check || forceRebuild) {
-          error <- try(devtools::install())
+          error <- try(devtools::install_deps(upgrade = "always"))
           if (vkey$roxygen && !("try-error" %in% class(error))) {
             error <- try(devtools::document(pkg = ".", roclets = c("rd", "collate", "namespace", "vignette")))
           }
@@ -88,7 +88,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
                 buildVersion, ") is already part of the repo ::.")
       } else if (as.numeric_version(curversion) == as.numeric_version(vkey$version) &&
                  as.numeric_version(curversion) > buildVersion) {
-        error <- try(devtools::install())
+        error <- try(devtools::install_deps(upgrade = "always"))
         if (!("try-error" %in% class(error))) {
           error <- try(devtools::build())
         }
