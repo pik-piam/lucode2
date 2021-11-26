@@ -242,19 +242,34 @@ readRuntime <- function(path, plot = FALSE, types = NULL, coupled = FALSE, outfn
     x <- as.numeric(max(dat$end) - min(dat$start), units = "hours")
     lusweave::swlatex(out, paste0("From start to end:\\newline  ", round(x), " hours\\newline\\newline"))
 
-    lusweave::swlatex(out, "Average runtime:\\newline")
+    lusweave::swlatex(out, "Average runtime (including preparation and output):\\newline")
+    x <- dat %>%
+      group_by(.data$model, .data$run, .data$it) %>%
+      # sum duration over section (prep, GAMS, output) for each model, run, and iteration
+      summarize(duration_single = sum(.data$duration)) %>%
+      # remove groups of run and iteration
+      # average duration across iteration and runs for each model
+      group_by(.data$model) %>%
+      summarize(single_mean = mean(.data$duration_single))
+
+    for (m in x$model) {
+      lusweave::swlatex(out, paste0(" ", m, " ", round(x[x$model == m, ]$single_mean, 1), " hours\\newline"))
+    }
+    lusweave::swlatex(out, paste0("\\newline"))
+
+    lusweave::swlatex(out, "Average total runtime (sum over iterations, average over scenarios):\\newline")
     x <- dat %>%
       group_by(.data$model, .data$run) %>%
       summarize(total = sum(.data$duration)) %>%
-      summarize(duration_single_mean = mean(.data$total))
+      summarize(duration_model_mean = mean(.data$total))
     for (m in x$model) {
-      lusweave::swlatex(out, paste0(" ", m, " ", round(x[x$model == m, ]$duration_single_mean, 1), " hours\\newline"))
+      lusweave::swlatex(out, paste0(" ", m, " ", round(x[x$model == m, ]$duration_model_mean, 1), " hours\\newline"))
     }
 
     x <- dat %>%
       group_by(.data$run) %>%
-      summarize(duration_coupled_mean = sum(.data$duration)) %>%
-      summarize(duration_mean = mean(.data$duration_coupled_mean))
+      summarize(duration_coupled = sum(.data$duration)) %>%
+      summarize(duration_mean = mean(.data$duration_coupled))
     lusweave::swlatex(out, paste0("coupled ",
                                   round(as.numeric(x$duration_mean, units = "hours"), 1),
                                   " hours\\newline\\newline"))
