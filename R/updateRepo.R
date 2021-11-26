@@ -12,7 +12,7 @@
 #' @param skipFolders Which folders/packages should not be built.
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{buildLibrary}}
-#' @importFrom devtools document install build install_deps
+#' @importFrom devtools document build install_deps
 #' @importFrom tools write_PACKAGES
 #' @importFrom withr local_dir local_envvar with_dir
 #' @export
