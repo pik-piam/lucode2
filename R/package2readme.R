@@ -10,7 +10,7 @@
 #' @importFrom desc desc
 #' @importFrom utils citation vignette
 #' @importFrom usethis git_remotes
-#' @importFrom withr with_dir local_options local_tempfile
+#' @importFrom withr with_dir local_options local_tempfile local_connection
 #' @importFrom tools file_ext
 #' @examples
 #' package2readme("lucode2")
@@ -212,7 +212,8 @@ package2readme <- function(package = ".", add = NULL) { # nolint
     } else {
       message("Added README.md file")
     }
-    writeLines(out, readmefile)
+    # enc2utf8 re-encodes out as utf8, encoding = "" and useBytes = TRUE prevent automatic re-encoding
+    writeLines(enc2utf8(out), local_connection(file(readmefile, "w+", encoding = "")), useBytes = TRUE)
   } else {
     message(paste(out, collapse = "\n"))
   }
