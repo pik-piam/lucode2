@@ -4,7 +4,7 @@
 \alias{loadBuildLibraryConfig}
 \title{buildLibrary}
 \usage{
-loadBuildLibraryConfig(lib)
+loadBuildLibraryConfig(lib = ".")
 }
 \arguments{
 \item{lib}{Path to the package}

@@ -8,13 +8,19 @@
 #' @seealso \code{\link{buildLibrary}}
 #' @importFrom utils askYesNo
 #' @importFrom yaml read_yaml write_yaml
-loadBuildLibraryConfig <- function(lib) {
+loadBuildLibraryConfig <- function(lib = ".") {
   lib <- normalizePath(lib)
   if (!file.exists(file.path(lib, ".buildlibrary"))) {
-    message("Config file .buildlibrary not found in '", lib, "'.")
-    if (!isTRUE(askYesNo(paste0("Do you want to create '", file.path(lib, ".buildlibrary"), "'?"), default = FALSE))) {
-      stop(".buildlibrary was not created, cannot continue.")
+    if (interactive()) {
+      message("Config file .buildlibrary not found in '", lib, "'. Possible reason: '", lib, "' ",
+              if (lib == normalizePath(".")) "(= your working directory) " else "",
+              "is not the main folder of a package.")
+
+      if (!isTRUE(askYesNo(paste0("Do you want to create .buildLibrary in '", lib, "'?"), default = FALSE))) {
+        stop(".buildlibrary was not created, cannot continue.")
+      }
     }
+
     # if not yet available, add .buildlibrary and add to .Rbuildignore
     cfg <- list(ValidationKey = 0,
                 AutocreateReadme = TRUE,
