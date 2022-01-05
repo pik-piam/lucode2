@@ -6,20 +6,28 @@
 #' @return The configuration loaded from .buildLibrary as a list.
 #' @author Jan Philipp Dietrich, Pascal Führlich
 #' @seealso \code{\link{buildLibrary}}
+#' @importFrom utils askYesNo
 #' @importFrom yaml read_yaml write_yaml
-loadBuildLibraryConfig <- function(lib) {
+loadBuildLibraryConfig <- function(lib = ".") {
+  lib <- normalizePath(lib)
   if (!file.exists(file.path(lib, ".buildlibrary"))) {
+    if (interactive()) {
+      message("Config file .buildlibrary not found in '", lib, "'. Possible reason: '", lib, "' ",
+              if (lib == normalizePath(".")) "(= your working directory) " else "",
+              "is not the main folder of a package.")
+
+      if (!isTRUE(askYesNo(paste0("Do you want to create .buildLibrary in '", lib, "'?"), default = FALSE))) {
+        stop(".buildlibrary was not created, cannot continue.")
+      }
+    }
+
     # if not yet available, add .buildlibrary and add to .Rbuildignore
-    cfg <- list(
-      ValidationKey = 0,
-      AutocreateReadme = TRUE,
-      AcceptedWarnings = c(
-        "Warning: package '.*' was built under R version",
-        "Warning: namespace '.*' is not available and has been replaced"
-      ),
-      AcceptedNotes = NULL,
-      allowLinterWarnings = FALSE
-    )
+    cfg <- list(ValidationKey = 0,
+                AutocreateReadme = TRUE,
+                AcceptedWarnings = c("Warning: package '.*' was built under R version",
+                                     "Warning: namespace '.*' is not available and has been replaced"),
+                AcceptedNotes = NULL,
+                allowLinterWarnings = FALSE)
     write_yaml(cfg, file.path(lib, ".buildlibrary"))
     message("Created .buildlibrary config file. Please add it to your next commit!")
   }
