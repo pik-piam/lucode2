@@ -1,8 +1,8 @@
 Package: lucode2
 Type: Package
 Title: Code Manipulation and Analysis Tools
-Version: 0.18.8
-Date: 2022-01-05
+Version: 0.19.0
+Date: 2022-01-06
 Authors@R: c(person("Jan Philipp", "Dietrich", email = "dietrich@pik-potsdam.de", role = c("aut","cre")),
              person("David", "Klein", role = "aut"),
              person("Anastasis", "Giannousakis", role = "aut"),
@@ -12,6 +12,7 @@ Authors@R: c(person("Jan Philipp", "Dietrich", email = "dietrich@pik-potsdam.de"
              person("Pascal", "Führlich", role = "aut"))
 Description: A collection of tools which allow to manipulate and analyze code.
 Imports:
+    callr,
     citation,
     data.table,
     desc,
@@ -26,12 +27,15 @@ Imports:
     withr
 Suggests:
     covr,
+    gdx,
+    gdxrrw,
     gert,
     ggplot2,
     gtools,
     lusweave,
     knitr,
     magclass,
+    rmarkdown,
     testthat
 URL: https://github.com/pik-piam/lucode2, https://doi.org/10.5281/zenodo.4389418
 BugReports: https://github.com/pik-piam/lucode2/issues
