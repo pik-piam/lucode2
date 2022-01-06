@@ -18,6 +18,7 @@
 #' \dontrun{
 #' lucode2::check()
 #' }
+#' @importFrom callr r
 #' @importFrom devtools document check
 #' @importFrom withr local_tempdir
 #' @seealso \code{\link{buildLibrary}}, \code{\link{lint}}
@@ -28,11 +29,11 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
   document(pkg = lib, roclets = c("rd", "collate", "namespace", "vignette"))
 
   ########### Run tests ###########
-  testResultsRds <- normalizePath(file.path(local_tempdir(), "testResults.rds"),
-                                  winslash = "/", mustWork = FALSE)
-  system(paste0("Rscript -e \"options(crayon.enabled = TRUE); saveRDS(devtools::test('", lib, "'), file = '",
-                testResultsRds, "')\""))
-  testResults <- as.data.frame(readRDS(testResultsRds))
+  # run tests in a separate R session so test results are independent of anything set in the current R session
+  testResults <- callr::r(function(lib) {
+    withr::local_options(crayon.enabled = TRUE)
+    return(devtools::test(lib))
+  }, args = list(lib), show = TRUE)
 
   if (sum(testResults[["failed"]]) > 0 || any(testResults[["error"]])) {
     stop("Some tests failed, please fix them first.")
