@@ -26,9 +26,10 @@
 
 # define function for extraction of indicies sets from command line input
 extract_arguments <- function(inputArg) {  # nolint
-  if (length(grep("=", inputArg) > 0)) inputArg <- strsplit(inputArg, "=")[[1]][2]
+  if (length(grep("=", inputArg) > 0)) inputArg <- sub(".*?=", "", inputArg) # everything after first =
+  if (inputArg == "") return("")
   if (length(grep(",", inputArg) > 0)) {
-    return(unlist(sapply(strsplit(inputArg, ",")[[1]], extract_arguments), use.names = FALSE))
+    return(unlist(sapply(strsplit(inputArg, ",")[[1]], extract_arguments), use.names = FALSE)) # nolint
   }
   if (length(strsplit(inputArg, ":")[[1]]) == 2) {
     if (suppressWarnings(is.na(as.integer(strsplit(inputArg, ":")[[1]][1])) |
