@@ -7,7 +7,7 @@
 checkup()
 }
 \value{
-Invisibly the report as a list.
+Invisibly, the report as a list.
 }
 \description{
 Checks the current R ecosystem for common problems and reports info such as OS and R version.

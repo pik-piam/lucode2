@@ -2,7 +2,7 @@
 #'
 #' Checks the current R ecosystem for common problems and reports info such as OS and R version.
 #'
-#' @return Invisibly the report as a list.
+#' @return Invisibly, the report as a list.
 #'
 #' @author Pascal Führlich
 #'
@@ -10,11 +10,13 @@
 #' @importFrom utils old.packages str tail
 #' @export
 checkup <- function() {
+  # Rscript uses the same version of R as this R session
   rscriptVersion <- tail(system("Rscript -e 'cat(R.version.string)'", intern = TRUE), 1)
   if (rscriptVersion != R.version.string) {
     warning("Rscript uses ", rscriptVersion, ", but this session uses ", R.version.string, "")
   }
 
+  # check if packages are outdated
   outdatedPackages <- old.packages()
   if (length(outdatedPackages) > 0) {
     warning("The following packages can be updated:\n",
@@ -23,6 +25,7 @@ checkup <- function() {
             "\nConsider running `update.packages()`.")
   }
 
+  # check if a package is installed multiple times in different libPaths
   packagesInLibPaths <- lapply(.libPaths(), list.files) # nolint
   names(packagesInLibPaths) <- .libPaths() # nolint
   duplicatePackages <- findDuplicates(packagesInLibPaths)
@@ -32,6 +35,7 @@ checkup <- function() {
             "Consider uninstalling one version via `remove.packages('packageName', lib = 'libPath')`")
   }
 
+  # check if multiple paths in PATH contain programs with the same name but different content
   pathEnvironmentVariable <- unique(strsplit(Sys.getenv("PATH"), ":")[[1]])
   filesInPath <- lapply(pathEnvironmentVariable, list.files)
   names(filesInPath) <- pathEnvironmentVariable
@@ -42,7 +46,6 @@ checkup <- function() {
       length(unique(md5sum(file.path(duplicateFilesInPath[[programName]], programName)))) >= 2
     }, warning = function(unused) FALSE, error = function(unused) FALSE))
   }, logical(1))]
-  duplicateDifferingFilesInPath
   if (length(duplicateDifferingFilesInPath) > 0) {
     warning("Multiple different versions of the following programs are found in your PATH environment variable:\n",
             paste0(names(duplicateDifferingFilesInPath), ": ", duplicateDifferingFilesInPath, collapse = "\n"),
@@ -50,8 +53,9 @@ checkup <- function() {
   }
 
   report <- R.Version()[c("platform", "version.string")]
-  report[["repos"]] <- as.character(getOption("repos"))
 
+  # check if at least one of the PIK CRAN repos is used
+  report[["repos"]] <- as.character(getOption("repos"))
   expectedRepos <- c("https://pik-piam.r-universe.dev", "https://rse.pik-potsdam.de/r/packages")
   if (length(intersect(report[["repos"]], expectedRepos)) == 0) {
     warning("No PIK CRAN in getOption('repos'). Consider adding the RSE server and/or r-universe by running\n",
@@ -68,6 +72,9 @@ checkup <- function() {
     as.character(rmarkdown::pandoc_version())
   else
     "? (Run `install.packages('rmarkdown')` to enable pandoc check.)"
+
+  report[["locale"]] <- Sys.getlocale()
+  report[["libPaths"]] <- .libPaths() # nolint
 
   str(report)
   return(invisible(report))
