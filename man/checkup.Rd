@@ -10,7 +10,7 @@ checkup()
 Invisibly, the report as a list.
 }
 \description{
-Checks the current R ecosystem for common problems and reports info such as OS and R version.
+Checks the current R setup for common problems and reports info such as OS and R version.
 }
 \author{
 Pascal Führlich

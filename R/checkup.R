@@ -1,6 +1,6 @@
 #' checkup
 #'
-#' Checks the current R ecosystem for common problems and reports info such as OS and R version.
+#' Checks the current R setup for common problems and reports info such as OS and R version.
 #'
 #' @return Invisibly, the report as a list.
 #'
@@ -28,12 +28,12 @@ checkup <- function() {
 
   str(report)
 
-  message("Checking R ecosystem for problems... ", appendLF = FALSE)
+  message("Checking R setup for problems... ", appendLF = FALSE)
 
   report[["warnings"]] <- list()
 
   # Rscript uses the same version of R as this R session
-  rscriptVersion <- tail(system("Rscript -e 'cat(R.version.string)'", intern = TRUE), 1)
+  rscriptVersion <- tail(system("Rscript -e 'cat(R.version.string)'", intern = TRUE, ignore.stderr = TRUE), 1)
   if (rscriptVersion != R.version.string) {
     report[["warnings"]][["rscriptVersion"]] <- paste0("Rscript uses ", rscriptVersion, ", but this session uses ",
                                                        R.version.string)
