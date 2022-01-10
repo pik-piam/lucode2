@@ -53,8 +53,8 @@ readArgs <- function(..., .envir = parent.frame(), .silent = FALSE) {
     }
   }
   if (!.silent) {
-    cat("\n\n### READ COMMAND LINE - ASSIGNED CONFIGURATION ###\n")
+    message("\n### READ COMMAND LINE - ASSIGNED CONFIGURATION ###")
     eprint_list(allowedArgs, envir = .envir)
-    cat("### READ COMMAND LINE - CONFIGURATION END ###\n\n")
+    message("### READ COMMAND LINE - CONFIGURATION END ###\n")
   }
 }

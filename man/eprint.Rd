@@ -4,10 +4,10 @@
 \alias{eprint}
 \title{extended Print}
 \usage{
-eprint(varName, envir = parent.frame())
+eprint(var_name, envir = parent.frame())
 }
 \arguments{
-\item{varName}{name of the variable that should be printed as string}
+\item{var_name}{name of the variable that should be printed as string}
 
 \item{envir}{environment from which the variable should be read (by default
 the environment from which the function is called)}
@@ -30,5 +30,5 @@ eprint("a")
 \code{\link{eprint_list}}
 }
 \author{
-Jan Philipp Dietrich
+Jan Philipp Dietrich, Oliver Richters
 }
