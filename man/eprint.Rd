@@ -30,5 +30,5 @@ eprint("a")
 \code{\link{eprint_list}}
 }
 \author{
-Jan Philipp Dietrich
+Jan Philipp Dietrich, Oliver Richters
 }

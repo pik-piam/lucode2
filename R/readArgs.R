@@ -18,24 +18,25 @@
 #' value1 <- "old"
 #' value2 <- 2
 #' value3 <- "willstaythesame"
-#' readArgs("value1", "value2")
-#' print(value1)
-#' print(value2)
-#' print(value3)
+#' readArgs("value1", "value2", "value4")
+#' cat(value1, "\n")
+#' cat(value2, "\n")
+#' cat(value3, "\n")
 #'
 #' # Open the command line and execute the following code:
 #' # Rscript test.R value1=new value2=3 value3=isnotallowed
 #'
 #' # Output:
-#' # [1]
-#' # [1] ### READ COMMAND LINE - ASSIGNED CONFIGURATION ###
-#' # [1] value1 <- new
-#' # [1] value2 <- 3
-#' # [1] ### READ COMMAND LINE - CONFIGURATION END ###
-#' # [1]
-#' # [1] "new"
-#' # [1] 3
-#' # [1] "willstaythesame"
+#' #
+#' # ### READ COMMAND LINE - ASSIGNED CONFIGURATION ###
+#' # value1 <- new
+#' # value2 <- 3
+#' # value4 not found
+#' # ### READ COMMAND LINE - CONFIGURATION END ###
+#' #
+#' # "new"
+#' # 3
+#' # "willstaythesame"
 #'
 #'
 #' ### function that reads all allowed arguments from command line###
@@ -52,10 +53,8 @@ readArgs <- function(..., .envir = parent.frame(), .silent = FALSE) {
     }
   }
   if (!.silent) {
-    print("", quote = FALSE)
-    print("### READ COMMAND LINE - ASSIGNED CONFIGURATION ###", quote = FALSE)
+    message("\n### READ COMMAND LINE - ASSIGNED CONFIGURATION ###")
     eprint_list(allowedArgs, envir = .envir)
-    print("### READ COMMAND LINE - CONFIGURATION END ###", quote = FALSE)
-    print("", quote = FALSE)
+    message("### READ COMMAND LINE - CONFIGURATION END ###\n")
   }
 }
