@@ -23,6 +23,6 @@ eprint <- function(var_name, envir = parent.frame()) { # nolint
   if (class(varValue) == "try-error") {
     message(paste(var_name, "not found"))
   } else {
-    message(paste(var_name, "<-", varValue))
+    message(paste(var_name, "<-", paste(varValue, collapse = ", ")))
   }
 }
