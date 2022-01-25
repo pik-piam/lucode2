@@ -46,6 +46,7 @@
 #' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Führlich
 #' @seealso \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
 #' @importFrom citation package2zenodo
+#' @importFrom desc desc_get_deps
 #' @importFrom yaml write_yaml
 #' @importFrom utils old.packages update.packages packageVersion
 #' @importFrom withr defer local_connection
@@ -61,13 +62,15 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
                                   "newest lucode2 version is loaded. Then try again:\nlucode2::buildLibrary()")
     if (.__NAMESPACE__.$spec[[2]] != packageVersion("lucode2")) {
       # the loaded lucode2 version (.__NAMESPACE__.$spec[[2]]) is different from the version available on disk
-      stop(pleaseRestartSession)
+      cat(pleaseRestartSession)
+      return(invisible(NULL))
     }
     cat("Checking for lucode2 update... ")
     if (!is.null(old.packages(instPkgs = installed.packages()["lucode2", , drop = FALSE]))) {
       cat("A new version of lucode2 is available, please update.\n")
       update.packages(oldPkgs = "lucode2")
-      stop(pleaseRestartSession)
+      cat(pleaseRestartSession)
+      return(invisible(NULL))
     } else {
       cat("You're running the newest lucode2 version.\n")
     }
@@ -94,6 +97,15 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   # load/create .buildLibrary file
   ############################################################
   cfg <- loadBuildLibraryConfig(lib)
+
+  ############################################################
+  # import Depends packages
+  ############################################################
+  dependsPackages <- desc_get_deps()[desc_get_deps()["type"] == "Depends", "package"]
+  if (length(dependsPackages) > 0) {
+    # All packages defined as "Depends" in DESCRIPTION must be imported, otherwise a check fails.
+    writeLines(c(paste("#' @import", paste(dependsPackages, collapse = " ")), "NULL"), file.path("R", "imports.R"))
+  }
 
   ####################################################################
   # Run checks, tests and linter
