@@ -46,7 +46,6 @@
 #' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Führlich
 #' @seealso \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
 #' @importFrom citation package2zenodo
-#' @importFrom desc desc_get_deps
 #' @importFrom yaml write_yaml
 #' @importFrom utils old.packages update.packages packageVersion
 #' @importFrom withr defer local_connection
@@ -97,15 +96,6 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   # load/create .buildLibrary file
   ############################################################
   cfg <- loadBuildLibraryConfig(lib)
-
-  ############################################################
-  # import Depends packages
-  ############################################################
-  dependsPackages <- setdiff(desc_get_deps()[desc_get_deps()["type"] == "Depends", "package"], "R")
-  if (length(dependsPackages) > 0) {
-    # All packages defined as "Depends" in DESCRIPTION must be imported, otherwise a check fails.
-    writeLines(c(paste("#' @import", paste(dependsPackages, collapse = " ")), "NULL"), file.path("R", "imports.R"))
-  }
 
   ####################################################################
   # Run checks, tests and linter
