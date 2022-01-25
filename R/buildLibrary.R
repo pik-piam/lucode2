@@ -101,7 +101,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ############################################################
   # import Depends packages
   ############################################################
-  dependsPackages <- desc_get_deps()[desc_get_deps()["type"] == "Depends", "package"]
+  dependsPackages <- setdiff(desc_get_deps()[desc_get_deps()["type"] == "Depends", "package"], "R")
   if (length(dependsPackages) > 0) {
     # All packages defined as "Depends" in DESCRIPTION must be imported, otherwise a check fails.
     writeLines(c(paste("#' @import", paste(dependsPackages, collapse = " ")), "NULL"), file.path("R", "imports.R"))
