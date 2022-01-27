@@ -32,15 +32,11 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
   # run tests in a separate R session so test results are independent of anything set in the current R session
   testResults <- callr::r(function(lib) {
     withr::local_options(crayon.enabled = TRUE)
-    return(devtools::test(lib))
+    return(devtools::test(lib, stop_on_failure = TRUE))
   }, args = list(lib), show = TRUE)
 
-  if (sum(testResults[["failed"]]) > 0 || any(testResults[["error"]])) {
-    stop("Some tests failed, please fix them first.")
-  }
-
-  unacceptedWarnings <- testResults[["result"]] %>%
-    Reduce(f = append, init = list()) %>% # combine results from all tests
+  unacceptedWarnings <- testResults %>%
+    Reduce(f = function(a, b) append(a, b[["results"]]), init = list()) %>% # combine results from all tests
     Filter(f = function(result) inherits(result, c("warning", "expectation_warning"))) %>% # keep only warnings
     Filter(f = function(aWarning) { # filter accepted warnings
       return(!any(vapply(config[["AcceptedWarnings"]],
