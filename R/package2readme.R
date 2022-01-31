@@ -96,7 +96,7 @@ package2readme <- function(package = ".", add = NULL) { # nolint
     if (is.null(z)) return("")
     z <- sub("^[^/]*", "", z)
     out <- paste0("[![codecov](https://codecov.io/gh", z,
-                  "/branch/master/graph/badge.svg)](https://codecov.io/gh", z, ")")
+                  "/branch/master/graph/badge.svg)](https://app.codecov.io/gh", z, ")")
     return(out)
   }
 
