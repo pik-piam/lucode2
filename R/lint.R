@@ -14,7 +14,7 @@
 #' @seealso \code{\link{getFilesToLint}}, \code{\link{autoFormat}}, \code{\link[lintr]{lint}}
 #' @importFrom lintr lint_package with_defaults absolute_path_linter line_length_linter object_name_linter
 #' todo_comment_linter undesirable_function_linter cyclocomp_linter default_undesirable_functions
-#' undesirable_operator_linter T_and_F_symbol_linter
+#' undesirable_operator_linter default_undesirable_operators T_and_F_symbol_linter
 #' @examples
 #' lucode2::lint()
 #' @export
@@ -43,7 +43,8 @@ lint <- function(files = getFilesToLint()) {
   linterArgs <- linterArgsForVignettesAndTests
   linterArgs$undesirable_function_linter <- # nolint
     undesirable_function_linter(c(default_undesirable_functions, deprecatedFunctions))
-  linterArgs$undesirable_operator_linter <- undesirable_operator_linter() # nolint
+  linterArgs$undesirable_operator_linter <- # nolint
+    undesirable_operator_linter(c(default_undesirable_operators, list(`->` = NA)))
   linters <- do.call(with_defaults, linterArgs)
 
   if (identical(files, ".")) {
