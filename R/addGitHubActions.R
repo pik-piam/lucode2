@@ -13,7 +13,7 @@
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{buildLibrary}}
 #' @importFrom desc desc
-#' @importFrom usethis use_github_action use_coverage
+#' @importFrom usethis proj_set use_github_action use_coverage
 #' @examples
 #' \dontrun{
 #' addGitHubActions()
@@ -22,6 +22,7 @@
 addGitHubActions <- function(lib = ".") {
   unlink(file.path(lib, ".github", "workflows", "test-buildlibrary.yaml")) # the old workflow, remove this at some point
 
+  proj_set(lib)
   # do not overwrite workflow file in lucode2, otherwise a workflow file change would be overwritten by buildLibrary
   if (!file.exists(file.path(lib, "DESCRIPTION")) ||
       desc(file = file.path(lib, "DESCRIPTION"))[["get"]]("Package") != "lucode2") {
