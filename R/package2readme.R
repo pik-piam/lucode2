@@ -9,8 +9,8 @@
 #' @author Jan Philipp Dietrich
 #' @importFrom desc desc
 #' @importFrom utils citation vignette
-#' @importFrom usethis git_remotes
-#' @importFrom withr with_dir local_options local_tempfile local_connection
+#' @importFrom usethis git_remotes with_project
+#' @importFrom withr local_options local_tempfile local_connection
 #' @importFrom tools file_ext
 #' @examples
 #' package2readme("lucode2")
@@ -35,9 +35,9 @@ package2readme <- function(package = ".", add = NULL) { # nolint
     if (is.null(folder)) {
       return(NULL)
     }
-    with_dir(folder, {
+    with_project(folder, {
       out <- try(git_remotes(), silent = TRUE)
-    })
+    }, quiet = TRUE)
     if ("try-error" %in% class(out)) {
       return(NULL)
     }
@@ -162,10 +162,10 @@ package2readme <- function(package = ".", add = NULL) { # nolint
     for (a in add) {
       if (file.exists(file.path(folder, a))) a <- file.path(folder, a)
       if (file.exists(a)) {
-        fileType <- tools::file_ext(a)
+        fileType <- file_ext(a)
         if (tolower(fileType) == "rmd") {
           checkRequiredPackages("knitr")
-          tmpFile <- withr::local_tempfile()
+          tmpFile <- local_tempfile()
           knitr::knit(a, output = tmpFile)
           a <- readLines(tmpFile)
         } else if (tolower(fileType) == "md") {
