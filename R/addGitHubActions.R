@@ -13,15 +13,14 @@
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{buildLibrary}}
 #' @importFrom desc desc
-#' @importFrom usethis proj_set use_github_action use_coverage
-#' @importFrom withr local_dir
+#' @importFrom usethis local_project use_github_action use_coverage
 #' @examples
 #' \dontrun{
 #' addGitHubActions()
 #' }
 #' @export
 addGitHubActions <- function(lib = ".") {
-  local_dir(lib)
+  local_project(lib, quiet = TRUE)
 
   # remove old workflow file, remove this line at some point
   unlink(file.path(".github", "workflows", "test-buildlibrary.yaml"))
