@@ -136,12 +136,11 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
     message("Could not add GitHub Actions:", error)
   })
 
-  if (!file.exists(file.path("DESCRIPTION")) ||
-      desc(file = file.path("DESCRIPTION"))[["get"]]("Package") != "lucode2") {
+  if (!file.exists("DESCRIPTION") || desc("DESCRIPTION")$get("Package") != "lucode2") {
     fileUrl <- "https://raw.githubusercontent.com/pik-piam/lucode2/master/.pre-commit-config.yaml"
     urlConnection <- local_connection(url(fileUrl))
     preCommitConfig <- sub("autoupdate_schedule: weekly", "autoupdate_schedule: quarterly", readLines(urlConnection))
-    writeLines(preCommitConfig, file.path(".pre-commit-config.yaml"))
+    writeLines(preCommitConfig, ".pre-commit-config.yaml")
   }
 
   ##########################################################
@@ -149,7 +148,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ##########################################################
   # Version number in the man file
   # Version number in the description file
-  descfile <- readLines(file.path("DESCRIPTION"))
+  descfile <- readLines("DESCRIPTION")
   descfileVersion <- sub(
     pattern = "[^(0-9)]*$", replacement = "", perl = TRUE,
     x = sub(
@@ -227,8 +226,8 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ##################################################################
   # Write the modified description files, update metadata and readme
   ##################################################################
-  writeLines(descfile, file.path("DESCRIPTION"))
-  write_yaml(cfg, file.path(".buildlibrary"))
+  writeLines(descfile, "DESCRIPTION")
+  write_yaml(cfg, ".buildlibrary")
   package2zenodo()
   if (isTRUE(cfg$AutocreateReadme)) {
     package2readme(add = cfg$AddInReadme)
@@ -237,7 +236,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ####################################################################
   # Make sure man/*.Rd files are not ignored
   ###################################################################
-  gitignore <- readLines(file.path(".gitignore"))
+  gitignore <- readLines(".gitignore")
   if ("*.Rd" %in% gitignore || file.exists(file.path("man", ".gitignore"))) {
     message("*.Rd files are currently ignored, but they should be commited.")
 
@@ -260,7 +259,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
 
   if (updateType != 0) {
     cat(paste0("* updating from version"), descfileVersion, "to version", toString(version), "... OK\n")
-    if (file.exists(file.path(".git"))) {
+    if (dir.exists(".git")) {
       if (gitpush) {
         system(paste0('git add . && git commit -m "', commitmessage, " and type ", updateType,
                       ' upgrade" && git push && cd -'))
