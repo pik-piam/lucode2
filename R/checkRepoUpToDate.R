@@ -16,12 +16,8 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
   }
 
   tryCatch({
-    if (packageVersion("usethis") < "2.1.0") {
-      message("usethis >= 2.1.0 is needed for automatically checking if repo is up-to-date")
-      stop()
-    }
     checkRequiredPackages("gert", "automatically checking if the git repo is up-to-date")
-    message("Checking if your repository is up-to-date...")
+    message("Checking if your repo is up-to-date...")
     local_dir(pathToRepo)
 
     # check whether we are merging
