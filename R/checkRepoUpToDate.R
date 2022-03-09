@@ -1,9 +1,9 @@
 #' @importFrom utils packageVersion
-#' @importFrom withr local_dir
+#' @importFrom usethis local_project git_default_branch
 checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
   # asking the user is fallback if automatic check does not work
   askUser <- function(ignoredParameter) { # a warning/error which we don't need is passed by tryCatch
-    didYouPullQuestion <- paste("Automatic up-to-date check failed. Is your repository up-to-date?",
+    didYouPullQuestion <- paste("Automatic up-to-date check failed/skipped. Is your repository up-to-date?",
                                 "Did you pull immediately before running this check? (Y/n) ")
     if (!(tolower(readline(didYouPullQuestion)) %in% c("", "y", "yes"))) {
       stop("Please update your repository first, before you proceed!")
@@ -16,13 +16,9 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
   }
 
   tryCatch({
-    if (packageVersion("usethis") < "2.1.0") {
-      message("usethis >= 2.1.0 is needed for automatically checking if repo is up-to-date")
-      stop()
-    }
     checkRequiredPackages("gert", "automatically checking if the git repo is up-to-date")
-    message("Checking if your repository is up-to-date...")
-    local_dir(pathToRepo)
+    message("Checking if your repo is up-to-date...")
+    local_project(pathToRepo, quiet = TRUE)
 
     # check whether we are merging
     gitStatus <- system2("git", "status", stdout = TRUE)
@@ -43,11 +39,11 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
       gert::git_remote_add(url = remoteUrl, name = "upstream")
     }
 
-    gert::git_fetch()
+    gert::git_fetch(verbose = FALSE)
     behindTracking <- gert::git_ahead_behind()[["behind"]]
 
-    gert::git_fetch("upstream")
-    behindUpstream <- gert::git_ahead_behind(upstream = paste0("upstream/", usethis::git_default_branch()))[["behind"]]
+    gert::git_fetch("upstream", verbose = FALSE)
+    behindUpstream <- gert::git_ahead_behind(upstream = paste0("upstream/", git_default_branch()))[["behind"]]
 
     if (behindUpstream > 0 || behindTracking > 0) {
       errorMessage <- "Your repo is not up-to-date."
@@ -56,7 +52,7 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
       }
       if (behindUpstream > 0) {
         errorMessage <- paste0(errorMessage, "\nYou are ", behindUpstream, " commits behind upstream. ",
-                               "Please run:\ngit pull upstream ", usethis::git_default_branch())
+                               "Please run:\ngit pull upstream ", git_default_branch())
       }
       stop(errorMessage)
     } else {
