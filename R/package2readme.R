@@ -126,7 +126,7 @@ package2readme <- function(package = ".", add = NULL) { # nolint
     } else {
       v <- matrix(nrow = 0, ncol = 2, dimnames = list(NULL, c("Item", "Title")))
       path <- file.path(folder, "vignettes")
-      vig <- list.files(path, pattern = "*.Rmd")
+      vig <- list.files(path, pattern = ".*\\.Rmd$")
       for (i in vig) {
         tmp <- readLines(file.path(path, i), n = 5)
         tmp <- c(Item = sub(".Rmd", "", i, fixed = TRUE),
