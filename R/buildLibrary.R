@@ -93,6 +93,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   }
 
   checkRepoUpToDate(".", autoCheckRepoUpToDate)
+  fixBuildLibraryMergeConflict(lib)
 
   ############################################################
   # load/create .buildLibrary file
