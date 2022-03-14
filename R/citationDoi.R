@@ -12,7 +12,7 @@ citationDoi <- function(meta) {
       "\n", "", gsub(
         "https://doi.org/", "", grep(
           "doi.org", urls, fixed = TRUE, value = TRUE), fixed = TRUE))
-    cit$url <- grep("doi.org", urls, fixed = TRUE, value = TRUE, invert = TRUE)
+    cit$url <- c(cit$url, grep("doi.org", urls, fixed = TRUE, value = TRUE, invert = TRUE))
     if (cit$note == "") cit$note <- paste("R package version", meta$Version)
     if (!length(cit$url)) cit$url <- NULL
     if (!length(cit$doi)) cit$doi <- NULL
