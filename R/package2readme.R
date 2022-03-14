@@ -8,7 +8,7 @@
 #' 1) a line of markdown code, 2) a path to a markdown file, or 3) a path to a Rmarkdown file
 #' @author Jan Philipp Dietrich
 #' @importFrom desc desc
-#' @importFrom utils citation vignette
+#' @importFrom utils citation vignette packageDescription
 #' @importFrom usethis git_remotes with_project
 #' @importFrom withr local_options local_tempfile local_connection
 #' @importFrom tools file_ext
