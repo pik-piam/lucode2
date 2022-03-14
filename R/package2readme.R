@@ -110,13 +110,30 @@ package2readme <- function(package = ".", add = NULL) { # nolint
                   ""))
   }
 
-  fillCite <- function(d) {
+  fillCite <- function(d, folder) {
     # the format function wraps lines according to the width option, set explicitly so it is always the same
     local_options(list(width = 664)) # 664 * 0.75 is <= 500; will get deparse cutoff warning if > 500
+
+    # Get the citation object.
+    ci <- NULL
+    # If `folder` is set, try to get citation from this project folder.
+    if (!is.null(folder)) {
+      try({
+        projectPath <- normalizePath(folder, mustWork=TRUE, winslash="/")
+        ci <- citation(auto = packageDescription(
+          basename(projectPath),
+          lib.loc = dirname(projectPath)))
+      })
+    }
+    # If previous code did not work or folder is not set, get citation from installed package.
+    if (is.null(ci)) {
+      ci <- citation(package = d$get("Package"))
+    }
+
     out <- c("\nTo cite package **", d$get("Package"), "** in publications use:\n\n",
-             format(citation(package = d$get("Package")), style = "text"),
+             format(ci, style = "text"),
              "\n\nA BibTeX entry for LaTeX users is\n\n ```latex\n",
-             format(citation(package = d$get("Package")), style = "bibtex"), "\n```")
+             format(ci, style = "bibtex"), "\n```")
     return(paste(out, collapse = ""))
   }
 
@@ -199,7 +216,7 @@ package2readme <- function(package = ".", add = NULL) { # nolint
                githubactions = fillGithubActions(d, folder),
                codecov       = fillCodecov(d, folder),
                runiverse     = fillRUniverse(d$get("Package")),
-               cite          = fillCite(d),
+               cite          = fillCite(d, folder),
                vignette      = fillVignette(d, folder))
 
   template <- readLines(system.file("extdata", "README_template.md", package = "lucode2"))
