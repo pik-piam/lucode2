@@ -22,9 +22,6 @@
 addGitHubActions <- function(lib = ".") {
   local_project(lib, quiet = TRUE)
 
-  # remove old workflow file, remove this line at some point
-  unlink(file.path(".github", "workflows", "test-buildlibrary.yaml"))
-
   if (file.exists("DESCRIPTION") && desc("DESCRIPTION")$get("Package") == "lucode2") {
     question <- "Replace inst/extdata/lucode2-check.yaml with .github/workflows/lucode2-check.yaml?"
     if (md5sum("./.github/workflows/lucode2-check.yaml") != md5sum("./inst/extdata/lucode2-check.yaml") &&
