@@ -47,9 +47,10 @@
 #' @seealso \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
 #' @importFrom citation package2zenodo
 #' @importFrom desc desc desc_get_deps
-#' @importFrom yaml write_yaml
-#' @importFrom utils old.packages update.packages packageVersion
+#' @importFrom tools md5sum
+#' @importFrom utils askYesNo old.packages update.packages packageVersion
 #' @importFrom withr defer local_connection local_dir
+#' @importFrom yaml write_yaml
 #' @examples
 #' \dontrun{
 #' buildLibrary()
@@ -138,10 +139,15 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
     message("Could not add GitHub Actions:", error)
   })
 
-  if (!file.exists("DESCRIPTION") || desc("DESCRIPTION")$get("Package") != "lucode2") {
-    fileUrl <- "https://raw.githubusercontent.com/pik-piam/lucode2/master/.pre-commit-config.yaml"
-    urlConnection <- local_connection(url(fileUrl))
-    preCommitConfig <- sub("autoupdate_schedule: weekly", "autoupdate_schedule: quarterly", readLines(urlConnection))
+  if (file.exists("DESCRIPTION") && desc("DESCRIPTION")$get("Package") == "lucode2") {
+    if (md5sum("./.pre-commit-config.yaml") != md5sum("./inst/extdata/.pre-commit-config.yaml") &&
+        (!interactive() || !askYesNo("Replace inst/extdata/.pre-commit-config.yaml with .pre-commit-config.yaml?"))) {
+      stop(".pre-commit-config.yaml != inst/extdata/.pre-commit-config.yaml")
+    }
+    file.copy("./.pre-commit-config.yaml", "./inst/extdata/", overwrite = TRUE)
+  } else {
+    configPath <- system.file("extdata", ".pre-commit-config.yaml", package = "lucode2")
+    preCommitConfig <- sub("autoupdate_schedule: weekly", "autoupdate_schedule: quarterly", readLines(configPath))
     writeLines(preCommitConfig, ".pre-commit-config.yaml")
   }
 
