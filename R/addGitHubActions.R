@@ -25,11 +25,17 @@ addGitHubActions <- function(lib = ".") {
   # remove old workflow file, remove this line at some point
   unlink(file.path(".github", "workflows", "test-buildlibrary.yaml"))
 
-  # do not overwrite workflow file in lucode2, otherwise a workflow file change would be overwritten by buildLibrary
-  if (!file.exists("DESCRIPTION") || desc("DESCRIPTION")$get("Package") != "lucode2") {
-    unlink(file.path(".github", "workflows", "lucode2-check.yaml"))
-    use_github_action(NULL, # name is not used when a url is passed
-                      "https://raw.githubusercontent.com/pik-piam/lucode2/master/.github/workflows/lucode2-check.yaml")
+  if (file.exists("DESCRIPTION") && desc("DESCRIPTION")$get("Package") == "lucode2") {
+    question <- "Replace inst/extdata/lucode2-check.yaml with .github/workflows/lucode2-check.yaml?"
+    if (md5sum("./.github/workflows/lucode2-check.yaml") != md5sum("./inst/extdata/lucode2-check.yaml") &&
+        (!interactive() || !askYesNo(question))) {
+      stop("inst/extdata/lucode2-check.yaml != .github/workflows/lucode2-check.yaml")
+    }
+    file.copy("./.github/workflows/lucode2-check.yaml", "./inst/extdata/", overwrite = TRUE)
+  } else {
+    actionPath <- system.file("extdata", "lucode2-check.yaml", package = "lucode2")
+    githubAction <- sub("autoupdate_schedule: weekly", "autoupdate_schedule: quarterly", readLines(actionPath))
+    writeLines(githubAction, "./.github/workflows/lucode2-check.yaml")
   }
 
   if (!file.exists("codecov.yml")) {

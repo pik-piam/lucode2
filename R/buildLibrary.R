@@ -140,13 +140,14 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   })
 
   if (file.exists("DESCRIPTION") && desc("DESCRIPTION")$get("Package") == "lucode2") {
-    if (md5sum("./.pre-commit-config.yaml") != md5sum("./inst/extdata/.pre-commit-config.yaml") &&
-        (!interactive() || !askYesNo("Replace inst/extdata/.pre-commit-config.yaml with .pre-commit-config.yaml?"))) {
-      stop(".pre-commit-config.yaml != inst/extdata/.pre-commit-config.yaml")
+    if (md5sum("./.pre-commit-config.yaml") != md5sum("./inst/extdata/pre-commit-config.yaml") &&
+        (!interactive() || !askYesNo("Replace inst/extdata/pre-commit-config.yaml with .pre-commit-config.yaml?"))) {
+      stop(".pre-commit-config.yaml != inst/extdata/pre-commit-config.yaml")
     }
-    file.copy("./.pre-commit-config.yaml", "./inst/extdata/", overwrite = TRUE)
+    # hidden files in inst/extdata produce NOTE during check, so remove leading dot from .pre-commit-config.yaml
+    file.copy("./.pre-commit-config.yaml", "./inst/extdata/pre-commit-config.yaml", overwrite = TRUE)
   } else {
-    configPath <- system.file("extdata", ".pre-commit-config.yaml", package = "lucode2")
+    configPath <- system.file("extdata", "pre-commit-config.yaml", package = "lucode2")
     preCommitConfig <- sub("autoupdate_schedule: weekly", "autoupdate_schedule: quarterly", readLines(configPath))
     writeLines(preCommitConfig, ".pre-commit-config.yaml")
   }
