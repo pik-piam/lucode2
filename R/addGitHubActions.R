@@ -12,8 +12,7 @@
 #'
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{buildLibrary}}
-#' @importFrom desc desc
-#' @importFrom usethis local_project use_github_action use_coverage
+#' @importFrom usethis local_project use_coverage
 #' @examples
 #' \dontrun{
 #' addGitHubActions()
@@ -22,18 +21,7 @@
 addGitHubActions <- function(lib = ".") {
   local_project(lib, quiet = TRUE)
 
-  if (file.exists("DESCRIPTION") && desc("DESCRIPTION")$get("Package") == "lucode2") {
-    question <- "Replace inst/extdata/lucode2-check.yaml with .github/workflows/lucode2-check.yaml?"
-    if (md5sum("./.github/workflows/lucode2-check.yaml") != md5sum("./inst/extdata/lucode2-check.yaml") &&
-        (!interactive() || !askYesNo(question))) {
-      stop("inst/extdata/lucode2-check.yaml != .github/workflows/lucode2-check.yaml")
-    }
-    file.copy("./.github/workflows/lucode2-check.yaml", "./inst/extdata/", overwrite = TRUE)
-  } else {
-    actionPath <- system.file("extdata", "lucode2-check.yaml", package = "lucode2")
-    githubAction <- sub("autoupdate_schedule: weekly", "autoupdate_schedule: quarterly", readLines(actionPath))
-    writeLines(githubAction, "./.github/workflows/lucode2-check.yaml")
-  }
+  conditionalCopy(".github/workflows/lucode2-check.yaml")
 
   if (!file.exists("codecov.yml")) {
     use_coverage("codecov")

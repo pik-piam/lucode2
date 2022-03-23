@@ -47,8 +47,7 @@
 #' @seealso \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
 #' @importFrom citation package2zenodo
 #' @importFrom desc desc desc_get_deps
-#' @importFrom tools md5sum
-#' @importFrom utils askYesNo old.packages update.packages packageVersion
+#' @importFrom utils old.packages update.packages packageVersion
 #' @importFrom withr defer local_connection local_dir
 #' @importFrom yaml write_yaml
 #' @examples
@@ -59,6 +58,9 @@
 buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FALSE, commitmessage = NULL, # nolint
                          checkForUpdates = TRUE, autoCheckRepoUpToDate = TRUE) {
   local_dir(lib)
+  if (!file.exists("DESCRIPTION")) {
+    stop("No DESCRIPTION file found in ", normalizePath("."))
+  }
   if (checkForUpdates) {
     pleaseRestartSession <- paste("Please restart your R session (in RStudio: Ctrl+Shift+F10) to make sure that the",
                                   "newest lucode2 version is loaded. Then try again:\nlucode2::buildLibrary()")
@@ -139,16 +141,11 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
     message("Could not add GitHub Actions:", error)
   })
 
-  if (file.exists("DESCRIPTION") && desc("DESCRIPTION")$get("Package") == "lucode2") {
-    if (md5sum("./.pre-commit-config.yaml") != md5sum("./inst/extdata/pre-commit-config.yaml") &&
-        (!interactive() || !askYesNo("Replace inst/extdata/pre-commit-config.yaml with .pre-commit-config.yaml?"))) {
-      stop(".pre-commit-config.yaml != inst/extdata/pre-commit-config.yaml")
-    }
-    # hidden files in inst/extdata produce NOTE during check, so remove leading dot from .pre-commit-config.yaml
-    file.copy("./.pre-commit-config.yaml", "./inst/extdata/pre-commit-config.yaml", overwrite = TRUE)
-  } else {
-    configPath <- system.file("extdata", "pre-commit-config.yaml", package = "lucode2")
-    preCommitConfig <- sub("autoupdate_schedule: weekly", "autoupdate_schedule: quarterly", readLines(configPath))
+  # hidden files in inst/extdata produce NOTE during check, so remove leading dot from .pre-commit-config.yaml
+  conditionalCopy(".pre-commit-config.yaml", "pre-commit-config.yaml")
+  if (desc("DESCRIPTION")$get("Package") != "lucode2") {
+    preCommitConfig <- sub("autoupdate_schedule: weekly", "autoupdate_schedule: quarterly",
+                           readLines(".pre-commit-config.yaml"))
     writeLines(preCommitConfig, ".pre-commit-config.yaml")
   }
 
