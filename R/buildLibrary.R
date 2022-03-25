@@ -47,7 +47,7 @@
 #' @seealso \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
 #' @importFrom citation package2zenodo
 #' @importFrom desc desc desc_get_deps
-#' @importFrom utils old.packages update.packages packageVersion
+#' @importFrom utils old.packages update.packages packageVersion download.file
 #' @importFrom withr defer local_connection local_dir
 #' @importFrom yaml write_yaml
 #' @examples
@@ -98,6 +98,11 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   checkRepoUpToDate(".", autoCheckRepoUpToDate)
   fixBuildLibraryMergeConflict()
   modifyRproj()
+  if (desc("DESCRIPTION")$get("Package") == "lucode2") {
+    # when building other packages the r-universe badge is added to readme if package name is in this json
+    download.file("https://pik-piam.r-universe.dev/packages", "./inst/extdata/rUniversePackages.json")
+    write("", "./inst/extdata/rUniversePackages.json", append = TRUE) # append newline to prevent warning
+  }
 
   ############################################################
   # load/create .buildLibrary file
