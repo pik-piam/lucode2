@@ -26,6 +26,22 @@ checkup <- function() {
   else
     "? (Run `install.packages('rmarkdown')` to enable pandoc check.)"
 
+  rProfileUser <- Sys.getenv("R_PROFILE_USER")
+  if (rProfileUser == "") {
+    if (file.exists("./.Rprofile")) {
+      rProfileUser <- normalizePath("./.Rprofile")
+    } else {
+      rProfileUser <- normalizePath("~/.Rprofile", mustWork = FALSE)
+    }
+  }
+  if (file.exists(rProfileUser)) {
+    report[["Rprofile"]] <- rProfileUser
+  } else {
+    report[["Rprofile"]] <- "NOT FOUND"
+    warning("The Rprofile '", rProfileUser, "' does not exist. The following files exist in that folder:\n",
+            paste(list.files(dirname(rProfileUser), all.files = TRUE, no.. = TRUE), collapse = "\n"))
+  }
+
   str(report)
 
   message("Checking R setup for problems... ", appendLF = FALSE)
