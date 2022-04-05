@@ -26,6 +26,7 @@
 #'   | 2 (default) | `minor`       | for new features or improvements         |
 #'   | 3           | `patch`       | for bugfixes and corrections             |
 #'   | 4           | `development` | only for packages in development stage   |
+#'   | 0           | `none`        | version has already been incremented     |
 #'
 #' @md
 #' @note The behavior of buildLibrary can be configured via the `.buildLibrary` file in the
@@ -201,6 +202,8 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
                          "3" = 3,
                          "development" = 4,
                          "4" = 4,
+                         "none" = 0,
+                         "0" = 0,
                          # default
                          chooseModule()
     )
