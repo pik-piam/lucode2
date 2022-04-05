@@ -99,10 +99,12 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   checkRepoUpToDate(".", autoCheckRepoUpToDate)
   fixBuildLibraryMergeConflict()
   modifyRproj()
-  if (desc("DESCRIPTION")$get("Package") == "lucode2") {
-    # when building other packages the r-universe badge is added to readme if package name is in this json
-    download.file("https://pik-piam.r-universe.dev/packages", "./inst/extdata/rUniversePackages.json")
-    write("", "./inst/extdata/rUniversePackages.json", append = TRUE) # append newline to prevent warning
+  if (desc("DESCRIPTION")$get("Package") == "lucode2" &&
+        download.file("https://pik-piam.r-universe.dev/packages", "./rUniversePackages.json.tmp") == 0) {
+      # when building other packages the r-universe badge is added to readme if package name is in this json
+      # rename after successful download to prevent truncated file when download is unsuccessful
+      file.rename("./rUniversePackages.json.tmp", "./inst/extdata/rUniversePackages.json")
+      write("", "./inst/extdata/rUniversePackages.json", append = TRUE) # append newline to prevent warning
   }
 
   ############################################################

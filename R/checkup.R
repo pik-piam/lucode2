@@ -31,7 +31,7 @@ checkup <- function() {
     if (file.exists("./.Rprofile")) {
       rProfileUser <- normalizePath("./.Rprofile")
     } else {
-      rProfileUser <- normalizePath("~/.Rprofile", mustWork = FALSE)
+      rProfileUser <- normalizePath("~/.Rprofile", mustWork = FALSE) # nolint
     }
   }
   if (file.exists(rProfileUser)) {

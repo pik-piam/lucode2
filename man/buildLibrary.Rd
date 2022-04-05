@@ -25,6 +25,7 @@ buildLibrary(
    2 (default) \tab \code{minor} \tab for new features or improvements \cr
    3 \tab \code{patch} \tab for bugfixes and corrections \cr
    4 \tab \code{development} \tab only for packages in development stage \cr
+   0 \tab \code{none} \tab version has already been incremented \cr
 }}
 
 \item{gitpush}{If a git commit should happen automatically}
