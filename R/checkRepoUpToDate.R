@@ -28,11 +28,6 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
     return(invisible(NULL))
   }
 
-  if ("upstream" %in% gert::git_remote_list()[["name"]] &&
-      startsWith(gert::git_remote_info("upstream")[["url"]], "https:pik-piam")) {
-    gert::git_remote_remove("upstream")
-  }
-
   if (!"upstream" %in% gert::git_remote_list()[["name"]]) {
     remoteUrl <- sub("[^/:]+/([^/]+$)", "pik-piam/\\1", gert::git_remote_info()[["url"]])
     message("Creating a git remote called 'upstream' pointing to ", remoteUrl)
