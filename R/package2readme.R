@@ -102,12 +102,13 @@ package2readme <- function(package = ".", add = NULL) { # nolint
 
   fillRUniverse <- function(nameOfPackage) {
     # suppress warning about missing trailing newline
-    pikPiamRUniversePackages <- suppressWarnings(readLines("https://pik-piam.r-universe.dev/packages"))
-    pikPiamRUniversePackages <- gsub('[\\", ]', "", pikPiamRUniversePackages)
-    return(ifelse(nameOfPackage %in% pikPiamRUniversePackages,
-                  paste0("[![r-universe](https://pik-piam.r-universe.dev/badges/", nameOfPackage,
-                         ")](https://pik-piam.r-universe.dev/ui#builds)"),
-                  ""))
+    rUniversePackages <- readLines(system.file("extdata", "rUniversePackages.json", package = "lucode2"))
+    if (any(grepl(nameOfPackage, rUniversePackages, fixed = TRUE))) {
+      return(paste0("[![r-universe](https://pik-piam.r-universe.dev/badges/", nameOfPackage,
+                    ")](https://pik-piam.r-universe.dev/ui#builds)"))
+    } else {
+      return("")
+    }
   }
 
   fillCite <- function(d, folder) {
