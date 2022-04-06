@@ -3,8 +3,8 @@
 checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
   # asking the user is fallback if automatic check does not work
   askUser <- function() {
-    didYouPullQuestion <- paste("Automatic up-to-date check failed/skipped. Is your repository up-to-date?",
-                                "Did you pull immediately before running this check? (Y/n) ")
+    didYouPullQuestion <- paste("Is your repo up-to-date? Did you pull from the upstream",
+                                "repo immediately before running this check? (Y/n) ")
     if (!(tolower(readline(didYouPullQuestion)) %in% c("", "y", "yes"))) {
       stop("Please update your repository first, before you proceed!")
     }
@@ -24,6 +24,7 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
   if ("You have unmerged paths." %in% gitStatus ||
       "All conflicts fixed but you are still merging." %in% gitStatus) {
     # gert::git_ahead_behind will say we are behind during merge, so cannot use auto check
+    message("Automatic repo up-to-date check does not work during merge.")
     askUser()
     return(invisible(NULL))
   }
