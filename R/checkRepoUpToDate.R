@@ -30,13 +30,18 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
   }
 
   if (!"upstream" %in% gert::git_remote_list()[["name"]]) {
-    remoteUrl <- sub("[^/:]+/([^/]+$)", "pik-piam/\\1", gert::git_remote_info()[["url"]])
+    remoteUrl <- sub("[^/:]+/([^/]+$)", "pik-piam/\\1", gert::git_remote_list()[[1, "url"]])
     message("Creating a git remote called 'upstream' pointing to ", remoteUrl)
     gert::git_remote_add(url = remoteUrl, name = "upstream")
   }
 
-  gert::git_fetch(verbose = FALSE)
-  behindTracking <- gert::git_ahead_behind()[["behind"]]
+  behindTracking <- 0
+  branchList <- gert::git_branch_list()
+  # check if a remote tracking branch is configured for the current branch
+  if (!is.na(branchList[branchList[, "name"] == gert::git_branch(), "upstream"][[1, 1]])) {
+    gert::git_fetch(verbose = FALSE)
+    behindTracking <- gert::git_ahead_behind()[["behind"]]
+  }
 
   gert::git_fetch("upstream", verbose = FALSE)
   behindUpstream <- gert::git_ahead_behind(upstream = paste0("upstream/", git_default_branch()))[["behind"]]
