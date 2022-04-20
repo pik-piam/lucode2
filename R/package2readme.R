@@ -100,9 +100,26 @@ package2readme <- function(package = ".", add = NULL) { # nolint
     return(out)
   }
 
-  fillRUniverse <- function(nameOfPackage) {
+  loadFromLucode2 <- function(filename, d) {
+    if (d$get("Package") == "lucode2" && !is.null(folder)) {
+      # can't load the file from the package when we are working on ourselves
+      # load it directly instead
+      out <- file.path(folder, "inst", "extdata", filename)
+      if (!file.exists(out)) {
+        # for binary packages, the inst folder does not exist
+        out <- file.path(folder, "extdata", filename)
+      }
+      return(out)
+    }
+    else {
+      return(system.file("extdata", filename, package = "lucode2"))
+    }
+  }
+
+  fillRUniverse <- function(nameOfPackage, d) {
     # suppress warning about missing trailing newline
-    rUniversePackages <- readLines(system.file("extdata", "rUniversePackages.json", package = "lucode2"))
+
+    rUniversePackages <- readLines(loadFromLucode2("rUniversePackages.json", d))
     if (any(grepl(nameOfPackage, rUniversePackages, fixed = TRUE))) {
       return(paste0("[![r-universe](https://pik-piam.r-universe.dev/badges/", nameOfPackage,
                     ")](https://pik-piam.r-universe.dev/ui#builds)"))
@@ -216,11 +233,11 @@ package2readme <- function(package = ".", add = NULL) { # nolint
                zenodo        = fillZenodo(d),
                githubactions = fillGithubActions(d, folder),
                codecov       = fillCodecov(d, folder),
-               runiverse     = fillRUniverse(d$get("Package")),
+               runiverse     = fillRUniverse(d$get("Package"), d),
                cite          = fillCite(d, folder),
                vignette      = fillVignette(d, folder))
 
-  template <- readLines(system.file("extdata", "README_template.md", package = "lucode2"))
+  template <- readLines(loadFromLucode2("README_template.md", d))
   out <- fillTemplate(template, fill)
 
   if (!is.null(folder)) {
