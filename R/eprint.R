@@ -20,7 +20,7 @@
 #' ### allows to create easily log-files with all relevant information
 eprint <- function(var_name, envir = parent.frame()) { # nolint
   varValue <- try(get(var_name, envir = envir), silent = TRUE)
-  if (class(varValue) == "try-error") {
+  if (inherits(varValue, "try-error")) {
     message(paste(var_name, "not found"))
   } else {
     message(paste(var_name, "<-", paste(varValue, collapse = ", ")))

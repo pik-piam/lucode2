@@ -1,3 +1,15 @@
+#' conditionalCopy
+#'
+#' Copy a file from lucode2 into the current package.
+#'
+#' For normal packages, it will simply overwrite the given file from the corresponding
+#' file in lucode2's extdata.
+#' For lucode2 itself, it instead checks if the file in extdata matches the file in
+#' the main folder. If not, it asks if the file in extdata should be updated.
+#'
+#' @param relativePath The destination to copy to.
+#' @param nameInInstExtdata The source file name in lucode2's extdata, if it differs from relativePath's basename.
+#'
 #' @importFrom tools md5sum
 #' @importFrom utils askYesNo
 conditionalCopy <- function(relativePath, nameInInstExtdata = basename(relativePath)) {
@@ -12,7 +24,7 @@ conditionalCopy <- function(relativePath, nameInInstExtdata = basename(relativeP
     }
     file.copy(relativePath, instExtdataPath, overwrite = TRUE)
   } else {
-    file.copy(system.file("extdata", nameInInstExtdata, package = "lucode2"), relativePath)
+    file.copy(system.file("extdata", nameInInstExtdata, package = "lucode2"), relativePath, overwrite = TRUE)
   }
   return(invisible(NULL))
 }

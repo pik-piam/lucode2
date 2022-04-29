@@ -13,4 +13,7 @@ test_that("conditionalCopy works", {
   writeLines("Package: not-lucode2", "DESCRIPTION")
   conditionalCopy("inst/apfelkuchen.yaml", "lucode2-check.yaml")
   expect_gt(length(readLines("inst/apfelkuchen.yaml")), 0)
+  writeLines("", "test_overwrite")
+  conditionalCopy("test_overwrite", "lucode2-check.yaml")
+  expect_gt(length(readLines("test_overwrite")), 1)
 })
