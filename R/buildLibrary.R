@@ -274,13 +274,14 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, # nolint
   if (updateType != 0) {
     message("Updated from version ", descfileVersion, " to version ", version)
     packageName <- desc("DESCRIPTION")$get("Package")
-    tryCatch({
-      repoVersion <- package_version(available.packages()[packageName, "Version"])
+    availablePackages <- available.packages()
+    if (packageName %in% dimnames(availablePackages)[[1]]) {
+      repoVersion <- package_version(availablePackages[packageName, "Version"])
       if (repoVersion >= version) {
         warning(packageName, " ", repoVersion,
                 " is already available online, you might want to update to a higher version number.")
       }
-    }, error = invisible) # suppress subscriptOutOfBoundsError if package is not available online yet
+    }
   }
   message("Don't forget to commit and push your changes.")
   message("done")
