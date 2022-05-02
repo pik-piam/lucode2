@@ -10,12 +10,10 @@
 #' \item R check: Check whether the library is consistent and can be built.
 #' \item Package building: Builds the .zip and .tar.gz packages under windows.
 #' Under linux, only the .tar.gz package is built. }
-#' The commit has to be performed by the user still.
+#' The commit still has to be performed by the user.
 #'
 #' @param lib Path to the package
 #' @param cran If cran-like test is needed
-#' @param gitpush If a git commit should happen automatically
-#' @param commitmessage Your commit message
 #' @param checkForUpdates Check for lucode2 updates (default TRUE). Set FALSE in case of problems with the new version.
 #' @param autoCheckRepoUpToDate Automatically check if your repository is up to date. If FALSE the user is simply asked.
 #' @param updateType Either an integer or character string:
@@ -56,7 +54,7 @@
 #' buildLibrary()
 #' }
 #' @export
-buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FALSE, commitmessage = NULL, # nolint
+buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, # nolint
                          checkForUpdates = TRUE, autoCheckRepoUpToDate = TRUE) {
   local_dir(lib)
   if (!file.exists("DESCRIPTION")) {
@@ -274,23 +272,16 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, gitpush = FA
   ############################################################
 
   if (updateType != 0) {
-    cat(paste0("* updating from version"), descfileVersion, "to version", toString(version), "... OK\n")
-    if (dir.exists(".git")) {
-      if (gitpush) {
-        system(paste0('git add . && git commit -m "', commitmessage, " and type ", updateType,
-                      ' upgrade" && git push && cd -'))
-      } else {
-        cat("* git repository detected... OK\n")
-        cat("* command suggestions for updating your git repository:\n")
-        cat(rep("=", getOption("width")), "\n", sep = "")
-        cat(paste0('change into the package dir: $ cd "', lib, '"\n'))
-        cat(paste0('adding and committing: $ git add . && git commit -m "type ', updateType, ' upgrade"\n'))
-        cat(paste0("version tagging: $ git tag ", version, "\n"))
-        cat("push commits to github: $ git push <remote> <branch>\n")
-        cat("push new tag to github: $ git push --tags\n")
-        cat(rep("=", getOption("width")), "\n", sep = "")
+    message("Updated from version ", descfileVersion, " to version ", version)
+    packageName <- desc("DESCRIPTION")$get("Package")
+    tryCatch({
+      repoVersion <- package_version(available.packages()[packageName, "Version"])
+      if (repoVersion >= version) {
+        warning(packageName, " ", repoVersion,
+                " is already available online, you might want to update to a higher version number.")
       }
-    }
+    }, error = invisible) # suppress subscriptOutOfBoundsError if package is not available online yet
   }
-  cat("done\n")
+  message("Don't forget to commit and push your changes.")
+  message("done")
 }
