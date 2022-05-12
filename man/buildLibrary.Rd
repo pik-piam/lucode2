@@ -8,8 +8,6 @@ buildLibrary(
   lib = ".",
   cran = TRUE,
   updateType = NULL,
-  gitpush = FALSE,
-  commitmessage = NULL,
   checkForUpdates = TRUE,
   autoCheckRepoUpToDate = TRUE
 )
@@ -28,10 +26,6 @@ buildLibrary(
    0 \tab \code{none} \tab version has already been incremented \cr
 }}
 
-\item{gitpush}{If a git commit should happen automatically}
-
-\item{commitmessage}{Your commit message}
-
 \item{checkForUpdates}{Check for lucode2 updates (default TRUE). Set FALSE in case of problems with the new version.}
 
 \item{autoCheckRepoUpToDate}{Automatically check if your repository is up to date. If FALSE the user is simply asked.}
@@ -48,7 +42,7 @@ following steps: \itemize{
 \item R check: Check whether the library is consistent and can be built.
 \item Package building: Builds the .zip and .tar.gz packages under windows.
 Under linux, only the .tar.gz package is built. }
-The commit has to be performed by the user still.
+The commit still has to be performed by the user.
 }
 \note{
 The behavior of buildLibrary can be configured via the \code{.buildLibrary} file in the

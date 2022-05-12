@@ -1,8 +1,8 @@
 Package: lucode2
 Type: Package
 Title: Code Manipulation and Analysis Tools
-Version: 0.22.5
-Date: 2022-04-28
+Version: 0.23.0
+Date: 2022-05-12
 Authors@R: c(person("Jan Philipp", "Dietrich", email = "dietrich@pik-potsdam.de", role = c("aut","cre")),
              person("David", "Klein", role = "aut"),
              person("Anastasis", "Giannousakis", role = "aut"),
@@ -35,6 +35,7 @@ Suggests:
     lusweave,
     magclass,
     poorman,
+    renv,
     rmarkdown,
     testthat
 URL: https://github.com/pik-piam/lucode2, https://doi.org/10.5281/zenodo.4389418
