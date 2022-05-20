@@ -4,15 +4,17 @@
 \alias{manipulateFile}
 \title{Replace in File}
 \usage{
-manipulateFile(file, manipulations, ...)
+manipulateFile(file, manipulations, perl = TRUE, ...)
 }
 \arguments{
 \item{file}{a connection object or a character string describing the file,
 that should be manipulated.}
 
 \item{manipulations}{A list of 2 element vectors, containing the search
-phrase as first element and the replace term as second element. Regular
-expressions in perl syntax (including backreferencing) can be used.}
+phrase as first element and the replace term as second element.}
+
+\item{perl}{usually set to TRUE so regular expressions in perl syntax (including backreferencing)
+can be used. If fixed = TRUE is specified in ..., perl is set to FALSE}
 
 \item{...}{Further options passed to gsub}
 }
