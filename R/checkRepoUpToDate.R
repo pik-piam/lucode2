@@ -35,15 +35,36 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
     gert::git_remote_add(url = remoteUrl, name = "upstream")
   }
 
+  fetch <- function(remote = NULL) {
+    return(tryCatch({
+      gert::git_fetch(remote, verbose = FALSE)
+      TRUE
+    }, error = function(error) {
+      if (Sys.which("git") == "") {
+        return(FALSE)
+      }
+      system2("git", c("fetch", remote))
+      return(TRUE)
+    }))
+  }
+
   behindTracking <- 0
   branchList <- gert::git_branch_list()
   # check if a remote tracking branch is configured for the current branch
   if (!is.na(branchList[branchList[, "name"] == gert::git_branch(), "upstream"][[1, 1]])) {
-    gert::git_fetch(verbose = FALSE)
+    if (!fetch()) {
+      message("Automatic repo up-to-date check could not fetch from git remote.")
+      askUser()
+      return(invisible(NULL))
+    }
     behindTracking <- gert::git_ahead_behind()[["behind"]]
   }
 
-  gert::git_fetch("upstream", verbose = FALSE)
+  if (!fetch("upstream")) {
+      message("Automatic repo up-to-date check could not fetch from git remote.")
+      askUser()
+      return(invisible(NULL))
+    }
   behindUpstream <- gert::git_ahead_behind(upstream = paste0("upstream/", git_default_branch()))[["behind"]]
 
   if (behindUpstream > 0 || behindTracking > 0) {
