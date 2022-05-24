@@ -39,7 +39,7 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
     return(tryCatch({
       gert::git_fetch(remote, verbose = FALSE)
       TRUE
-    }, error = function() {
+    }, error = function(error) {
       if (Sys.which("git") == "") {
         return(FALSE)
       }
