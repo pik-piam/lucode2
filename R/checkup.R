@@ -44,7 +44,7 @@ checkup <- function() {
 
   str(report)
 
-  message("Checking R setup for problems... ", appendLF = FALSE)
+  message("Checking system for known potential problems... ", appendLF = FALSE)
 
   report[["warnings"]] <- list()
 
@@ -113,6 +113,20 @@ checkup <- function() {
       paste0("options(repos = c(getOption('repos'), '", expectedRepos, "'))", collapse = "\n")
     )
     warning(report[["warnings"]][["expectedRepos"]])
+  }
+
+  # check if multiple modules with the same basename are loaded
+  module <- try(system2("module", c("list", "-t"), stdout = TRUE, stderr = TRUE), silent = TRUE)
+  if (!inherits(module, "try-error")){
+    moduleBasename <- sub("/.*$", "", module)
+    duplicateModule <- findDuplicates(as.list(setNames(moduleBasename, module)))
+    if (length(duplicateModule) > 0) {
+      report[["warnings"]][["moduleDuplicates"]] <- paste0(
+        "Multiple modules with the same basename are loaded:\n",
+        paste0(names(duplicateModule), ": ", duplicateModule, collapse = "\n")
+      )
+      warning(report[["warnings"]][["moduleDuplicates"]])
+    }
   }
 
   message("done.")
