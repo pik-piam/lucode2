@@ -6,6 +6,7 @@
 #'
 #' @author Pascal Führlich
 #'
+#' @importFrom stats setNames
 #' @importFrom tools md5sum
 #' @importFrom utils old.packages str tail
 #' @export
@@ -117,7 +118,7 @@ checkup <- function() {
 
   # check if multiple modules with the same basename are loaded
   module <- try(system2("module", c("list", "-t"), stdout = TRUE, stderr = TRUE), silent = TRUE)
-  if (!inherits(module, "try-error")){
+  if (!inherits(module, "try-error")) {
     moduleBasename <- sub("/.*$", "", module)
     duplicateModule <- findDuplicates(as.list(setNames(moduleBasename, module)))
     if (length(duplicateModule) > 0) {
