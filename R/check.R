@@ -30,7 +30,10 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
   packageName <- desc(file.path(lib, "DESCRIPTION"))$get("Package")
   packageDocumentation <- file.path(lib, "R", paste0(packageName, "-package.R"))
   if (!file.exists(packageDocumentation)) {
-    writeLines(c("#' @docType package", '"_PACKAGE"'), packageDocumentation)
+    writeLines(c("# The package documentation is defined in this file. You can get it via:",
+                 "# `library(package); ?package`",
+                 "#' @docType package",
+                 '"_PACKAGE"'), packageDocumentation)
   }
 
   document(pkg = lib, roclets = c("rd", "collate", "namespace", "vignette"))
