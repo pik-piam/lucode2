@@ -94,10 +94,12 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, # nolint
     return(s)
   }
 
+  packageName <- desc("DESCRIPTION")$get("Package")
+
   checkRepoUpToDate(".", autoCheckRepoUpToDate)
   fixBuildLibraryMergeConflict()
   modifyRproj()
-  if (desc("DESCRIPTION")$get("Package") == "lucode2" &&
+  if (packageName == "lucode2" &&
         download.file("https://pik-piam.r-universe.dev/packages", "./rUniversePackages.json.tmp") == 0) {
       # when building other packages the r-universe badge is added to readme if package name is in this json
       # rename after successful download to prevent truncated file when download is unsuccessful
@@ -149,7 +151,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, # nolint
 
   # hidden files in inst/extdata produce NOTE during check, so remove leading dot from .pre-commit-config.yaml
   conditionalCopy(".pre-commit-config.yaml", "pre-commit-config.yaml")
-  if (desc("DESCRIPTION")$get("Package") != "lucode2") {
+  if (packageName != "lucode2") {
     preCommitConfig <- sub("autoupdate_schedule: weekly", "autoupdate_schedule: quarterly",
                            readLines(".pre-commit-config.yaml"))
     writeLines(preCommitConfig, ".pre-commit-config.yaml")
@@ -273,7 +275,6 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, # nolint
 
   if (updateType != 0) {
     message("Updated from version ", descfileVersion, " to version ", version)
-    packageName <- desc("DESCRIPTION")$get("Package")
     availablePackages <- available.packages()
     if (packageName %in% dimnames(availablePackages)[[1]]) {
       repoVersion <- package_version(availablePackages[packageName, "Version"])
