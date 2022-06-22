@@ -56,6 +56,7 @@
 #' @export
 buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, # nolint
                          checkForUpdates = TRUE, autoCheckRepoUpToDate = TRUE) {
+  # TODO add link to common errors: https://github.com/pik-piam/discussions/discussions/18
   local_dir(lib)
   if (!file.exists("DESCRIPTION")) {
     stop("No DESCRIPTION file found in ", normalizePath("."))
