@@ -62,6 +62,22 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
 
   ########### Run linter ###########
   if (runLinter) {
+    writeIfNonExistent <- function(fileText, filePaths) {
+      for (filePath in filePaths) {
+        if (!file.exists(filePath)) {
+          writeLines(fileText, filePath)
+        }
+      }
+    }
+    writeIfNonExistent(c("linters: lucode2::lintrRules()", 'encoding: "UTF-8"'),
+                       file.path(lib, ".lintr"))
+    writeIfNonExistent(c("linters: lucode2::lintrRules(allowUndesirable = TRUE)", 'encoding: "UTF-8"'),
+                       file.path(lib, "tests", ".lintr"))
+    if (dir.exists(file.path(lib, "vignettes"))) {
+      writeIfNonExistent(c("linters: lucode2::lintrRules(allowUndesirable = TRUE)", 'encoding: "UTF-8"'),
+                         file.path(lib, "vignettes", ".lintr"))
+    }
+
     linterResult <- lint(getFilesToLint(lib))
     print(linterResult)
     if (length(linterResult) > 0) {

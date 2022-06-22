@@ -18,14 +18,15 @@ linter warnings.
 Check the given files for linter warnings using lintr::lint.
 }
 \details{
-For files in the vignettes and tests folder less strict rules are applied, e.g. using ::: usually leads to a linter
-warning, but not in vignettes/tests.
+For files in the vignettes and tests folder less strict rules are applied, e.g. using ::: usually
+leads to a linter warning, but not in vignettes/tests. Which linter rules are used depends on
+".lintr" config files. \code{\link{buildLibrary}} creates lintr config files that use \code{\link{lintrRules}}.
 }
 \examples{
 lucode2::lint()
 }
 \seealso{
-\code{\link{getFilesToLint}}, \code{\link{autoFormat}}, \code{\link[lintr]{lint}}
+\code{\link{lintrRules}}, \code{\link{getFilesToLint}}, \code{\link{autoFormat}}, \code{\link[lintr]{lint}}
 }
 \author{
 Pascal Führlich
