@@ -98,7 +98,7 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
       } else {
         warning("There were linter warnings. It is not mandatory to fix them, they do not prevent buildLibrary ",
                 "from finishing normally. Still, please fix all linter warnings in new code and ideally also ",
-                "some in old code. ", autoFormatExcludeInfo, " ", helpLink)
+                "some in old code. ", autoFormatExcludeInfo)
       }
     } else {
       message("No linter warnings - great :D")
