@@ -28,10 +28,10 @@
 #' @seealso \code{\link[devtools]{check}}, \code{\link[devtools]{test}}
 #' @export
 check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), runLinter = TRUE) {
-  lib <- normalizePath(lib, winslash = "/")
+  local_dir(lib)
 
-  packageName <- desc(file.path(lib, "DESCRIPTION"))$get("Package")
-  packageDocumentation <- file.path(lib, "R", paste0(packageName, "-package.R"))
+  packageName <- desc("DESCRIPTION")$get("Package")
+  packageDocumentation <- file.path("R", paste0(packageName, "-package.R"))
   if (!file.exists(packageDocumentation)) {
     writeLines(c("# The package documentation is defined in this file.",
                  "# You can get it via `library(<package>); ?<package>`.",
@@ -39,14 +39,14 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
                  '"_PACKAGE"'), packageDocumentation)
   }
 
-  document(pkg = lib, roclets = c("rd", "collate", "namespace", "vignette"))
+  document(pkg = ".", roclets = c("rd", "collate", "namespace", "vignette"))
 
   ########### Run tests ###########
   # run tests in a separate R session so test results are independent of anything set in the current R session
-  testResults <- callr::r(function(lib) {
+  testResults <- callr::r(function() {
     withr::local_options(crayon.enabled = TRUE)
-    return(devtools::test(lib, stop_on_failure = TRUE))
-  }, args = list(lib), show = TRUE)
+    return(devtools::test(stop_on_failure = TRUE))
+  }, show = TRUE)
 
   helpLink <- "You can find solutions to common problems at https://github.com/pik-piam/discussions/discussions/18"
   unacceptedWarnings <- testResults %>%
@@ -68,24 +68,25 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
   ########### Run linter ###########
   if (runLinter) {
     # create .lintr config files if they do not exist
-    writeIfNonExistent <- function(fileText, filePaths) {
-      for (filePath in filePaths) {
-        if (!file.exists(filePath)) {
-          writeLines(fileText, filePath)
-        }
+    writeIfNonExistent <- function(fileText, filePath) {
+      if (!file.exists(filePath)) {
+        writeLines(fileText, filePath)
+      }
+      if (!paste0("^", filePath, "$") %in% readLines(".Rbuildignore")) {
+        write(paste0("^", filePath, "$"), ".Rbuildignore", append = TRUE)
       }
     }
     writeIfNonExistent(c("linters: lucode2::lintrRules()", 'encoding: "UTF-8"'),
-                       file.path(lib, ".lintr"))
+                       ".lintr")
     writeIfNonExistent(c("linters: lucode2::lintrRules(allowUndesirable = TRUE)", 'encoding: "UTF-8"'),
-                       file.path(lib, "tests", ".lintr"))
-    if (dir.exists(file.path(lib, "vignettes"))) {
+                       file.path("tests", ".lintr", fsep = "/"))
+    if (dir.exists("vignettes")) {
       writeIfNonExistent(c("linters: lucode2::lintrRules(allowUndesirable = TRUE)", 'encoding: "UTF-8"'),
-                         file.path(lib, "vignettes", ".lintr"))
+                         file.path("vignettes", ".lintr", fsep = "/"))
     }
 
     # run linter and check results
-    linterResult <- lint(getFilesToLint(lib))
+    linterResult <- lint()
     print(linterResult)
     if (length(linterResult) > 0) {
       autoFormatExcludeInfo <- paste("Running lucode2::autoFormat() might fix some warnings. If really needed (e.g.",
@@ -105,7 +106,7 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
   }
 
   ########### Run checks ###########
-  checkResults <- devtools::check(lib, document = FALSE, cran = cran, args = "--no-tests")
+  checkResults <- devtools::check(document = FALSE, cran = cran, args = "--no-tests")
 
   # Filter warnings and notes which are accepted
   for (acceptedWarning in config[["AcceptedWarnings"]]) {
