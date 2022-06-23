@@ -31,10 +31,11 @@ buildLibrary(
 \item{autoCheckRepoUpToDate}{Automatically check if your repository is up to date. If FALSE the user is simply asked.}
 }
 \description{
-Builds R libraries. Includes checks for consistency.
+Builds R libraries. Includes checks for consistency. Find solutions to common problems at
+https://github.com/pik-piam/discussions/discussions/18
 }
 \details{
-This function is designed to help building R libraries. It performs the
+This function is designed to help building and checking R libraries. It performs the
 following steps: \itemize{
 \item Version: Determination of a new version number (Can also be defined by the user).
 \item Date: Determination of a the date of the build (Can also be defined by the user).
@@ -42,7 +43,6 @@ following steps: \itemize{
 \item R check: Check whether the library is consistent and can be built.
 \item Package building: Builds the .zip and .tar.gz packages under windows.
 Under linux, only the .tar.gz package is built. }
-The commit still has to be performed by the user.
 }
 \note{
 The behavior of buildLibrary can be configured via the \code{.buildLibrary} file in the
