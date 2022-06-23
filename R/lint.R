@@ -13,9 +13,7 @@
 
 #' @author Pascal Führlich
 #' @seealso \code{\link{lintrRules}}, \code{\link{getFilesToLint}}, \code{\link{autoFormat}}, \code{\link[lintr]{lint}}
-#' @importFrom lintr lint_package with_defaults absolute_path_linter line_length_linter object_name_linter
-#' todo_comment_linter undesirable_function_linter cyclocomp_linter default_undesirable_functions
-#' undesirable_operator_linter default_undesirable_operators T_and_F_symbol_linter
+#' @importFrom lintr lint_package
 #' @examples
 #' lucode2::lint()
 #' @export
