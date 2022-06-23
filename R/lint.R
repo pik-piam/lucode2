@@ -4,7 +4,7 @@
 #'
 #' For files in the vignettes and tests folder less strict rules are applied, e.g. using ::: usually
 #' leads to a linter warning, but not in vignettes/tests. Which linter rules are used depends on
-#' ".lintr" config files. \code{\link{buildLibrary}} creates lintr config files that use \code{\link{lintrRules}}.
+#' ".lintr" config files. \code{\link{check}} creates lintr config files that use \code{\link{lintrRules}}.
 #'
 #' @param files A character vector of paths to files that should be checked by the linter. If set to "."
 #' the whole package is linted.
@@ -12,7 +12,7 @@
 #' linter warnings.
 
 #' @author Pascal Führlich
-#' @seealso \code{\link{lintrRules}}, \code{\link{getFilesToLint}}, \code{\link{autoFormat}}, \code{\link[lintr]{lint}}
+#' @seealso \code{\link{getFilesToLint}}, \code{\link{lintrRules}}, \code{\link{autoFormat}}, \code{\link[lintr]{lint}}
 #' @importFrom lintr lint_package
 #' @examples
 #' lucode2::lint()
