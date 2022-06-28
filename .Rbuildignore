@@ -9,3 +9,6 @@
 ^workflow$
 ^.vscode$
 ^.idea$
+^.lintr$
+^tests/.lintr$
+^vignettes/.lintr$

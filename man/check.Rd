@@ -22,13 +22,16 @@ check(
 \item{runLinter}{Set to FALSE to skip the linter.}
 }
 \description{
-Builds documentation and runs checks, tests, and linter.
+Builds documentation and runs checks, tests, and linter. Find solutions to common problems at
+https://github.com/pik-piam/discussions/discussions/18
 }
 \details{
 This function builds documentation including vignettes via devtools::document(). It runs devtools::check()
-(without tests), then in a separate clean R session it runs devtools::test(), and finally lucode2::lint(). Warnings
-and notes in checks and tests are only allowed if the given config defines them as accepted, otherwise this function
-will stop.
+(without tests), then in a separate clean R session it runs devtools::test(), and finally lucode2::lint().
+Before linting ".lintr" config files are created if missing. The actual linter rules are defined
+in \code{\link{lintrRules}}. In general undesirable functions and operators
+result in linter warnings, but not in the tests and vignettes subdirectories. Warnings and notes in checks
+and tests are only allowed if the given config defines them as accepted, otherwise this function will stop.
 }
 \examples{
 \dontrun{
@@ -36,7 +39,7 @@ lucode2::check()
 }
 }
 \seealso{
-\code{\link{buildLibrary}}, \code{\link{lint}}
+\code{\link{buildLibrary}}, \code{\link{lint}}, \code{\link{lintrRules}}
 
 \code{\link[devtools]{check}}, \code{\link[devtools]{test}}
 }
