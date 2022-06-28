@@ -181,19 +181,16 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, # nolint
       "only for packages in development stage",
       "no version increment (only to use if version is already incremented!)"
     )
-    cat(title, ":\n")
+    cat(title, ":\n", sep = "")
     updateTypeNumber <- c(1:(length(updateType) - 1), 0)
     cat(paste(updateTypeNumber, updateType, sep = ": "), sep = "\n")
     cat("\nNumber: ")
     identifier <- getLine()
-    identifier <- as.numeric(strsplit(identifier, ",")[[1]])
-    if (any(!(identifier %in% updateTypeNumber))) {
-      stop(
-        "This choice (", identifier, ") is not possible. ",
-        "Please type in a number between 0 and ", length(updateType) - 1
-      )
+    if (any(!(as.numeric(identifier) %in% updateTypeNumber))) {
+      message("This choice (", identifier, ") is not possible.")
+      identifier <- chooseModule(title = paste0("Please type in a number between 0 and ", length(updateType) - 1))
     }
-    return(identifier)
+    return(as.numeric(identifier))
   }
 
   if (is.null(updateType)) {
