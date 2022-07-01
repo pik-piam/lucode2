@@ -106,7 +106,7 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
   }
 
   ########### Run checks ###########
-  checkResults <- devtools::check(document = FALSE, cran = cran, args = "--no-tests")
+  checkResults <- devtools::check(document = FALSE, cran = cran, args = "--no-tests", error_on = "never")
 
   # Filter warnings and notes which are accepted
   for (acceptedWarning in config[["AcceptedWarnings"]]) {
