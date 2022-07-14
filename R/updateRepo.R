@@ -75,13 +75,15 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
               remoteUrl <- sub("\\.git$", "", remoteUrl)
             }
 
-            writeLines(paste0("Repository: ", repoUrl, "\n",
-                              "RemoteUrl: ", remoteUrl, "\n",
-                              "RemoteRef: HEAD\n",
-                              "RemoteSha: ", gert::git_commit_id(), "\n"),
-                       withr::local_connection(file("DESCRIPTION", "a"))) # open DESCRIPTION in append mode
+            cat("Repository: ", repoUrl, "\n",
+                "RemoteUrl: ", remoteUrl, "\n",
+                "RemoteRef: HEAD\n",
+                "RemoteSha: ", gert::git_commit_id(), "\n",
+                file = "DESCRIPTION", sep = "", append = TRUE)
+
             error <- try(devtools::build())
-            gert::git_reset_hard()
+
+            gert::git_reset_hard() # reset DESCRIPTION changes to prevent merge conflict
           }
           if ("try-error" %in% class(error)) {
             message(".:: ", fd, " ", curversion, " -> ", vkey$version, " build failed ::.")
