@@ -11,7 +11,9 @@
 #' @export
 #' @examples
 #' packageInfo("lucode2")
-packageInfo <- function(package, repos = c("https://cran.rstudio.com/", "https://rse.pik-potsdam.de/r/packages/")) {
+packageInfo <- function(package, repos = c("https://cran.rstudio.com/",
+                                           "https://rse.pik-potsdam.de/r/packages/",
+                                           "https://pik-piam.r-universe.dev")) {
   version <- try(packageVersion(package), silent = TRUE)
   if ("try-error" %in% class(version)) {
     version <- "<not installed>"
