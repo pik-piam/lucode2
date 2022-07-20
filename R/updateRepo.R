@@ -69,6 +69,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
             error <- try(devtools::document(pkg = ".", roclets = c("rd", "collate", "namespace", "vignette")))
           }
           if (!("try-error" %in% class(error))) {
+            # add metadata such as remote url to DESCRIPTION e.g. for renv
             remoteUrl <- gert::git_remote_info()$url
             if (startsWith("git@github.com:", remoteUrl)) {
               remoteUrl <- sub("^git@github\\.com:", "https://github.com/", remoteUrl)

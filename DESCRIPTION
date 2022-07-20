@@ -35,8 +35,8 @@ Suggests:
     lusweave,
     magclass,
     poorman,
-    rmarkdown,
     renv,
+    rmarkdown,
     testthat
 URL: https://github.com/pik-piam/lucode2, https://doi.org/10.5281/zenodo.4389418
 BugReports: https://github.com/pik-piam/lucode2/issues
