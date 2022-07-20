@@ -6,7 +6,8 @@
 \usage{
 packageInfo(
   package,
-  repos = c("https://cran.rstudio.com/", "https://rse.pik-potsdam.de/r/packages/")
+  repos = c("https://cran.rstudio.com/", "https://rse.pik-potsdam.de/r/packages/",
+    "https://pik-piam.r-universe.dev")
 )
 }
 \arguments{
@@ -16,8 +17,8 @@ packageInfo(
 be checked}
 }
 \description{
-Function to print version number and time since last update
-formatted to the standard output
+Function to print version number and time since last update formatted to standard output.
+Considers CRAN, the RSE server, and r-universe.
 }
 \examples{
 packageInfo("lucode2")

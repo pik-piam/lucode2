@@ -10,15 +10,26 @@ repos:
     -   id: check-merge-conflict
     -   id: check-yaml
     -   id: fix-byte-order-marker
+    -   id: check-added-large-files
+        args: ['--maxkb=100']
+    -   id: mixed-line-ending
+        args: ['--fix=lf']
+
 -   repo: https://github.com/lorenzwalthert/precommit
     rev: v0.3.2
     hooks:
+    -   id: parsable-R
     -   id: deps-in-desc
     -   id: no-browser-statement
     -   id: no-debug-statement
-    -   id: parsable-R
     -   id: readme-rmd-rendered
     -   id: roxygenize
-    -   id: use-tidy-description
+        additional_dependencies:
+        - citation
+        - data.table
+        - devtools
+        - dplyr
+        - usethis
+        - git2r
 ci:
     autoupdate_schedule: weekly

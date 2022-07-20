@@ -1,7 +1,7 @@
 #' packageInfo
 #'
-#' Function to print version number and time since last update
-#' formatted to the standard output
+#' Function to print version number and time since last update formatted to standard output.
+#' Considers CRAN, the RSE server, and r-universe.
 #'
 #' @param package Package name
 #' @param repos vector of package repositories in which availability of the package should

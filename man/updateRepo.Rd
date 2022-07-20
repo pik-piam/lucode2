@@ -9,7 +9,8 @@ updateRepo(
   check = TRUE,
   forceRebuild = FALSE,
   clean = FALSE,
-  skipFolders = c("Archive", "gdxrrw", "HARr")
+  skipFolders = c("Archive", "gdxrrw", "HARr"),
+  repoUrl = "https://rse.pik-potsdam.de/r/packages"
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ updateRepo(
 \item{clean}{Option to clean repos before updating/pulling to avoid merge conflicts}
 
 \item{skipFolders}{Which folders/packages should not be built.}
+
+\item{repoUrl}{Url of the package repo. Will be added to DESCRIPTION files in the Repository field.}
 }
 \description{
 Function to update an package repository. Run this function on a folder which contains
