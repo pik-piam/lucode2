@@ -19,9 +19,11 @@ repos:
     hooks:
     -   id: parsable-R
     -   id: deps-in-desc
+        args: [--allow_private_imports]
     -   id: no-browser-statement
     -   id: no-debug-statement
     -   id: readme-rmd-rendered
+    -   id: use-tidy-description
     -   id: roxygenize
         additional_dependencies:
         - citation
