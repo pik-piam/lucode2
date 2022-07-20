@@ -7,8 +7,28 @@ repos:
     hooks:
     -   id: check-case-conflict
     -   id: check-json
-    -   id: check-yaml
     -   id: check-merge-conflict
+    -   id: check-yaml
     -   id: fix-byte-order-marker
+    -   id: check-added-large-files
+        args: ['--maxkb=100']
+    -   id: mixed-line-ending
+
+-   repo: https://github.com/lorenzwalthert/precommit
+    rev: v0.3.2
+    hooks:
+    -   id: parsable-R
+    -   id: deps-in-desc
+    -   id: no-browser-statement
+    -   id: no-debug-statement
+    -   id: readme-rmd-rendered
+    -   id: roxygenize
+        additional_dependencies:
+        - citation
+        - data.table
+        - devtools
+        - dplyr
+        - usethis
+        - git2r
 ci:
     autoupdate_schedule: weekly
