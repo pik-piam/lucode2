@@ -34,7 +34,7 @@ packageInfo <- function(package, repos = c("https://cran.rstudio.com/",
     v <- list()
     for (r in repos) {
       v$r <- tryCatch(
-        available.packages(paste0(r, "/src/contrib"))[package, "Version"],
+        available.packages(file.path(r, "src", "contrib"))[package, "Version"],
         error = function(e) return("<not available>"))
       cat(v$r, "|", r, "\n")
     }
