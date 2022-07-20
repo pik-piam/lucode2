@@ -7,8 +7,18 @@ repos:
     hooks:
     -   id: check-case-conflict
     -   id: check-json
-    -   id: check-yaml
     -   id: check-merge-conflict
+    -   id: check-yaml
     -   id: fix-byte-order-marker
+-   repo: https://github.com/lorenzwalthert/precommit
+    rev: v0.3.2
+    hooks:
+    -   id: deps-in-desc
+    -   id: no-browser-statement
+    -   id: no-debug-statement
+    -   id: parsable-R
+    -   id: readme-rmd-rendered
+    -   id: roxygenize
+    -   id: use-tidy-description
 ci:
     autoupdate_schedule: weekly
