@@ -32,7 +32,7 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
 
   packageName <- desc("DESCRIPTION")$get("Package")
   packageDocumentation <- file.path("R", paste0(packageName, "-package.R"))
-  if (!file.exists(packageDocumentation)) {
+  if (!file.exists(packageDocumentation) && !file.exists(file.path("R", paste0(packageName, ".R")))) {
     writeLines(c("# The package documentation is defined in this file.",
                  "# You can get it via `library(<package>); ?<package>`.",
                  "#' @docType package",
@@ -67,24 +67,6 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
 
   ########### Run linter ###########
   if (runLinter) {
-    # create .lintr config files if they do not exist
-    writeIfNonExistent <- function(fileText, filePath) {
-      if (!file.exists(filePath)) {
-        writeLines(fileText, filePath)
-      }
-      if (!paste0("^", filePath, "$") %in% readLines(".Rbuildignore")) {
-        write(paste0("^", filePath, "$"), ".Rbuildignore", append = TRUE)
-      }
-    }
-    writeIfNonExistent(c("linters: lucode2::lintrRules()", 'encoding: "UTF-8"'),
-                       ".lintr")
-    writeIfNonExistent(c("linters: lucode2::lintrRules(allowUndesirable = TRUE)", 'encoding: "UTF-8"'),
-                       file.path("tests", ".lintr", fsep = "/"))
-    if (dir.exists("vignettes")) {
-      writeIfNonExistent(c("linters: lucode2::lintrRules(allowUndesirable = TRUE)", 'encoding: "UTF-8"'),
-                         file.path("vignettes", ".lintr", fsep = "/"))
-    }
-
     # run linter and check results
     linterResult <- lint()
     print(linterResult)

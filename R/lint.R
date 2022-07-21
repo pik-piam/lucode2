@@ -14,10 +14,24 @@
 #' @author Pascal Führlich
 #' @seealso \code{\link{getFilesToLint}}, \code{\link{lintrRules}}, \code{\link{autoFormat}}, \code{\link[lintr]{lint}}
 #' @importFrom lintr lint_package
+#' @importFrom withr with_dir
 #' @examples
 #' lucode2::lint()
 #' @export
 lint <- function(files = getFilesToLint()) {
+  # create .lintr config files if they do not exist
+  gitRoot <- suppressWarnings(system2("git", c("rev-parse", "--show-toplevel"), stdout = TRUE, stderr = TRUE))
+  if (dir.exists(gitRoot)) {
+    with_dir(gitRoot, {
+      writeIfNonExistent(c("linters: lucode2::lintrRules()", 'encoding: "UTF-8"'),
+                          ".lintr")
+      writeIfNonExistent(c("linters: lucode2::lintrRules(allowUndesirable = TRUE)", 'encoding: "UTF-8"'),
+                          file.path("tests", ".lintr", fsep = "/"))
+      writeIfNonExistent(c("linters: lucode2::lintrRules(allowUndesirable = TRUE)", 'encoding: "UTF-8"'),
+                          file.path("vignettes", ".lintr", fsep = "/"))
+    })
+  }
+
   if (identical(files, ".")) {
     return(lint_package())
   }
@@ -48,4 +62,16 @@ lint <- function(files = getFilesToLint()) {
   linterWarnings <- flattenLints(linterWarnings)
   class(linterWarnings) <- "lints"
   return(linterWarnings)
+}
+
+writeIfNonExistent <- function(fileText, filePath) {
+  if (!dir.exists(dirname(filePath))) {
+    return()
+  }
+  if (!file.exists(filePath)) {
+    writeLines(fileText, filePath)
+  }
+  if (!paste0("^", filePath, "$") %in% readLines(".Rbuildignore")) {
+    write(paste0("^", filePath, "$"), ".Rbuildignore", append = TRUE)
+  }
 }

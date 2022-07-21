@@ -10,6 +10,7 @@
 #' @param forceRebuild Option to rebuild all packages from source
 #' @param clean Option to clean repos before updating/pulling to avoid merge conflicts
 #' @param skipFolders Which folders/packages should not be built.
+#' @param repoUrl Url of the package repo. Will be added to DESCRIPTION files in the Repository field.
 #' @author Jan Philipp Dietrich, Pascal Führlich
 #' @seealso \code{\link{buildLibrary}}
 #' @importFrom devtools document build install_deps
@@ -17,7 +18,9 @@
 #' @importFrom withr local_dir local_envvar with_dir
 #' @export
 updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = FALSE, # nolint
-                       skipFolders = c("Archive", "gdxrrw", "HARr")) {
+                       skipFolders = c("Archive", "gdxrrw", "HARr"),
+                       repoUrl = "https://rse.pik-potsdam.de/r/packages") {
+  checkRequiredPackages("gert", "get git remote url and commit hash")
   path <- normalizePath(path)
   local_dir(path)
   message(date(), "\n")
@@ -66,7 +69,22 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
             error <- try(devtools::document(pkg = ".", roclets = c("rd", "collate", "namespace", "vignette")))
           }
           if (!("try-error" %in% class(error))) {
+            # add metadata such as remote url to DESCRIPTION e.g. for renv
+            remoteUrl <- gert::git_remote_info()$url
+            if (startsWith("git@github.com:", remoteUrl)) {
+              remoteUrl <- sub("^git@github\\.com:", "https://github.com/", remoteUrl)
+              remoteUrl <- sub("\\.git$", "", remoteUrl)
+            }
+
+            cat("Repository: ", repoUrl, "\n",
+                "RemoteUrl: ", remoteUrl, "\n",
+                "RemoteRef: HEAD\n",
+                "RemoteSha: ", gert::git_commit_id(), "\n",
+                file = "DESCRIPTION", sep = "", append = TRUE)
+
             error <- try(devtools::build())
+
+            gert::git_reset_hard() # reset DESCRIPTION changes to prevent merge conflict
           }
           if ("try-error" %in% class(error)) {
             message(".:: ", fd, " ", curversion, " -> ", vkey$version, " build failed ::.")
