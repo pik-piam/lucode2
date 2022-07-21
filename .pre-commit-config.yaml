@@ -24,13 +24,5 @@ repos:
     -   id: no-debug-statement
     -   id: readme-rmd-rendered
     -   id: use-tidy-description
-    -   id: roxygenize
-        additional_dependencies:
-        - citation
-        - data.table
-        - devtools
-        - dplyr
-        - usethis
-        - git2r
 ci:
     autoupdate_schedule: weekly
