@@ -27,4 +27,9 @@ addGitHubActions <- function(lib = ".") {
     use_coverage("codecov")
     file.copy(system.file(file.path("extdata", "codecov.yml"), package = "lucode2"), "codecov.yml", overwrite = TRUE)
   }
+
+  if (!"^\\.github$" %in% readLines(".Rbuildignore")) {
+    write("^\\.github$", ".Rbuildignore", append = TRUE)
+  }
+
 }
