@@ -11,7 +11,7 @@ on:
 env:
   USE_BSPM: "true"
   _R_CHECK_FORCE_SUGGESTS_: "false"
-  NO_BINARY_INSTALL_R_PACKAGES: 'c("madrat", "magclass", "citation", "gms", "goxygen")'
+  NO_BINARY_INSTALL_R_PACKAGES: 'c("madrat", "magclass", "citation", "gms", "goxygen", "GDPuc")'
 
 jobs:
   lucode2-check:
@@ -81,8 +81,8 @@ jobs:
 
       - name: Install python dependencies if applicable
         run: |
-          [ -f requirements.txt ] && python -m pip install --upgrade pip wheel
-          [ -f requirements.txt ] && pip install -r requirements.txt
+          [ -f requirements.txt ] && python -m pip install --upgrade pip wheel || true
+          [ -f requirements.txt ] && pip install -r requirements.txt || true
 
       - name: Remove bspm integration # to get rid of error when running install.packages
         run: |
