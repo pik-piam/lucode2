@@ -17,6 +17,7 @@ conditionalCopy <- function(relativePath, nameInInstExtdata = basename(relativeP
     stop("No DESCRIPTION file found in ", normalizePath("."))
   }
   instExtdataPath <- file.path("inst", "extdata", nameInInstExtdata)
+  dir.create(dirname(relativePath), recursive = TRUE, showWarnings = FALSE)
   if (desc("DESCRIPTION")$get("Package") == "lucode2") {
     if (file.exists(instExtdataPath) && md5sum(relativePath) != md5sum(instExtdataPath) &&
         (!interactive() || !askYesNo(paste0("Replace ", instExtdataPath, " with ", relativePath, "?")))) {

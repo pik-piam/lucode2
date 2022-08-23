@@ -249,7 +249,9 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, # nolint
   ####################################################################
   # Make sure man/*.Rd files are not ignored
   ###################################################################
-  gitignore <- readLines(".gitignore")
+  gitignore <- suppressWarnings(tryCatch(
+    readLines(".gitignore"),
+    error = function(cond) return(character(0))))
   if ("*.Rd" %in% gitignore || file.exists(file.path("man", ".gitignore"))) {
     message("*.Rd files are currently ignored, but they should be commited.")
 
