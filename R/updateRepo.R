@@ -71,7 +71,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
           if (!("try-error" %in% class(error))) {
             # add metadata such as remote url to DESCRIPTION e.g. for renv
             remoteUrl <- gert::git_remote_info()$url
-            if (startsWith("git@github.com:", remoteUrl)) {
+            if (startsWith(remoteUrl, "git@github.com:")) {
               remoteUrl <- sub("^git@github\\.com:", "https://github.com/", remoteUrl)
               remoteUrl <- sub("\\.git$", "", remoteUrl)
             }
