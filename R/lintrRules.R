@@ -19,6 +19,7 @@ lintrRules <- function(allowUndesirable = FALSE) {
   deprecatedFunctions <- list(`on.exit` = "use withr::defer",
                               # by default on.exit replaces all code registered to be run on exit,
                               # making it very dangerous to use on.exit together with withr functions
+                              globalVariables = "rewrite code without global variables",
                               fulldim = "use magclass::getItems()",
                               getRegionList = "use magclass::getItems()",
                               getRegions = "use magclass::getItems()",
