@@ -20,138 +20,126 @@
 updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = FALSE, # nolint
                        skipFolders = c("Archive", "gdxrrw", "HARr"),
                        repoUrl = "https://rse.pik-potsdam.de/r/packages") {
-  checkRequiredPackages("gert", "get git remote url and commit hash")
+  checkRequiredPackages("gert", "interacting with git repos")
   path <- normalizePath(path)
-  local_dir(path)
   message(date(), "\n")
 
-  # pull git repos
-  dirs <- grep("^\\.", list.dirs(recursive = FALSE, full.names = FALSE), value = TRUE, invert = TRUE)
-  for (d in dirs) {
-    if (d %in% skipFolders) {
-      next
-    }
-    with_dir(d, {
-      if (dir.exists(".git")) {
-        if (clean) {
-          system("git reset --hard HEAD -q; git clean -fxq; git pull -q")
-        } else {
-          system("git pull -q")
-        }
-      }
-    })
+  if (!file.exists(file.path(path, "PACKAGES"))) {
+    write_PACKAGES(path, unpacked = TRUE)
   }
-
-  # build new versions of packages including documentation
-  updatePACKAGES <- FALSE
-  availablePackages <- suppressWarnings(available.packages(paste0("file:", path), filters = "duplicates"))
+  availablePackages <- suppressWarnings(available.packages(paste0("file:", path)))
   availablePackagesOnCran <- suppressWarnings(available.packages("https://cloud.r-project.org/src/contrib",
                                                                  filters = "duplicates"))
-  dirs <- dirs[order(tolower(dirs))]
-  for (d in dirs) {
-    if (d %in% skipFolders) {
-      next
-    }
-    fd <- format(d, width = max(nchar(dirs)))
-    curversion <- tryCatch(availablePackages[d, "Version"], error = function(e) 0)
-    with_dir(d, {
-      vkey <- validkey()
-      pattern <- paste0("^", d, "_(.*)\\.tar\\.gz")
-      buildVersion <- max(as.numeric_version(sub(pattern, "\\1", dir("..", pattern = pattern))))
-      if (length(buildVersion) == 0) {
-        buildVersion <- as.numeric_version(0)
+
+  # pull git repos
+  repoPaths <- list.dirs(path, recursive = FALSE)
+  repoPaths <- repoPaths[!startsWith(basename(repoPaths), ".") &
+                         !(repoPaths %in% skipFolders) &
+                         dir.exists(file.path(repoPaths, ".git"))]
+  repoPaths <- repoPaths[order(tolower(repoPaths))]
+
+  collectedErrors <- lapply(repoPaths, function(repoPath) {
+    return(tryCatch({
+      packageName <- basename(repoPath)
+      if (clean) {
+        gert::git_reset_hard(repo = repoPath)
+        # emulate git clean using stash
+        gert::git_stash_save(include_untracked = TRUE, repo = repoPath)
+        gert::git_stash_drop(repo = repoPath)
+      }
+      gert::git_pull(repo = repoPath, verbose = FALSE)
+
+      currentVersion <- numeric_version(tryCatch(availablePackages[packageName, "Version"], error = function(e) "0"))
+
+      messageStart <- paste0(".:: ", format(packageName, width = max(nchar(basename(repoPaths)))), " ", currentVersion)
+
+      validationKey <- validkey(repoPath)
+      newVersion <- numeric_version(validationKey$version)
+
+      if (!(validationKey$valid || !check || forceRebuild)) {
+        message(messageStart, " -> ", newVersion, " invalid validation key ::.")
+        str(gert::git_commit_info(repo = repoPath)[c("id", "author", "message", "time")])
+        stop("invalid validation key")
       }
 
-      if (as.numeric_version(curversion) < as.numeric_version(vkey$version) || forceRebuild) {
-        if (vkey$valid || !check || forceRebuild) {
-          error <- try(devtools::install_deps(upgrade = "always"))
-          if (vkey$roxygen && !("try-error" %in% class(error))) {
-            error <- try(devtools::document(pkg = ".", roclets = c("rd", "collate", "namespace", "vignette")))
-          }
-          if (!("try-error" %in% class(error))) {
-            # add metadata such as remote url to DESCRIPTION e.g. for renv
-            remoteUrl <- gert::git_remote_info()$url
-            if (startsWith(remoteUrl, "git@github.com:")) {
-              remoteUrl <- sub("^git@github\\.com:", "https://github.com/", remoteUrl)
-              remoteUrl <- sub("\\.git$", "", remoteUrl)
-            }
+      targzPattern <- paste0("^", packageName, "_(.*)\\.tar\\.gz")
+      targzBasename <- list.files(path, pattern = targzPattern)
+      if (length(targzBasename) >= 2) {
+        stop("for ", packageName, " there are multiple tgz files: ", paste(targzBasename, collapse = ", "))
+      }
 
-            cat("Repository: ", repoUrl, "\n",
-                "RemoteUrl: ", remoteUrl, "\n",
-                "RemoteRef: HEAD\n",
-                "RemoteSha: ", gert::git_commit_id(), "\n",
-                file = "DESCRIPTION", sep = "", append = TRUE)
+      buildVersion <- numeric_version(sub(targzPattern, "\\1", targzBasename))
+      if (length(buildVersion) == 0) {
+        buildVersion <- numeric_version("0")
+      }
 
-            error <- try(devtools::build())
+      if (forceRebuild || newVersion > currentVersion || newVersion > buildVersion) {
+        devtools::install_deps(repoPath, upgrade = "always")
 
-            gert::git_reset_hard() # reset DESCRIPTION changes to prevent merge conflict
-          }
-          if ("try-error" %in% class(error)) {
-            message(".:: ", fd, " ", curversion, " -> ", vkey$version, " build failed ::.")
-            if (dir.exists(".git")) {
-              system("git --no-pager show -s --format='(%h) %s \n%an <%ae>' HEAD")
-            }
-          } else {
-            updatePACKAGES <- TRUE
-            message(".:: ", fd, " ", curversion, " -> ", vkey$version, " build success ::.")
-          }
-        } else {
-          message(".:: ", fd, " ", curversion, " -> ", vkey$version, " invalid commit ::.")
-          if (dir.exists(".git")) {
-            system("git --no-pager show -s --format='(%h) %s \n%an <%ae>' HEAD")
-          }
+        if (validationKey$roxygen) {
+          devtools::document(repoPath, roclets = c("rd", "collate", "namespace", "vignette"))
         }
-      } else if (as.numeric_version(curversion) < buildVersion) {
-        message(".:: ", fd, " ", curversion, " -> not build as newer version (",
-                buildVersion, ") is already part of the repo ::.")
-      } else if (as.numeric_version(curversion) == as.numeric_version(vkey$version) &&
-                 as.numeric_version(curversion) > buildVersion) {
-        error <- try(devtools::install_deps(upgrade = "always"))
-        if (!("try-error" %in% class(error))) {
-          error <- try(devtools::build())
+
+        # add metadata such as remote url to DESCRIPTION e.g. for renv
+        remoteUrl <- sub("git@github\\.com:(.+)\\.git",
+                          "https://github.com/\\1",
+                          gert::git_remote_info(repo = repoPath)$url)
+        cat("Repository: ", repoUrl, "\n",
+            "RemoteUrl: ", remoteUrl, "\n",
+            "RemoteRef: HEAD\n",
+            "RemoteSha: ", gert::git_commit_id(repo = repoPath), "\n",
+            file = file.path(repoPath, "DESCRIPTION"), sep = "", append = TRUE)
+
+        error <- try({
+          devtools::build(repoPath)
+        })
+
+        gert::git_reset_hard(repo = repoPath) # reset DESCRIPTION changes to prevent merge conflict
+
+        if (inherits(error, "try-error")) {
+          message(messageStart, " -> ", newVersion, " build failed ::.")
+          system("git --no-pager show -s --format='(%h) %s \n%an <%ae>' HEAD")
+          stop(error) # will be caught by tryCatch
         }
-        if ("try-error" %in% class(error)) {
-          message(".:: ", fd, " ", curversion, " -> package build failed ::.")
-          if (dir.exists(".git")) {
-            system("git --no-pager show -s --format='(%h) %s \n%an <%ae>' HEAD")
-          }
-        } else {
-          message(".:: ", fd, " ", curversion, " -> package build success ::.")
+
+        message(messageStart, " -> ", newVersion, " build success ::.", appendLF = FALSE)
+
+        # move old tgz file into Archive for renv
+        if (length(list.files(path, pattern = targzPattern)) > 1) {
+          archivePath <- file.path(path, "Archive", packageName)
+          dir.create(archivePath, showWarnings = !dir.exists(archivePath))
+          file.rename(file.path(path, targzBasename), file.path(archivePath, targzBasename))
         }
       } else {
-        craninfo <- ""
-        if (d %in% rownames(availablePackagesOnCran)) {
-          cranversion <- availablePackagesOnCran[d, "Version"]
-          if (as.numeric_version(cranversion) > as.numeric_version(curversion)) {
-            warning("Package version of package \"", d, "\" is newer on CRAN (", cranversion,
-                    ") compared to PIK-CRAN (", curversion, ")! Check version on CRAN immediatly!")
-            craninfo <- paste0(" .::WARNING! CRAN: ", availablePackagesOnCran[d, "Version"], " !WARNING::.")
-          } else {
-            craninfo <- paste0(" .::CRAN: ", availablePackagesOnCran[d, "Version"], "::.")
-          }
-        }
-        message(".:: ", fd, " ", format(curversion, width = 10), " ok ::.", craninfo)
+        message(messageStart, " ok ::.", appendLF = FALSE)
       }
-    })
-  }
-  if (updatePACKAGES) {
-    write_PACKAGES(unpacked = TRUE)
-    for (d in dirs) {
-      if (d %in% skipFolders) {
-        next
-      }
-      targz <- grep(paste0("^", d, "_.*.tar.gz"), dir(), value = TRUE)
-      if (length(targz) > 1) {
-        newest <- max(numeric_version(sub("^.*_", "", sub(".tar.gz$", "", targz))))
-        targz <- targz[-grep(newest, targz)]
-        if (file.exists(file.path("Archive", d))) {
-          file.rename(targz, file.path("Archive", d, targz))
+
+      # check if newer package version is available on CRAN
+      if (packageName %in% rownames(availablePackagesOnCran)) {
+        cranversion <- numeric_version(availablePackagesOnCran[packageName, "Version"])
+        if (cranversion > currentVersion) {
+          message(" .::WARNING! CRAN: ", availablePackagesOnCran[packageName, "Version"], " !WARNING::.")
+          stop("Package version of package \"", packageName, "\" is newer on CRAN (", cranversion,
+                ") compared to PIK-CRAN (", currentVersion, ")! Check version on CRAN immediatly!")
         } else {
-          dir.create(file.path("Archive", d))
-          file.rename(targz, file.path("Archive", d, targz))
+          message(" .::CRAN: ", availablePackagesOnCran[packageName, "Version"], "::.")
         }
+      } else {
+        message()
       }
-    }
+      NULL
+    }, error = function(error) error))
+  })
+  names(collectedErrors) <- basename(repoPaths)
+  collectedErrors <- Filter(Negate(is.null), collectedErrors)
+
+  write_PACKAGES(path, unpacked = TRUE)
+
+  if (length(collectedErrors) >= 1) {
+    message("\nerrors:")
+    print(collectedErrors)
+
+    stop("There were errors, see log (on RSE server with `journalctl -u update-repo.service`)")
   }
   message("done.")
 }
