@@ -16,7 +16,7 @@ test_that("updateRepo works", {
     expect_true(file.exists(file.path(reposFolder, "miniPackage_0.0.0.9000.tar.gz")))
     expect_true(file.exists(file.path(reposFolder, "PACKAGES")))
 
-    expect_message(updateRepo(reposFolder), "miniPackage 0.0.0.9000 ok")
+    expect_message(updateRepo(reposFolder), "miniPackage 0.0.0.9000 ok", fixed = TRUE)
     usethis::with_project(file.path(reposFolder, "miniPackage"), {
       usethis::use_version("major")
     })
