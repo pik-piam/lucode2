@@ -7,7 +7,7 @@ test_that("updateRepo works", {
                     verbose = FALSE)
     expect_message({
       expect_error(updateRepo(reposFolder),
-                   "There were errors, see log (on RSE server with `journalctl -u update-repo.service`)",
+                   "There were errors, see log (on RSE server with `journalctl -r -u update-repo.service`)",
                    fixed = TRUE)
     }, "invalid validation key")
 

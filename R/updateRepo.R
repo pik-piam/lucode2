@@ -140,7 +140,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
     cat("\nerrors:\n")
     print(collectedErrors)
 
-    stop("There were errors, see log (on RSE server with `journalctl -u update-repo.service`)")
+    stop("There were errors, see log (on RSE server with `journalctl -r -u update-repo.service`)")
   }
   message("done.")
 }
