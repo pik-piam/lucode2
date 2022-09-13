@@ -107,7 +107,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
         # move old tgz file into Archive for renv
         if (length(list.files(path, pattern = targzPattern)) > 1) {
           archivePath <- file.path(path, "Archive", packageName)
-          dir.create(archivePath, showWarnings = !dir.exists(archivePath))
+          dir.create(archivePath, recursive = TRUE, showWarnings = !dir.exists(archivePath))
           file.rename(file.path(path, targzBasename), file.path(archivePath, targzBasename))
         }
       } else {
@@ -130,13 +130,14 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
       NULL
     }, error = function(error) error))
   })
+
   names(collectedErrors) <- basename(repoPaths)
   collectedErrors <- Filter(Negate(is.null), collectedErrors)
 
   write_PACKAGES(path, unpacked = TRUE)
 
   if (length(collectedErrors) >= 1) {
-    message("\nerrors:")
+    cat("\nerrors:\n")
     print(collectedErrors)
 
     stop("There were errors, see log (on RSE server with `journalctl -u update-repo.service`)")
