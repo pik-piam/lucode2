@@ -45,8 +45,8 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
   # run tests in a separate R session so test results are independent of anything set in the current R session
   testResults <- callr::r(function() {
     withr::local_options(crayon.enabled = TRUE)
-    return(devtools::test(stop_on_failure = TRUE))
-  }, show = TRUE)
+    return(devtools::test(stop_on_failure = TRUE, reporter = "summary"))
+  }, show = TRUE, spinner = FALSE)
 
   helpLink <- "You can find solutions to common problems at https://github.com/pik-piam/discussions/discussions/18"
   unacceptedWarnings <- testResults %>%
