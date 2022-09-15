@@ -20,7 +20,8 @@ conditionalCopy <- function(relativePath, nameInInstExtdata = basename(relativeP
   dir.create(dirname(relativePath), recursive = TRUE, showWarnings = FALSE)
   if (desc("DESCRIPTION")$get("Package") == "lucode2") {
     if (file.exists(instExtdataPath) && md5sum(relativePath) != md5sum(instExtdataPath) &&
-        (!interactive() || !askYesNo(paste0("Replace ", instExtdataPath, " with ", relativePath, "?")))) {
+        (!interactive() || (requireNamespace("testthat", quietly = TRUE) && testthat::is_testing()) ||
+         !askYesNo(paste0("Replace ", instExtdataPath, " with ", relativePath, "?")))) {
       stop(relativePath, " != ", instExtdataPath)
     }
     file.copy(relativePath, instExtdataPath, overwrite = TRUE)
