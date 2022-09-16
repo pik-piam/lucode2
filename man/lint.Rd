@@ -23,7 +23,9 @@ leads to a linter warning, but not in vignettes/tests. Which linter rules are us
 ".lintr" config files. \code{\link{check}} creates lintr config files that use \code{\link{lintrRules}}.
 }
 \examples{
+\dontrun{
 lucode2::lint()
+}
 }
 \seealso{
 \code{\link{getFilesToLint}}, \code{\link{lintrRules}}, \code{\link{autoFormat}}, \code{\link[lintr]{lint}}

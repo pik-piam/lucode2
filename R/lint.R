@@ -16,7 +16,9 @@
 #' @importFrom lintr lint_package
 #' @importFrom withr with_dir
 #' @examples
+#' \dontrun{
 #' lucode2::lint()
+#' }
 #' @export
 lint <- function(files = getFilesToLint()) {
   # create .lintr config files if they do not exist

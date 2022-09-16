@@ -28,6 +28,7 @@ Authors:
   \item Benjamin Leon Bodirsky
   \item Lavinia Baumstark
   \item Pascal Führlich
+  \item Oliver Richters
 }
 
 }
