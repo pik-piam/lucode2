@@ -6,6 +6,8 @@
 #' @param \dots arguments allowed to be read from command line (other values
 #' are ignored). Value is set if found on command line input, nothing is done,
 #' if value is not found.
+#' @param .argv command line arguments, usually read with commandArgs, can be specified
+#' for testing purposes
 #' @param .envir environment in which the variables should be written (by
 #' default the environment from which the function is called)
 #' @param .flags named vector with possible command line switches. Element names
@@ -22,14 +24,14 @@
 #' value1 <- "old"
 #' value2 <- 2
 #' value3 <- "willstaythesame"
-#' argv <- readArgs("value1", "value2", "value4", .flags = c(t = "--test", p = "--parallel"))
+#' flags <- readArgs("value1", "value2", "value4", .flags = c(t = "--test", p = "--parallel"))
 #' message(value1)
 #' message(value2)
 #' message(value3)
-#' if ("--test" %in% argv) {
+#' if ("--test" %in% flags) {
 #'   message("You are in test mode")
 #' }
-#' if ("--parallel" %in% argv) {
+#' if ("--parallel" %in% flags) {
 #'   message("You are in parallel mode")
 #' }
 #'
@@ -42,7 +44,7 @@
 #' # value1 <- new
 #' # value2 <- 3
 #' # value4 not found
-#' # All flags: --parallel, --test
+#' # Flags: --parallel, --test
 #' # ### READ COMMAND LINE - CONFIGURATION END ###
 #' #
 #' # new
@@ -53,22 +55,22 @@
 #'
 #'
 #' ### function that reads all allowed arguments from command line ###
-readArgs <- function(..., .envir = parent.frame(), .silent = FALSE, .flags = NULL) {
+readArgs <- function(..., .argv = commandArgs(trailingOnly = TRUE),
+                          .envir = parent.frame(), .flags = NULL, .silent = FALSE) {
   allowedArgs <- c(...)
-  argv <- commandArgs(trailingOnly = TRUE)
   # search for strings that look like -i1asrR and transform them into long flags
-  oneDashFlags <- unlist(strsplit(paste0(argv[grepl("^-[a-zA-Z0-9]*$", argv)], collapse = ""), split = ""))
-  twoDashFlags <- argv[grepl("^--[a-zA-Z0-9]*$", argv) & argv %in% .flags]
+  oneDashFlags <- unlist(strsplit(paste0(.argv[grepl("^-[a-zA-Z0-9]*$", .argv)], collapse = ""), split = ""))
+  twoDashFlags <- .argv[grepl("^--[a-zA-Z0-9]*$", .argv) & .argv %in% .flags]
   knownFlags <- sort(unique(c(twoDashFlags, unlist(.flags[names(.flags) %in% oneDashFlags]))))
   unknownFlags <- c(sort(paste0("-", oneDashFlags)[! oneDashFlags %in% c(names(.flags), "-")]),
-                    argv[grepl("^--[a-zA-Z0-9]*$", argv) & ! argv %in% .flags])
-  argv <- argv[! grepl("^-", argv)]
-  if (length(argv) > 0) {
+                    .argv[grepl("^--[a-zA-Z0-9]*$", .argv) & ! .argv %in% .flags])
+  .argv <- .argv[! grepl("^-", .argv)]
+  if (length(.argv) > 0) {
     ### apply additional command line arguments ###
-    for (argnr in seq_along(argv)) {
+    for (argnr in seq_along(.argv)) {
       for (i in seq_along(allowedArgs)) {
-        if (strsplit(argv[argnr], "=")[[1]][1] == allowedArgs[i]) {
-          assign(allowedArgs[i], extract_arguments(argv[argnr]), envir = .envir)
+        if (strsplit(.argv[argnr], "=")[[1]][1] == allowedArgs[i]) {
+          assign(allowedArgs[i], extract_arguments(.argv[argnr]), envir = .envir)
         }
       }
     }
