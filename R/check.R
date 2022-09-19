@@ -88,7 +88,9 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
   }
 
   ########### Run checks ###########
-  checkResults <- devtools::check(document = FALSE, cran = cran, args = "--no-tests", error_on = "never")
+  # _R_CHECK_SYSTEM_CLOCK_ = 0 should prevent "unable to verify current time" when time server is down
+  checkResults <- devtools::check(document = FALSE, cran = cran, args = c("--timings", "--no-tests"),
+                                  env_vars = c(NOT_CRAN = "true", `_R_CHECK_SYSTEM_CLOCK_` = "0"), error_on = "never")
 
   # Filter warnings and notes which are accepted
   for (acceptedWarning in config[["AcceptedWarnings"]]) {
