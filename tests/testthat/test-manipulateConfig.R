@@ -17,6 +17,7 @@ test_that("manipulateConfig works", {
              '  bazz "just x/y"',
              paste0('  buzz "not x/y" / ', cfg$buzz, " /"),
              paste0("bla_blub example text (1) / ", cfg$bla_blub,  " /"),
+             paste0("bla/ ", cfg$bla,  " /"),
              ";",
              paste0("bar  = ", cfg$bar, ";"),
              paste0("bazz = ", cfg$bazz, ";"),
