@@ -17,8 +17,8 @@
 #' @importFrom tools write_PACKAGES
 #' @importFrom withr local_dir local_envvar with_dir
 #' @export
-updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = FALSE, # nolint
-                       skipFolders = c("Archive", "gdxrrw", "HARr"),
+updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = TRUE, # nolint
+                       skipFolders = c("Archive", "gdxrrw", "HARr", "SPARQL"),
                        repoUrl = "https://rse.pik-potsdam.de/r/packages") {
   checkRequiredPackages("gert", "interacting with git repos")
   path <- normalizePath(path)
