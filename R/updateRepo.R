@@ -17,8 +17,8 @@
 #' @importFrom tools write_PACKAGES
 #' @importFrom withr local_dir local_envvar with_dir
 #' @export
-updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = FALSE, # nolint
-                       skipFolders = c("Archive", "gdxrrw", "HARr"),
+updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = TRUE, # nolint
+                       skipFolders = c("Archive", "gdxrrw", "HARr", "SPARQL"),
                        repoUrl = "https://rse.pik-potsdam.de/r/packages") {
   checkRequiredPackages("gert", "interacting with git repos")
   path <- normalizePath(path)
@@ -33,8 +33,9 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
 
   # pull git repos
   repoPaths <- list.dirs(path, recursive = FALSE)
-  repoPaths <- repoPaths[!startsWith(basename(repoPaths), ".") &
-                         !(repoPaths %in% skipFolders) &
+  packageNames <- basename(repoPaths)
+  repoPaths <- repoPaths[!startsWith(packageNames, ".") &
+                         !(packageNames %in% skipFolders) &
                          dir.exists(file.path(repoPaths, ".git"))]
   repoPaths <- repoPaths[order(tolower(repoPaths))]
 
@@ -44,14 +45,18 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
       if (clean) {
         gert::git_reset_hard(repo = repoPath)
         # emulate git clean using stash
-        gert::git_stash_save(include_untracked = TRUE, repo = repoPath)
-        gert::git_stash_drop(repo = repoPath)
+        try({ # creates error if there's nothing to stash, ignore it
+          gert::git_stash_save(include_untracked = TRUE, repo = repoPath)
+          gert::git_stash_drop(repo = repoPath)
+        }, silent = TRUE)
       }
-      gert::git_pull(repo = repoPath, verbose = FALSE)
-
+      suppressMessages({
+        gert::git_pull(repo = repoPath, verbose = FALSE)
+      })
       currentVersion <- numeric_version(tryCatch(availablePackages[packageName, "Version"], error = function(e) "0"))
 
-      messageStart <- paste0(".:: ", format(packageName, width = max(nchar(basename(repoPaths)))), " ", currentVersion)
+      messageStart <- paste0(".:: ", format(packageName, width = max(nchar(packageNames))),
+                             " ", format(as.character(currentVersion), width = 10))
 
       validationKey <- validkey(repoPath)
       newVersion <- numeric_version(validationKey$version)
@@ -117,7 +122,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = F
       # check if newer package version is available on CRAN
       if (packageName %in% rownames(availablePackagesOnCran)) {
         cranversion <- numeric_version(availablePackagesOnCran[packageName, "Version"])
-        if (cranversion > currentVersion) {
+        if (cranversion > currentVersion && cranversion > newVersion) {
           message(" .::WARNING! CRAN: ", availablePackagesOnCran[packageName, "Version"], " !WARNING::.")
           stop("Package version of package \"", packageName, "\" is newer on CRAN (", cranversion,
                 ") compared to PIK-CRAN (", currentVersion, ")! Check version on CRAN immediatly!")
