@@ -11,7 +11,6 @@ getScenNames <- function(dirs) {
   scenarioNames <- NULL
   for (i in path) {
     envir <- new.env()
-    envir$cfg <- list()
     load(i, envir = envir)
     scenarioNames[i] <- envir$cfg$title
   }
