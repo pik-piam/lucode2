@@ -8,7 +8,7 @@ test_that("getScenNames works", {
     cfg <- list("Name 1", "value")
     names(cfg) <- c("title", "otherKey")
     save(cfg, file = "output1/config.Rdata")
-    cfg <- list("value")
+    cfg <- list("Name 2")
     names(cfg) <- c("title")
     save(cfg, file = "output2/config.Rdata")
     cfg <- list("Name 3")
