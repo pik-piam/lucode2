@@ -10,11 +10,10 @@ getScenNames <- function(dirs) {
   path <- file.path(dirs, "config.Rdata")
   scenarioNames <- NULL
   for (i in path) {
-    load(i)
-    if (!exists("cfg")) {
-      cfg <- list()
-    }
-    scenarioNames[i] <- cfg$title
+    envir <- new.env()
+    envir$cfg <- list()
+    load(i, envir = envir)
+    scenarioNames[i] <- envir$cfg$title
   }
   return(scenarioNames)
 }
