@@ -5,16 +5,14 @@ test_that("getScenNames works", {
     dir.create("output1")
     dir.create("output2")
     dir.create("output3")
-    cfg <- list("Name 1", "value")
-    names(cfg) <- c("title", "otherKey")
+
+    cfg <- list("title" = "Name 1", "otherKey" = "value")
     save(cfg, file = "output1/config.Rdata")
 
-    stuff <- list("value")
-    names(stuff) <- c("otherKey")
+    stuff <- list("otherKey" = "value")
     save(stuff, file = "output2/config.Rdata")
 
-    cfg <- list("Name 3")
-    names(cfg) <- c("title")
+    cfg <- list("title" = "Name 3")
     save(cfg, file = "output3/config.Rdata")
 
     expected <- c("Name 1", "Name 3")
