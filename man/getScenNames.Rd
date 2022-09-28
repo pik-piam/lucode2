@@ -13,7 +13,7 @@ getScenNames(dirs)
 A vector containing the titles used as scenario names for e.g. plots
 }
 \description{
-Extract module information of a GAMS model.
+Get the scenario names (titles) of runs from the specified output folder(s).
 }
 \author{
 Lavinia Baumstark
