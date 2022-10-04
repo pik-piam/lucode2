@@ -63,7 +63,7 @@ jobs:
           python-version: 3.9
 
       - name: Cache R libraries
-        if: ${{ !env.ACT }}
+        if: ${{ !env.ACT }} # skip when running locally via nektos/act
         uses: pat-s/always-upload-cache@v3
         with:
           path: /usr/local/lib/R/
