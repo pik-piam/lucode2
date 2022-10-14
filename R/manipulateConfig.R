@@ -22,67 +22,61 @@
 #'
 manipulateConfig <- function(configFile, ...) {
   maxchar <- 60
-  arguments <- list(...)
-  if (length(arguments) == 1) {
-    if (is.list(arguments[[1]])) {
-      arguments <- arguments[[1]]
+  tmp <- list(...)
+  if (length(tmp) == 1) {
+    if (is.list(tmp[[1]])) {
+      tmp <- tmp[[1]]
     }
   }
-  manipulations <- list()
+  m <- list()
   type <- substring(configFile, nchar(configFile) - 2)
   if (type %in% c("gms", "inc")) {
-    for (key in names(arguments)) {
-      value <- arguments[[key]]
-      if (length(value) > 1) {
-        value <- capture.output(cat(paste0(value, ", "), fill = maxchar))
-        value <- paste(value, collapse = "\n\t\t")
-        value <- substr(value, 1, nchar(value) - 2)
+    for (i in names(tmp)) {
+      if (length(tmp[[i]]) > 1) {
+        rpl <- capture.output(cat(paste0(tmp[[i]], ", "), fill = maxchar))
+        rpl <- paste(rpl, collapse = "\n\t\t")
+        rpl <- substr(rpl, 1, nchar(rpl) - 2)
+      } else {
+        rpl <- tmp[[i]]
       }
 
-      # definitions in the form
-      # > $setglobal key value
-      manipulations[[paste0(key, "_pattern1")]][1] <- paste0(
-        "((\\n|^)[\\t ]*\\$[sS][eE][tT][gG][lL][oO][bB][aA][lL][\\t ]*", key, "[\\t ]).*?( *!!|\\n|$)")
-      manipulations[[paste0(key, "_pattern1")]][2] <- paste0("\\1 ", value, "\\2")
-
-      # definitions in the form
-      # > parameter key "documentation" / value /;
-      manipulations[[paste0(key, "_pattern2")]][1] <- paste0(
-        "((\\n|^)[\\t ]*(scalar|parameter|set|)s?[\\t ]*",
-        key,
-        "(|\\([^\\)]*\\))(/|[\\t ]+(\"[^\"]*\"|)[^\"/;]*/))[^/]*")
-      manipulations[[paste0(key, "_pattern2")]][2] <- paste0("\\1 ", value, " ")
-
-      # definitions in the form
-      # > key = value;
-      # > key = "value";
-      manipulations[[paste0(key, "_pattern3")]][1] <- paste0(
-        "((^|[\\n\\t ])", key, "[ \\t]*=[ \\t]*[\"\']?)[^\"\';]*")
-      manipulations[[paste0(key, "_pattern3")]][2] <- paste0("\\1", value)
+      m[[paste(i, "_pattern1", sep = "")]][1] <- paste(
+        "(\\$[sS][eE][tT][gG][lL][oO][bB][aA][lL][\\t ]*", i, "[\\t ]).*?( *!!|\\n|$)", sep = "")
+      m[[paste(i, "_pattern1", sep = "")]][2] <- paste(
+        "\\1 ", rpl, "\\2", sep = "")
+      m[[paste(i, "_pattern2", sep = "")]][1] <- paste(
+        "((\\n|^)[\\t ]*(scalar|parameter|set|)s?[\\t ]*", i, "(|\\([^\\)]*\\))(/|[\\t ]+(\"[^\"]*\"|)[^\"/;]*/))[^/]*",
+        sep = "")
+      m[[paste(i, "_pattern2", sep = "")]][2] <- paste(
+        "\\1 ", rpl, " ", sep = "")
+      m[[paste(i, "_pattern3", sep = "")]][1] <- paste(
+        "((^|[\\n\\t ])", i, "[ \\t]*=[ \\t]*[\"\']?)[^\"\';]*", sep = "")
+      m[[paste(i, "_pattern3", sep = "")]][2] <- paste(
+        "\\1", rpl, sep = "")
     }
   } else if (type %in% c("cfg", "R", "r")) {
-    for (key in names(arguments)) {
-      if (is.character(arguments[[key]])) arguments[[key]] <- paste0("\"", arguments[[key]], "\"")
-      manipulations[[key]][1] <- paste0("((^|[\\t \\$])", key, "[ \\t]*<-[ \\t]*)[\"\']?[^\"\']*[\"\']?")
-      manipulations[[key]][2] <- paste0("\\1", arguments[[key]])
+    for (i in names(tmp)) {
+      if (is.character(tmp[[i]])) tmp[[i]] <- paste("\"", tmp[[i]], "\"", sep = "")
+      m[[i]][1] <- paste("((^|[\\t \\$])", i, "[ \\t]*<-[ \\t]*)[\"\']?[^\"\']*[\"\']?", sep = "")
+      m[[i]][2] <- paste("\\1", tmp[[i]], sep = "")
     }
   } else if (type %in% c("cmd", ".sh")) {
-    for (key in names(arguments)) {
-      manipulations[[key]][1] <- paste0("((^|[\\t ])", key, "[ \\t]*=[ \\t]*[\"\']?)[^\"\'\\n]*")
-      manipulations[[key]][2] <- paste0("\\1", arguments[[key]])
+    for (i in names(tmp)) {
+      m[[i]][1] <- paste("((^|[\\t ])", i, "[ \\t]*=[ \\t]*[\"\']?)[^\"\'\\n]*", sep = "")
+      m[[i]][2] <- paste("\\1", tmp[[i]], sep = "")
     }
   } else if (type == "php") {
-    for (key in names(arguments)) {
-      manipulations[[key]][1] <- paste0("((^|[\\t ])\\$", key, "[ \\t]*=[ \\t]*[\"\']?)[^\"\';]*")
-      manipulations[[key]][2] <- paste0("\\1", arguments[[key]])
+    for (i in names(tmp)) {
+      m[[i]][1] <- paste("((^|[\\t ])\\$", i, "[ \\t]*=[ \\t]*[\"\']?)[^\"\';]*", sep = "")
+      m[[i]][2] <- paste("\\1", tmp[[i]], sep = "")
     }
   } else if (type == "opt") {
-    for (key in names(arguments)) {
-      manipulations[[key]][1] <- paste0("((^|[\\t ])", key, "[ \\t]*=[ \\t]*[\"\']?)[^\"\';]*")
-      manipulations[[key]][2] <- paste0("\\1", arguments[[key]])
+    for (i in names(tmp)) {
+      m[[i]][1] <- paste("((^|[\\t ])", i, "[ \\t]*=[ \\t]*[\"\']?)[^\"\';]*", sep = "")
+      m[[i]][2] <- paste("\\1", tmp[[i]], sep = "")
     }
   } else {
     stop(paste("Unknown file type", type))
   }
-  manipulateFile(configFile, manipulations)
+  manipulateFile(configFile, m)
 }
