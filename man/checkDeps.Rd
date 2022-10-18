@@ -16,7 +16,7 @@ checkDeps(
 subset of c("Depends", "Imports", "LinkingTo", "Suggests", "Enhances").}
 }
 \value{
-Invisibly, a named logical vector indicating whether a package requirement is met.
+Invisibly, a named logical vector indicating whether each package requirement is met.
 }
 \description{
 Check if package requirements specified in the given DESCRIPTION are met.
@@ -27,7 +27,7 @@ each installed package whose version number is lower than what is required.
 Only ">=" version requirements are supported.
 }
 \examples{
-checkDeps()
+checkDeps(system.file("DESCRIPTION", package = "lucode2"))
 }
 \author{
 Pascal Führlich
