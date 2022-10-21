@@ -38,36 +38,36 @@ checkRequirement <- function(package, version) {
   if (is.na(packageVersion)) {
     warning(package, " is required, but not installed - please install it.")
     result <- FALSE
-  # if we don't care about the version
-  } else if ('*' == version) {
+  # if we don"t care about the version
+  } else if ("*" == version) {
     result <- TRUE
   # compare version requirement
   } else {
-    valid_ops <- c('<', '<=', '>', '>=', '==', '!=')
+    validops <- c("<", "<=", ">", ">=", "==", "!=")
 
     # split version into operator and version number
-    op_v <- unlist(
+    opANDv <- unlist(
       regmatches(x = version,
-                 m = gregexpr(pattern = paste0('(',
-                                               paste(c(valid_ops, '[0-9\\.-]+'),
-                                                     collapse = '|'),
-                                               ')'),
+                 m = gregexpr(pattern = paste0("(",
+                                               paste(c(validops, "[0-9\\.-]+"),
+                                                     collapse = "|"),
+                                               ")"),
                               text = version))
     )
 
     # compare to installed version
-    if (op_v[1] %in% valid_ops) {
-      result <- getFunction(name = op_v[1])(packageVersion,
-                                            package_version(op_v[2]))
+    if (opANDv[1] %in% validops) {
+      result <- getFunction(name = opANDv[1])(packageVersion,
+                                            package_version(opANDv[2]))
 
       # warn on mismatch
       if (!result)
-        warning(paste(package, op_v[1], package_version(op_v[2]),
-                      'is required, but', packageVersion,
-                      'is installed - please update.'))
+        warning(paste(package, opANDv[1], package_version(opANDv[2]),
+                      "is required, but", packageVersion,
+                      "is installed - please update."))
     # catch faulty declarations
     } else {
-      stop(paste('invalid dependency declatation:', package, version))
+      stop(paste("invalid dependency declatation:", package, version))
     }
   }
   return(result)
