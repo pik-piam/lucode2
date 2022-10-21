@@ -11,7 +11,7 @@
 #'   - `"stop"`:  Issue an error with the unmet dependencies.  (Default.)
 #'   - `"warn"`:  Issue a warning with the unmet dependencies.
 #'   - `"pass"`:  Do nothing, just return invisibly.
-#' @return Invisibly, a named character vector indicating whether each package
+#' @return Invisibly, a named list of strings indicating whether each package
 #'   requirement is met (`"TRUE"`) or not, in which case the reason is stated.
 #'
 #' @author Pascal Führlich
