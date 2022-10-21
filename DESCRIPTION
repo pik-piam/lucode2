@@ -19,6 +19,7 @@ Imports:
     desc,
     devtools,
     dplyr,
+    methods,
     rlang,
     usethis (>= 2.1.0),
     yaml,
