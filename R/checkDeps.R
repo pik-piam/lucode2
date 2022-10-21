@@ -64,10 +64,10 @@ checkRequirement <- function(package, version) {
       if (!result)
         warning(paste(package, opANDv[1], package_version(opANDv[2]),
                       "is required, but", packageVersion,
-                      "is installed - please update."))
+                      "is installed - install a compatible version."))
     # catch faulty declarations
     } else {
-      stop(paste("invalid dependency declatation:", package, version))
+      stop(paste("invalid dependency declaration:", package, version))
     }
   }
   return(result)
