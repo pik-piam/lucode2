@@ -3,8 +3,7 @@
 #' Check if package requirements specified in the given DESCRIPTION are met.
 #'
 #' A warning is thrown for each required package that is not installed, and
-#' each installed package whose version number is lower than what is required.
-#' Only ">=" version requirements are supported.
+#' each installed package whose version does not meet the requirements.
 #'
 #' @param descriptionFile Path to a DESCRIPTION or a path that belongs to a source package project.
 #' @param dependencyTypes The types of depencies to check. Must be a
@@ -13,6 +12,9 @@
 #' @author Pascal Führlich
 #' @examples
 #' checkDeps(system.file("DESCRIPTION", package = "lucode2"))
+#'
+#' @importFrom methods getFunction
+#'
 #' @export
 checkDeps <- function(descriptionFile = ".", dependencyTypes = c("Depends", "Imports", "LinkingTo")) {
   stopifnot(all(dependencyTypes %in% c("Depends", "Imports", "LinkingTo", "Suggests", "Enhances")))
@@ -23,22 +25,50 @@ checkDeps <- function(descriptionFile = ".", dependencyTypes = c("Depends", "Imp
 }
 
 checkRequirement <- function(package, version) {
-  requiredVersion <- package_version(if (version == "*") "0.0" else gsub("[^0-9.]", "", version))
-
-  packageVersion <- tryCatch({
-    utils::packageVersion(package)
-  }, error = function(error) NA)
-
+  # get installed package or R version
   if (package == "R") {
     packageVersion <- getRversion()
+  } else {
+    packageVersion <- tryCatch({
+      utils::packageVersion(package)
+    }, error = function(error) NA)
   }
 
+  # if the package is not installed
   if (is.na(packageVersion)) {
     warning(package, " is required, but not installed - please install it.")
-  } else if (packageVersion < requiredVersion) {
-    warning(package, " >= ", requiredVersion, " is required, but ", packageVersion,
-            " is installed - please update.")
-  }
+    result <- FALSE
+  # if we don"t care about the version
+  } else if ("*" == version) {
+    result <- TRUE
+  # compare version requirement
+  } else {
+    validops <- c("<", "<=", ">", ">=", "==", "!=")
 
-  return(!is.na(packageVersion) && packageVersion >= requiredVersion)
+    # split version into operator and version number
+    opANDv <- unlist(
+      regmatches(x = version,
+                 m = gregexpr(pattern = paste0("(",
+                                               paste(c(validops, "[0-9\\.-]+"),
+                                                     collapse = "|"),
+                                               ")"),
+                              text = version))
+    )
+
+    # compare to installed version
+    if (opANDv[1] %in% validops) {
+      result <- getFunction(name = opANDv[1])(packageVersion,
+                                            package_version(opANDv[2]))
+
+      # warn on mismatch
+      if (!result)
+        warning(paste(package, opANDv[1], package_version(opANDv[2]),
+                      "is required, but", packageVersion,
+                      "is installed - install a compatible version."))
+    # catch faulty declarations
+    } else {
+      stop(paste("invalid dependency declaration:", package, version))
+    }
+  }
+  return(result)
 }
