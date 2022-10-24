@@ -2,32 +2,38 @@
 % Please edit documentation in R/checkDeps.R
 \name{checkDeps}
 \alias{checkDeps}
-\title{checkDeps}
+\title{Check Dependencies}
 \usage{
 checkDeps(
   descriptionFile = ".",
-  dependencyTypes = c("Depends", "Imports", "LinkingTo")
+  dependencyTypes = c("Depends", "Imports", "LinkingTo"),
+  action = "stop"
 )
 }
 \arguments{
-\item{descriptionFile}{Path to a DESCRIPTION or a path that belongs to a source package project.}
+\item{descriptionFile}{Path to a DESCRIPTION file or a path that belongs to a
+source package project.}
 
-\item{dependencyTypes}{The types of depencies to check. Must be a
-subset of c("Depends", "Imports", "LinkingTo", "Suggests", "Enhances").}
+\item{dependencyTypes}{The types of dependencies to check. Must be a
+subset of \code{c("Depends", "Imports", "LinkingTo", "Suggests", "Enhances")}.}
+
+\item{action}{Action to take on unmet dependencies:
+\itemize{
+\item \code{"stop"}:  Issue an error with the unmet dependencies.  (Default.)
+\item \code{"warn"}:  Issue a warning with the unmet dependencies.
+\item \code{"pass"}:  Do nothing, just return invisibly.
+}}
 }
 \value{
-Invisibly, a named logical vector indicating whether each package requirement is met.
+Invisibly, a named list of strings indicating whether each package
+requirement is met (\code{"TRUE"}) or not, in which case the reason is stated.
 }
 \description{
 Check if package requirements specified in the given DESCRIPTION are met.
 }
-\details{
-A warning is thrown for each required package that is not installed, and
-each installed package whose version number is lower than what is required.
-Only ">=" version requirements are supported.
-}
 \examples{
 checkDeps(system.file("DESCRIPTION", package = "lucode2"))
+
 }
 \author{
 Pascal Führlich
