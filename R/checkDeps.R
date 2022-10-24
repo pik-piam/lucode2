@@ -1,26 +1,46 @@
-#' checkDeps
+#' Check Dependencies
 #'
 #' Check if package requirements specified in the given DESCRIPTION are met.
 #'
-#' A warning is thrown for each required package that is not installed, and
-#' each installed package whose version does not meet the requirements.
+#' @md
+#' @param descriptionFile Path to a DESCRIPTION file or a path that belongs to a
+#'   source package project.
+#' @param dependencyTypes The types of dependencies to check. Must be a
+#' subset of `c("Depends", "Imports", "LinkingTo", "Suggests", "Enhances")`.
+#' @param action Action to take on unmet dependencies:
+#'   - `"stop"`:  Issue an error with the unmet dependencies.  (Default.)
+#'   - `"warn"`:  Issue a warning with the unmet dependencies.
+#'   - `"pass"`:  Do nothing, just return invisibly.
+#' @return Invisibly, a named list of strings indicating whether each package
+#'   requirement is met (`"TRUE"`) or not, in which case the reason is stated.
 #'
-#' @param descriptionFile Path to a DESCRIPTION or a path that belongs to a source package project.
-#' @param dependencyTypes The types of depencies to check. Must be a
-#' subset of c("Depends", "Imports", "LinkingTo", "Suggests", "Enhances").
-#' @return Invisibly, a named logical vector indicating whether each package requirement is met.
 #' @author Pascal Führlich
+#'
 #' @examples
 #' checkDeps(system.file("DESCRIPTION", package = "lucode2"))
 #'
 #' @importFrom methods getFunction
 #'
 #' @export
-checkDeps <- function(descriptionFile = ".", dependencyTypes = c("Depends", "Imports", "LinkingTo")) {
+checkDeps <- function(descriptionFile = ".",
+                      dependencyTypes = c("Depends", "Imports", "LinkingTo"),
+                      action = "stop") {
   stopifnot(all(dependencyTypes %in% c("Depends", "Imports", "LinkingTo", "Suggests", "Enhances")))
+  stopifnot(action %in% c("stop", "warn", "pass"))
   allDeps <- desc::desc_get_deps(descriptionFile)
   deps <- allDeps[allDeps$type %in% dependencyTypes, ]
   requirementMet <- Map(checkRequirement, package = deps$package, version = deps$version)
+
+  if (!all("TRUE" == requirementMet)) {
+    message <- paste(requirementMet[which("TRUE" != requirementMet)],
+                     collapse = "\n  ")
+    if ("stop" == action) {
+      stop(message)
+    } else if ("warn" == action) {
+      warning(message)
+    }
+  }
+
   return(invisible(requirementMet))
 }
 
@@ -36,9 +56,9 @@ checkRequirement <- function(package, version) {
 
   # if the package is not installed
   if (is.na(packageVersion)) {
-    warning(package, " is required, but not installed - please install it.")
-    result <- FALSE
-  # if we don"t care about the version
+    result <- paste(package,
+                    "is required, but not installed - please install it.")
+  # if we don't care about the version
   } else if ("*" == version) {
     result <- TRUE
   # compare version requirement
@@ -57,18 +77,19 @@ checkRequirement <- function(package, version) {
 
     # compare to installed version
     if (opANDv[1] %in% validops) {
-      result <- getFunction(name = opANDv[1])(packageVersion,
-                                            package_version(opANDv[2]))
-
-      # warn on mismatch
-      if (!result)
-        warning(paste(package, opANDv[1], package_version(opANDv[2]),
+      if (getFunction(name = opANDv[1])(packageVersion,
+                                            package_version(opANDv[2]))) {
+        result <- TRUE
+        # warn on mismatch
+      } else {
+        result <- paste(package, opANDv[1], package_version(opANDv[2]),
                       "is required, but", packageVersion,
-                      "is installed - install a compatible version."))
+                      "is installed - install a compatible version.")
+      }
     # catch faulty declarations
     } else {
-      stop(paste("invalid dependency declaration:", package, version))
+      result <- paste("invalid dependency declaration:", package, version)
     }
   }
-  return(result)
+  return(as.character(result))
 }
