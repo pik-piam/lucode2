@@ -44,6 +44,7 @@ checkDeps <- function(descriptionFile = ".",
       if (tolower(getLine()) %in% c("y", "yes")) {
         renvInstall <- sub("^.+: ([^:]+)$", "\\1", grep(": ", missing, value = TRUE))
         renv::install(renvInstall, prompt = FALSE)
+        renv::snapshot(prompt = FALSE)
         # after installing, check again in new R session to avoid using already loaded packages
         return(callr::r(function(...) lucode2::checkDeps(...),
                         list(descriptionFile, dependencyTypes, action = "stop")))
