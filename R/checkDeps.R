@@ -101,11 +101,9 @@ checkRequirement <- function(package, version) {
                         "is installed - please ")
         if (operator %in% c(">", ">=", "!=")) {
           result <- paste0(result, "update: ", package)
-          # renv::install(package)
         } else if (operator %in% c("<=", "==")) {
           result <- paste0(result, "install: ", package, "@", requiredVersion)
-          # renv::install(paste0(package, "@", requiredVersion))
-        } else { # operator == "<"
+        } else if (operator == "<") {
           result <- paste0(result, "install a compatible version of ", package)
         }
       }
