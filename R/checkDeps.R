@@ -37,7 +37,7 @@ checkDeps <- function(descriptionFile = ".",
     msg <- paste(missing, collapse = "\n  ")
     if (action == "ask" && any(grepl(": ", missing))) {
       if (!requireNamespace("renv", quietly = TRUE) || is.null(renv::project())) {
-        stop("'action = ask' is only supported in an activated renv.")
+        stop(msg)
       }
       message("missing requirements:\n  ", msg, "\n",
               "Try to fix automatically? (y/n) ", appendLF = FALSE)
