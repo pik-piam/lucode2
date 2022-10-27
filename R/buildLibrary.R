@@ -14,8 +14,8 @@
 #'
 #' @param lib Path to the package
 #' @param cran If cran-like test is needed
-#' @param checkForUpdates Check for lucode2 updates (default TRUE). Set FALSE in case of problems with the new version.
-#' @param autoCheckRepoUpToDate Automatically check if your repository is up to date. If FALSE the user is simply asked.
+#' @param autoUpdateLucode2 Update lucode2 if possible and run buildLibrary with new version instead.
+#' @param autoCheckRepoUpToDate Automatically check if your repository is up to date. If FALSE the user is asked.
 #' @param updateType Either an integer or character string:
 #'
 #'   | **number**  | **string**    | **description**                          |

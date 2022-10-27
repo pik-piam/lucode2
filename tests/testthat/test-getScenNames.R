@@ -1,4 +1,3 @@
-
 test_that("getScenNames works", {
   withr::with_tempdir({
     # set up testing environment
