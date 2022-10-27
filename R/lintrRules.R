@@ -11,7 +11,7 @@
 #'
 #' @importFrom lintr linters_with_defaults absolute_path_linter line_length_linter object_name_linter
 #' todo_comment_linter undesirable_function_linter cyclocomp_linter default_undesirable_functions
-#' undesirable_operator_linter default_undesirable_operators T_and_F_symbol_linter
+#' undesirable_operator_linter default_undesirable_operators T_and_F_symbol_linter object_length_linter
 #' @seealso \code{\link{check}}, \code{\link{lint}}
 #' @export
 lintrRules <- function(allowUndesirable = FALSE) {
@@ -30,7 +30,8 @@ lintrRules <- function(allowUndesirable = FALSE) {
                                    object_name_linter(styles = "camelCase"),
                                    todo_comment_linter(),
                                    cyclocomp_linter(25),
-                                   T_and_F_symbol_linter())
+                                   T_and_F_symbol_linter(),
+                                   object_length_linter(100))
 
   if (allowUndesirable) {
     linters$undesirable_function_linter <- undesirable_function_linter(deprecatedFunctions)
