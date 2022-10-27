@@ -55,43 +55,24 @@
 #' }
 #' @export
 buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, # nolint
-                         checkForUpdates = TRUE, autoCheckRepoUpToDate = TRUE) {
-  local_dir(lib)
-  if (!file.exists("DESCRIPTION")) {
-    stop("No DESCRIPTION file found in ", normalizePath("."))
-  }
-  if (checkForUpdates) {
-    pleaseRestartSession <- paste("Please restart your R session (in RStudio: Ctrl+Shift+F10) to make sure that the",
-                                  "newest lucode2 version is loaded. Then try again:\nlucode2::buildLibrary()")
-    if (.__NAMESPACE__.$spec[[2]] != packageVersion("lucode2")) {
-      # the loaded lucode2 version (.__NAMESPACE__.$spec[[2]]) is different from the version available on disk
-      cat(pleaseRestartSession)
-      return(invisible(NULL))
-    }
-    cat("Checking for lucode2 update... ")
-    if (!is.null(old.packages(instPkgs = installed.packages()["lucode2", , drop = FALSE]))) {
-      cat("A new version of lucode2 is available, please update.\n")
-      update.packages(oldPkgs = "lucode2")
-      cat(pleaseRestartSession)
-      return(invisible(NULL))
-    } else {
-      cat("You're running the newest lucode2 version.\n")
-    }
+                         autoUpdateLucode2 = TRUE, autoCheckRepoUpToDate = TRUE) {
+  lucode2IsOutdated <- !is.null(old.packages(instPkgs = installed.packages()["lucode2", , drop = FALSE]))
+  if (autoUpdateLucode2 && lucode2IsOutdated) {
+    message("lucode2 is outdated, starting lucode2 update")
+    install.packages("lucode2")
+
+    message("update done, starting buildLibrary using new lucode2")
+    # run buildLibrary in new session to use newly updated lucode2
+    return(callr::r(function(...) lucode2::buildLibrary(...),
+                    args = list(lib, cran, updateType, autoUpdateLucode2 = FALSE,
+                                autoCheckRepoUpToDate = autoCheckRepoUpToDate),
+                    show = TRUE))
   }
 
-  getLine <- function() {
-    # gets characters (line) from the terminal or from a connection
-    # and returns it
-    if (interactive()) {
-      s <- readline()
-    } else {
-      con <- file("stdin")
-      defer({
-        close(con)
-      })
-      s <- readLines(con, 1, warn = FALSE)
-    }
-    return(s)
+  lib <- normalizePath(lib)
+  local_dir(lib)
+  if (!file.exists("DESCRIPTION")) {
+    stop("No DESCRIPTION file found in ", lib)
   }
 
   packageName <- desc("DESCRIPTION")$get("Package")

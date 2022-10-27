@@ -31,6 +31,7 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
   local_dir(lib)
 
   packageName <- desc("DESCRIPTION")$get("Package")
+
   packageDocumentation <- file.path("R", paste0(packageName, "-package.R"))
   if (!file.exists(packageDocumentation) && !file.exists(file.path("R", paste0(packageName, ".R")))) {
     writeLines(c("# The package documentation is defined in this file.",
