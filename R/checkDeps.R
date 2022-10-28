@@ -40,8 +40,8 @@ checkDeps <- function(descriptionFile = ".",
         stop(msg)
       }
       message("missing requirements:\n  ", msg, "\n",
-              "Try to fix automatically? (y/n) ", appendLF = FALSE)
-      if (tolower(getLine()) %in% c("y", "yes")) {
+              "Try to fix automatically? (Y/n) ", appendLF = FALSE)
+      if (tolower(getLine()) %in% c("", "y", "yes")) {
         renvInstall <- sub("^.+: ([^:]+)$", "\\1", grep(": ", missing, value = TRUE))
         renv::install(renvInstall, prompt = FALSE)
         renv::snapshot(prompt = FALSE)
