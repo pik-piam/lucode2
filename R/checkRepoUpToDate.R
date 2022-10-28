@@ -8,6 +8,7 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
     if (!(tolower(readline(didYouPullQuestion)) %in% c("", "y", "yes"))) {
       stop("Please update your repository first, before you proceed!")
     }
+    message()
   }
 
   if (isFALSE(autoCheckRepoUpToDate)) {
@@ -43,8 +44,8 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
       if (Sys.which("git") == "") {
         return(FALSE)
       }
-      system2("git", c("fetch", remote))
-      return(TRUE)
+      exitCode <- system2("git", c("fetch", remote))
+      return(exitCode == 0)
     }))
   }
 
