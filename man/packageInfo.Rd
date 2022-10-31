@@ -20,9 +20,6 @@ be checked}
 Function to print version number and time since last update formatted to standard output.
 Considers CRAN, the RSE server, and r-universe.
 }
-\examples{
-packageInfo("lucode2")
-}
 \author{
 Jan Philipp Dietrich
 }

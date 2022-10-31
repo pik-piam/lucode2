@@ -264,5 +264,3 @@ unignoreManFiles <- function() {
     }
   }
 }
-
-# enable crayon anywhere?
