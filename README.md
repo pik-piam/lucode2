@@ -1,12 +1,13 @@
 # Code Manipulation and Analysis Tools
 
-R package **lucode2**, version **0.34.1**
+R package **lucode2**, version **0.35.0**
 
 [![CRAN status](https://www.r-pkg.org/badges/version/lucode2)](https://cran.r-project.org/package=lucode2) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4389418.svg)](https://doi.org/10.5281/zenodo.4389418) [![R build status](https://github.com/pik-piam/lucode2/workflows/check/badge.svg)](https://github.com/pik-piam/lucode2/actions) [![codecov](https://codecov.io/gh/pik-piam/lucode2/branch/master/graph/badge.svg)](https://app.codecov.io/gh/pik-piam/lucode2) [![r-universe](https://pik-piam.r-universe.dev/badges/lucode2)](https://pik-piam.r-universe.dev/ui#builds)
 
 ## Purpose and Functionality
 
-A collection of tools which allow to manipulate and analyze code.
+A collection of tools which allow to manipulate and analyze
+    code.
 
 
 ## Installation
@@ -38,16 +39,16 @@ In case of questions / problems please contact Jan Philipp Dietrich <dietrich@pi
 
 To cite package **lucode2** in publications use:
 
-Dietrich J, Klein D, Giannousakis A, Bonsch M, Bodirsky B, Baumstark L, Führlich P, Richters O (2022). _lucode2: Code Manipulation and Analysis Tools_. doi:10.5281/zenodo.4389418 <https://doi.org/10.5281/zenodo.4389418>, R package version 0.34.1, <https://github.com/pik-piam/lucode2>.
+Dietrich J, Führlich P, Klein D, Giannousakis A, Bonsch M, Bodirsky B, Baumstark L, Richters O (2022). _lucode2: Code Manipulation and Analysis Tools_. doi:10.5281/zenodo.4389418 <https://doi.org/10.5281/zenodo.4389418>, R package version 0.35.0, <https://github.com/pik-piam/lucode2>.
 
 A BibTeX entry for LaTeX users is
 
  ```latex
 @Manual{,
   title = {lucode2: Code Manipulation and Analysis Tools},
-  author = {Jan Philipp Dietrich and David Klein and Anastasis Giannousakis and Markus Bonsch and Benjamin Leon Bodirsky and Lavinia Baumstark and Pascal Führlich and Oliver Richters},
+  author = {Jan Philipp Dietrich and Pascal Führlich and David Klein and Anastasis Giannousakis and Markus Bonsch and Benjamin Leon Bodirsky and Lavinia Baumstark and Oliver Richters},
   year = {2022},
-  note = {R package version 0.34.1},
+  note = {R package version 0.35.0},
   doi = {10.5281/zenodo.4389418},
   url = {https://github.com/pik-piam/lucode2},
 }

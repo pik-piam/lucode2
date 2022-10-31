@@ -3,15 +3,17 @@
 checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
   # asking the user is fallback if automatic check does not work
   askUser <- function() {
-    didYouPullQuestion <- paste("Is your repo up-to-date? Did you pull from the upstream",
-                                "repo immediately before running this check? (Y/n) ")
-    if (!(tolower(readline(didYouPullQuestion)) %in% c("", "y", "yes"))) {
+    message("Is your repo up-to-date? Did you pull from the upstream",
+            "repo immediately before running this check? (Y/n) ", appendLF = FALSE)
+    if (!(tolower(getLine()) %in% c("", "y", "yes"))) {
       stop("Please update your repository first, before you proceed!")
     }
     message()
   }
 
-  if (isFALSE(autoCheckRepoUpToDate)) {
+  if (is.null(autoCheckRepoUpToDate)) {
+    return(invisible(NULL))
+  } else if (isFALSE(autoCheckRepoUpToDate)) {
     askUser()
     return(invisible(NULL))
   }

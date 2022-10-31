@@ -30,8 +30,9 @@ autoFormat <- function(files = getFilesToLint(), ignoreLintFreeFiles = TRUE, lin
 
         replacement <- gsub("\\bT\\b", "TRUE", originalLine)
         replacement <- gsub("\\bF\\b", "FALSE", replacement)
-        message("original line:\n", originalLine, "\nreplacement:\n", replacement)
-        if (tolower(readline("Replace? (Y/n) ")) %in% c("", "y", "yes")) {
+        message("original line:\n", originalLine, "\nreplacement:\n", replacement, "\n",
+                "Replace? (Y/n) ", appendLF = FALSE)
+        if (tolower(getLine()) %in% c("", "y", "yes")) {
           return(replacement)
         } else {
           return(originalLine)

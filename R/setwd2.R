@@ -10,7 +10,7 @@
 #' @export
 setwd2 <- function(return_only = FALSE) { # nolint
   cat("Please enter URL here:")
-  x <- readline()
+  x <- getLine()
   x <- gsub("\\\\", "/", x)
   if (return_only == FALSE) {
     setwd(x) # nolint

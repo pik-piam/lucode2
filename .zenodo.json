@@ -1,10 +1,13 @@
 {
   "title": "lucode2: Code Manipulation and Analysis Tools",
-  "version": "0.34.1",
-  "description": "<p>A collection of tools which allow to manipulate and analyze code.<\/p>",
+  "version": "0.35.0",
+  "description": "<p>A collection of tools which allow to manipulate and analyze\n    code.<\/p>",
   "creators": [
     {
       "name": "Dietrich, Jan Philipp"
+    },
+    {
+      "name": "Führlich, Pascal"
     },
     {
       "name": "Klein, David"
@@ -20,9 +23,6 @@
     },
     {
       "name": "Baumstark, Lavinia"
-    },
-    {
-      "name": "Führlich, Pascal"
     },
     {
       "name": "Richters, Oliver"

@@ -26,6 +26,7 @@
 #'   | 4           | `development` | only for packages in development stage   |
 #'   | 0           | `none`        | version has already been incremented     |
 #'
+#'
 #' @md
 #' @note The behavior of buildLibrary can be configured via the `.buildLibrary` file in the
 #' main folder of the package. It uses YAML format and can contain the following entries:
@@ -54,19 +55,26 @@
 #' buildLibrary()
 #' }
 #' @export
-buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, # nolint
+buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
                          autoUpdateLucode2 = TRUE, autoCheckRepoUpToDate = TRUE) {
-  lucode2IsOutdated <- !is.null(old.packages(instPkgs = installed.packages()["lucode2", , drop = FALSE]))
-  if (autoUpdateLucode2 && lucode2IsOutdated) {
-    message("lucode2 is outdated, starting lucode2 update")
-    install.packages("lucode2")
+  # ask questions first so buildLibrary can run through without further interaction
+  updateType <- handleUpdateType(updateType)
+  checkRepoUpToDate(".", autoCheckRepoUpToDate)
 
-    message("update done, starting buildLibrary using new lucode2")
-    # run buildLibrary in new session to use newly updated lucode2
+  if (autoUpdateLucode2 && !is.null(old.packages(instPkgs = installed.packages()["lucode2", , drop = FALSE]))) {
+    message("installing new lucode2 update")
+    install.packages("lucode2")
+  }
+
+  # the loaded lucode2 version is different from the version available on disk, usually right after updating lucode2
+  outdatedLucode2Loaded <- .__NAMESPACE__.$spec[["version"]] != packageVersion("lucode2")
+  if (outdatedLucode2Loaded) {
+    message("Running buildLibrary with new lucode2 version in new R session.\n",
+            "In case of problems restart R session.")
+    # getLine and similar functions don't work everywhere via callr, so must ask questions before this
     return(callr::r(function(...) lucode2::buildLibrary(...),
-                    args = list(lib, cran, updateType, autoUpdateLucode2 = FALSE,
-                                autoCheckRepoUpToDate = autoCheckRepoUpToDate),
-                    show = TRUE))
+                    args = list(lib, cran, updateType, autoUpdateLucode2 = FALSE, autoCheckRepoUpToDate = NULL),
+                    show = TRUE, spinner = FALSE))
   }
 
   lib <- normalizePath(lib)
@@ -77,7 +85,6 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, # nolint
 
   packageName <- desc("DESCRIPTION")$get("Package")
 
-  checkRepoUpToDate(".", autoCheckRepoUpToDate)
   fixBuildLibraryMergeConflict()
   modifyRproj()
   if (packageName == "lucode2" &&
@@ -109,9 +116,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, # nolint
   # Run checks, tests and linter
   ###################################################################
   testfolder <- file.path("tests", "testthat")
-  if (!file.exists(testfolder)) {
-    dir.create(testfolder, recursive = TRUE)
-  }
+  dir.create(testfolder, recursive = TRUE, showWarnings = !file.exists(testfolder))
   if (length(dir(testfolder)) == 0) {
     writeLines('skip("dummy test")', file.path(testfolder, "test-dummy.R"))
   }
@@ -144,56 +149,11 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, # nolint
   # Version number in the man file
   # Version number in the description file
   descfile <- readLines("DESCRIPTION")
-  descfileVersion <- sub(
-    pattern = "[^(0-9)]*$", replacement = "", perl = TRUE,
-    x = sub(
-      pattern = "Version:[^(0-9)]*", replacement = "", perl = TRUE,
-      x = grep(pattern = "Version", x = descfile, value = TRUE)
-    )
-  )
+  descfileVersion <- sub(pattern = "[^(0-9)]*$", replacement = "", perl = TRUE,
+                         x = sub(pattern = "Version:[^(0-9)]*", replacement = "", perl = TRUE,
+                                 x = grep(pattern = "Version", x = descfile, value = TRUE)))
 
-  version <- descfileVersion
-
-  chooseModule <- function(title = "Package check successful! Please choose an update type") {
-    updateType <- c(
-      "major revision (for major rewrite of the whole package)",
-      "minor revision (for new features or improvements)",
-      "patch (for bugfixes and corrections)",
-      "only for packages in development stage",
-      "no version increment (only to use if version is already incremented!)"
-    )
-    cat(title, ":\n", sep = "")
-    updateTypeNumber <- c(1:(length(updateType) - 1), 0)
-    cat(paste(updateTypeNumber, updateType, sep = ": "), sep = "\n")
-    cat("\nNumber: ")
-    identifier <- getLine()
-    if (any(!(as.numeric(identifier) %in% updateTypeNumber))) {
-      message("This choice (", identifier, ") is not possible.")
-      identifier <- chooseModule(title = paste0("Please type in a number between 0 and ", length(updateType) - 1))
-    }
-    return(as.numeric(identifier))
-  }
-
-  if (is.null(updateType)) {
-    updateType <- chooseModule()
-  } else {
-    # convert character updateType parameters to numbers
-    updateType <- switch(as.character(updateType),
-                         "major" = 1,
-                         "1" = 1,
-                         "minor" = 2,
-                         "2" = 2,
-                         "patch" = 3,
-                         "3" = 3,
-                         "development" = 4,
-                         "4" = 4,
-                         "none" = 0,
-                         "0" = 0,
-                         # default
-                         chooseModule()
-    )
-  }
-  version <- incrementVersion(version, updateType)
+  version <- incrementVersion(descfileVersion, updateType)
 
   # Change the version in descfile
   descfile[grep("Version", descfile)] <- sub(descfileVersion, version, descfile[grep("Version", descfile)])
@@ -211,7 +171,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, # nolint
   ############################################################
   # Update validation key
   ############################################################
-  cfg$ValidationKey <- as.character(if (cran) validationkey(version, dateToday) else 0) # nolint
+  cfg[["ValidationKey"]] <- as.character(if (cran) validationkey(version, dateToday) else 0)
 
   if (any(grepl("ValidationKey:", descfile))) {
     descfile <- descfile[!grepl("ValidationKey:", descfile)]
@@ -230,24 +190,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, # nolint
   ####################################################################
   # Make sure man/*.Rd files are not ignored
   ###################################################################
-  gitignore <- suppressWarnings(tryCatch(
-    readLines(".gitignore"),
-    error = function(cond) return(character(0))))
-  if ("*.Rd" %in% gitignore || file.exists(file.path("man", ".gitignore"))) {
-    message("*.Rd files are currently ignored, but they should be commited.")
-
-    if ("*.Rd" %in% gitignore) {
-      message('removing "*.Rd" from .gitignore')
-      writeLines(gitignore[gitignore != "*.Rd" &
-                             gitignore != "# Help files (because they will be created automatically by roxygen)"],
-                 ".gitignore")
-    }
-
-    if (file.exists(file.path("man", ".gitignore"))) {
-      message("removing man/.gitignore")
-      file.remove(file.path("man", ".gitignore"))
-    }
-  }
+  unignoreManFiles()
 
   ############################################################
   # Verbosity for version information and git commands
@@ -264,6 +207,62 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL, # nolint
       }
     }
   }
-  message("Don't forget to commit and push your changes.")
-  message("done")
+  message("Don't forget to commit and push your changes.\ndone")
 }
+
+handleUpdateType <- function(updateType = NULL, title = "Please choose an update type") {
+  if (!is.null(updateType)) {
+    # convert character updateType parameters to numbers
+    updateType <- switch(as.character(updateType),
+                          "major" = 1,
+                          "1" = 1,
+                          "minor" = 2,
+                          "2" = 2,
+                          "patch" = 3,
+                          "3" = 3,
+                          "development" = 4,
+                          "4" = 4,
+                          "none" = 0,
+                          "0" = 0,
+                          handleUpdateType(title = title))
+    return(updateType)
+  }
+  updateType <- c("major revision (for major rewrite of the whole package)",
+                  "minor revision (for new features or improvements)",
+                  "patch (for bugfixes and corrections)",
+                  "only for packages in development stage",
+                  "no version increment (only to use if version is already incremented!)")
+  cat(title, ":\n", sep = "")
+  updateTypeNumber <- c(1:(length(updateType) - 1), 0)
+  cat(paste(updateTypeNumber, updateType, sep = ": "), sep = "\n")
+  cat("\nNumber: ")
+  identifier <- getLine()
+  if (any(!(as.numeric(identifier) %in% updateTypeNumber))) {
+    message("This choice (", identifier, ") is not possible.")
+    identifier <- handleUpdateType(title = paste0("Please type in a number between 0 and ", length(updateType) - 1))
+  }
+  return(as.numeric(identifier))
+}
+
+unignoreManFiles <- function() {
+  gitignore <- suppressWarnings(tryCatch({
+    readLines(".gitignore")
+  }, error = function(error) return(character(0))))
+  if ("*.Rd" %in% gitignore || file.exists(file.path("man", ".gitignore"))) {
+    message("*.Rd files are currently ignored, but they should be commited.")
+
+    if ("*.Rd" %in% gitignore) {
+      message('removing "*.Rd" from .gitignore')
+      writeLines(gitignore[gitignore != "*.Rd" &
+                             gitignore != "# Help files (because they will be created automatically by roxygen)"],
+                 ".gitignore")
+    }
+
+    if (file.exists(file.path("man", ".gitignore"))) {
+      message("removing man/.gitignore")
+      file.remove(file.path("man", ".gitignore"))
+    }
+  }
+}
+
+# enable crayon anywhere?
