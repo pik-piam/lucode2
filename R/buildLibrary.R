@@ -57,8 +57,6 @@
 #' @export
 buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
                          autoUpdateLucode2 = TRUE, autoCheckRepoUpToDate = TRUE) {
-  # ask questions first so buildLibrary can run through without further interaction
-  updateType <- handleUpdateType(updateType)
   checkRepoUpToDate(".", autoCheckRepoUpToDate)
 
   if (autoUpdateLucode2 && !is.null(old.packages(instPkgs = installed.packages()["lucode2", , drop = FALSE]))) {
@@ -146,16 +144,16 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
   ##########################################################
   # Check for version numbers
   ##########################################################
-  # Version number in the man file
-  # Version number in the description file
+  # Version number in DESCRIPTION
   descfile <- readLines("DESCRIPTION")
   descfileVersion <- sub(pattern = "[^(0-9)]*$", replacement = "", perl = TRUE,
                          x = sub(pattern = "Version:[^(0-9)]*", replacement = "", perl = TRUE,
                                  x = grep(pattern = "Version", x = descfile, value = TRUE)))
 
+  updateType <- handleUpdateType(updateType)
   version <- incrementVersion(descfileVersion, updateType)
 
-  # Change the version in descfile
+  # Change the version in DESCRIPTION
   descfile[grep("Version", descfile)] <- sub(descfileVersion, version, descfile[grep("Version", descfile)])
 
   ############################################################
