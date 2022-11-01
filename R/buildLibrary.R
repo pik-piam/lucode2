@@ -59,14 +59,18 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
                          autoUpdateLucode2 = TRUE, autoCheckRepoUpToDate = TRUE) {
   checkRepoUpToDate(".", autoCheckRepoUpToDate)
 
+  loadedLucode2Version <- .__NAMESPACE__.$spec[["version"]]
+
   if (autoUpdateLucode2 && !is.null(old.packages(instPkgs = installed.packages()["lucode2", , drop = FALSE]))) {
     message("installing new lucode2 update")
-    install.packages("lucode2")
+    suppressWarnings({ # prevent Warning: package 'cluster' in library '/opt/R/4.2.1/lib/R/library' will not be updated
+      update.packages(oldPkgs = "lucode2", ask = FALSE)
+    })
+    stopifnot(`lucode2 update failed` = loadedLucode2Version != packageVersion("lucode2"))
   }
 
   # the loaded lucode2 version is different from the version available on disk, usually right after updating lucode2
-  outdatedLucode2Loaded <- .__NAMESPACE__.$spec[["version"]] != packageVersion("lucode2")
-  if (outdatedLucode2Loaded) {
+  if (loadedLucode2Version != packageVersion("lucode2")) {
     message("Running buildLibrary with new lucode2 version in new R session.\n",
             "In case of problems restart R session.")
     # getLine and similar functions don't work everywhere via callr, so must ask questions before this
