@@ -8,7 +8,7 @@ buildLibrary(
   lib = ".",
   cran = TRUE,
   updateType = NULL,
-  autoUpdateLucode2 = TRUE,
+  updateLucode2 = TRUE,
   autoCheckRepoUpToDate = TRUE
 )
 }
@@ -26,7 +26,7 @@ buildLibrary(
    0 \tab \code{none} \tab version has already been incremented \cr
 }}
 
-\item{autoUpdateLucode2}{Update lucode2 if possible and run buildLibrary with new version instead.}
+\item{updateLucode2}{Update lucode2 if possible and run buildLibrary with new version instead.}
 
 \item{autoCheckRepoUpToDate}{Automatically check if your repository is up to date. If FALSE the user is asked.}
 }

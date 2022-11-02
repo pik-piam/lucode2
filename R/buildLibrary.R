@@ -14,7 +14,7 @@
 #'
 #' @param lib Path to the package
 #' @param cran If cran-like test is needed
-#' @param autoUpdateLucode2 Update lucode2 if possible and run buildLibrary with new version instead.
+#' @param updateLucode2 Update lucode2 if possible and run buildLibrary with new version instead.
 #' @param autoCheckRepoUpToDate Automatically check if your repository is up to date. If FALSE the user is asked.
 #' @param updateType Either an integer or character string:
 #'
@@ -56,34 +56,43 @@
 #' }
 #' @export
 buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
-                         autoUpdateLucode2 = TRUE, autoCheckRepoUpToDate = TRUE) {
+                         updateLucode2 = TRUE, autoCheckRepoUpToDate = TRUE) {
   checkRepoUpToDate(".", autoCheckRepoUpToDate)
 
   loadedLucode2Version <- .__NAMESPACE__.$spec[["version"]]
 
-  if (autoUpdateLucode2 && !is.null(old.packages(instPkgs = installed.packages()["lucode2", , drop = FALSE]))) {
+  if (updateLucode2 && !is.null(old.packages(instPkgs = installed.packages()["lucode2", , drop = FALSE]))) {
     message("installing new lucode2 update")
-    suppressWarnings({ # prevent Warning: package 'cluster' in library '/opt/R/4.2.1/lib/R/library' will not be updated
+    suppressWarnings({ # prevent Warning: package 'cluster' in library '...' will not be updated
       update.packages(oldPkgs = "lucode2", ask = FALSE)
     })
     stopifnot(`lucode2 update failed` = loadedLucode2Version != packageVersion("lucode2"))
+    message("update done.\n")
   }
 
   # the loaded lucode2 version is different from the version available on disk, usually right after updating lucode2
   if (loadedLucode2Version != packageVersion("lucode2")) {
-    message("Running buildLibrary with new lucode2 version in new R session.\n",
+    # asking questions in RStudio/Jupyter in a callr session does not work, so need updateType to be set
+    if (is.null(updateType) && (Sys.getenv("RSTUDIO") == "1" || !is.na(Sys.getenv("JPY_SESSION_NAME", NA)))) {
+      warning("Cannot automatically rerun buildLibrary with new lucode2 version in RStudio, ",
+              "unless the `updateType` argument is set.")
+      stop("An outdated lucode2 version is loaded. Restart the R session (Ctrl+Shift+F10) and try again:\n",
+           "lucode2::buildLibrary()")
+    }
+
+    message("Running buildLibrary with new lucode2 version in separate R session.\n",
             "In case of problems restart R session.")
+
     # getLine and similar functions don't work everywhere via callr, so must ask questions before this
-    return(callr::r(function(...) lucode2::buildLibrary(...),
-                    args = list(lib, cran, updateType, autoUpdateLucode2 = FALSE, autoCheckRepoUpToDate = NULL),
-                    show = TRUE, spinner = FALSE))
+    return(invisible(callr::r(function(...) lucode2::buildLibrary(...),
+                              args = list(lib, cran, updateType, updateLucode2 = FALSE,
+                                          autoCheckRepoUpToDate = NULL),
+                              show = TRUE, spinner = FALSE, stdin = "")))
   }
 
   lib <- normalizePath(lib)
   local_dir(lib)
-  if (!file.exists("DESCRIPTION")) {
-    stop("No DESCRIPTION file found in ", lib)
-  }
+  stopifnot(`No DESCRIPTION file found` = file.exists("DESCRIPTION"))
 
   packageName <- desc("DESCRIPTION")$get("Package")
 
@@ -175,9 +184,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
   ############################################################
   cfg[["ValidationKey"]] <- as.character(if (cran) validationkey(version, dateToday) else 0)
 
-  if (any(grepl("ValidationKey:", descfile))) {
-    descfile <- descfile[!grepl("ValidationKey:", descfile)]
-  }
+  descfile <- descfile[!grepl("ValidationKey:", descfile)]
 
   ##################################################################
   # Write the modified description files, update metadata and readme
