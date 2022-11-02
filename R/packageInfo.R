@@ -9,8 +9,6 @@
 #' @author Jan Philipp Dietrich
 #' @importFrom utils packageVersion available.packages
 #' @export
-#' @examples
-#' packageInfo("lucode2")
 packageInfo <- function(package, repos = c("https://cran.rstudio.com/",
                                            "https://rse.pik-potsdam.de/r/packages/",
                                            "https://pik-piam.r-universe.dev")) {

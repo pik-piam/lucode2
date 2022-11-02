@@ -31,6 +31,7 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
   local_dir(lib)
 
   packageName <- desc("DESCRIPTION")$get("Package")
+
   packageDocumentation <- file.path("R", paste0(packageName, "-package.R"))
   if (!file.exists(packageDocumentation) && !file.exists(file.path("R", paste0(packageName, ".R")))) {
     writeLines(c("# The package documentation is defined in this file.",
@@ -41,70 +42,163 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
 
   document(pkg = ".", roclets = c("rd", "collate", "namespace", "vignette"))
 
-  ########### Run tests ###########
-  # run tests in a separate R session so test results are independent of anything set in the current R session
-  testResults <- callr::r(function() {
-    withr::local_options(crayon.enabled = TRUE)
-    return(devtools::test(stop_on_failure = TRUE, reporter = "summary"))
-  }, show = TRUE, spinner = FALSE)
+  logs <- list()
+  processes <- list()
 
-  helpLink <- "You can find solutions to common problems at https://github.com/pik-piam/discussions/discussions/18"
+  ########### Run tests ###########
+  logs[["test"]] <- withr::local_tempfile(pattern = "test", fileext = ".log")
+  message("running tests in background, see ", logs[["test"]])
+  # run tests in separate R session for parallelization and so that test results are independent of
+  # anything set in the current R session
+  processes[["test"]] <- callr::r_bg(function(...) lucode2::verifyTests(...),
+                                     args = list(config[["AcceptedWarnings"]]),
+                                     stdout = logs[["test"]], stderr = "2>&1")
+
+  ########### Run linter ###########
+  if (runLinter) {
+    logs[["linter"]] <- withr::local_tempfile(pattern = "linter", fileext = ".log")
+    message("running linter in background, see ", logs[["linter"]])
+    processes[["linter"]] <- callr::r_bg(function(...) lucode2::verifyLinter(...),
+                                         args = list(isFALSE(config[["allowLinterWarnings"]])),
+                                         stdout = logs[["linter"]], stderr = "2>&1")
+  }
+
+  ########### Run checks ###########
+  processes[["check"]] <- callr::r_bg(function(...) lucode2::verifyCheck(...),
+                                      args = list(cran, config[["AcceptedWarnings"]], config[["AcceptedNotes"]]),
+                                      stdout = "", stderr = "2>&1") # will print to main process' terminal
+
+  ########### Wait for processes ###########
+  while (length(processes) >= 1) {
+    Sys.sleep(2)
+    finishedProcesses <- Filter(processes, f = function(p) !p$is_alive())
+    for (processId in names(finishedProcesses)) {
+      throwError <- tryCatch({
+        processes[[processId]]$get_result()
+        FALSE
+      }, error = function(error) {
+        for (p in processes) {
+          p$kill_tree()
+        }
+        if (processId %in% names(logs)) {
+          message("\n\naborting due to ", processId, " error:")
+          message(paste(readLines(logs[[processId]]), collapse = "\n"))
+        }
+        return(TRUE)
+      })
+      if (throwError) {
+        stop("lucode2::check failed")
+      }
+    }
+    processes <- processes[!names(processes) %in% names(finishedProcesses)]
+  }
+
+  for (logId in names(logs)) {
+    message("\n\n", logId, " log:")
+    message(paste(readLines(logs[[logId]], warn = FALSE), collapse = "\n"))
+  }
+
+  return(invisible(NULL))
+}
+
+
+#' verifyTests
+#'
+#' Run tests and stop on error or unaccepted warning.
+#'
+#' @param acceptedWarnings A character vector of regular expressions.
+#' A warning will result in an error unless it matches one of these regular expressions.
+#'
+#' @author Pascal Führlich
+#' @export
+verifyTests <- function(acceptedWarnings) {
+  testResults <- devtools::test(stop_on_failure = TRUE, reporter = "summary") %>%
+    Reduce(f = function(a, b) append(a, b[["results"]]), init = list()) # combine results from all tests
+
+  # stop if there was at least one unaccepted warning
   unacceptedWarnings <- testResults %>%
-    Reduce(f = function(a, b) append(a, b[["results"]]), init = list()) %>% # combine results from all tests
     Filter(f = function(result) inherits(result, c("warning", "expectation_warning"))) %>% # keep only warnings
     Filter(f = function(aWarning) { # filter accepted warnings
-      return(!any(vapply(config[["AcceptedWarnings"]],
+      return(!any(vapply(acceptedWarnings,
                          function(acceptedWarning) grepl(acceptedWarning, aWarning[["message"]]),
                          logical(1))))
     })
   if (length(unacceptedWarnings) > 0) {
-    stop("The package tests produced warnings. Before submission you need to take care of the following warnings:\n",
-         unacceptedWarnings %>%
-           vapply(function(x) paste0('test "', x[["test"]], '": ', x[["message"]]), character(1)) %>%
-           paste(collapse = "\n"),
-         "\n", helpLink)
+    message("Before submission you need to take care of the following warnings:\n")
+    unacceptedWarnings %>%
+      vapply(function(x) paste0('test "', x[["test"]], '": ', x[["message"]]), character(1)) %>%
+      paste(collapse = "\n") %>%
+      message()
+    message("\nYou can find solutions to common problems at ",
+            "https://github.com/pik-piam/discussions/discussions/18")
+    stop("The package tests produced warnings.")
   }
+}
 
-  ########### Run linter ###########
-  if (runLinter) {
-    # run linter and check results
-    linterResult <- lint()
-    print(linterResult)
-    if (length(linterResult) > 0) {
-      autoFormatExcludeInfo <- paste("Running lucode2::autoFormat() might fix some warnings. If really needed (e.g.",
-                                     "to prevent breaking an interface), see ?lintr::exclude on how to disable the",
-                                     "linter for some lines.")
-      if (isFALSE(config[["allowLinterWarnings"]])) {
-        stop("There were linter warnings. They have to be fixed to successfully complete lucode2::buildLibrary. ",
-             autoFormatExcludeInfo, " ", helpLink)
-      } else {
-        warning("There were linter warnings. It is not mandatory to fix them, they do not prevent buildLibrary ",
-                "from finishing normally. Still, please fix all linter warnings in new code and ideally also ",
-                "some in old code. ", autoFormatExcludeInfo)
-      }
+#' verifyLinter
+#'
+#' Run linter and stop on linter warning unless linter warnings are allowed.
+#'
+#' @param allowLinterWarnings If FALSE (the default) will stop on linter warnings.
+#'
+#' @author Pascal Führlich
+#' @export
+verifyLinter <- function(allowLinterWarnings = FALSE) {
+  linterResults <- lucode2::lint()
+  message("linter results:")
+  print(linterResults)
+  if (length(linterResults) > 0) {
+    autoFormatExcludeInfo <- paste("Running lucode2::autoFormat() might fix some warnings. If really needed (e.g.",
+                                   "to prevent breaking an interface), see ?lintr::exclude on how to disable the",
+                                   "linter for some lines.")
+    if (allowLinterWarnings) {
+      stop("There were linter warnings. They have to be fixed to successfully complete lucode2::buildLibrary. ",
+           autoFormatExcludeInfo,
+           " You can find solutions to common problems at https://github.com/pik-piam/discussions/discussions/18")
     } else {
-      message("No linter warnings - great :D")
+      warning("There were linter warnings. It is not mandatory to fix them, they do not prevent buildLibrary ",
+              "from finishing normally. Still, please fix all linter warnings in new code and ideally also ",
+              "some in old code. ", autoFormatExcludeInfo)
     }
+  } else {
+    message("No linter warnings - great :D")
   }
+}
 
-  ########### Run checks ###########
+#' verifyCheck
+#'
+#' Run R CMD check completely without stopping. Then stop on errors, or unaccepted warnings and notes.
+#'
+#' @param cran Passed to devtools::check
+#' @param acceptedWarnings A character vector of regular expressions.
+#' A warning will result in an error unless it matches one of these regular expressions.
+#' @param acceptedNotes A character vector of regular expressions.
+#' A note will result in an error unless it matches one of these regular expressions.
+#'
+#' @author Pascal Führlich
+#' @export
+verifyCheck <- function(cran, acceptedWarnings, acceptedNotes) {
+  withr::local_options(crayon.enabled = TRUE)
   # _R_CHECK_SYSTEM_CLOCK_ = 0 should prevent "unable to verify current time" when time server is down
   checkResults <- devtools::check(document = FALSE, cran = cran, args = c("--timings", "--no-tests"),
-                                  env_vars = c(NOT_CRAN = "true", `_R_CHECK_SYSTEM_CLOCK_` = "0"), error_on = "never")
+                                  env_vars = c(NOT_CRAN = "true", `_R_CHECK_SYSTEM_CLOCK_` = "0"),
+                                  error_on = "never")
 
   # Filter warnings and notes which are accepted
-  for (acceptedWarning in config[["AcceptedWarnings"]]) {
+  for (acceptedWarning in acceptedWarnings) {
     checkResults[["warnings"]] <- grep(acceptedWarning, checkResults[["warnings"]], value = TRUE, invert = TRUE)
   }
-  for (acceptedNote in config[["AcceptedNotes"]]) {
+  for (acceptedNote in acceptedNotes) {
     checkResults[["notes"]] <- grep(acceptedNote, checkResults[["notes"]], value = TRUE, invert = TRUE)
   }
-  print(checkResults)
 
   for (type in c("errors", "warnings", "notes")) {
     if (length(checkResults[[type]]) > 0) {
-      stop("The package check showed ", type, ". You need to take care of these ", type,
-           " before submission! ", helpLink)
+      message("\nThe following errors/warnings/notes are mandatory to fix:\n")
+      print(checkResults)
+      message("\nYou can find solutions to common problems at ",
+              "https://github.com/pik-piam/discussions/discussions/18")
+      stop("There were errors/warnings/notes that are mandatory to fix during R CMD check.")
     }
   }
 }

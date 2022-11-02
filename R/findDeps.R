@@ -10,8 +10,6 @@
 #' @author Pascal Führlich
 #' @seealso \code{\link[renv]{dependencies}}
 #' @importFrom utils installed.packages
-#' @examples
-#' findDeps()
 #' @export
 findDeps <- function(devDeps = TRUE) {
   checkRequiredPackages("renv")

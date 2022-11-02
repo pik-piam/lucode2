@@ -19,9 +19,6 @@ Find all dependencies of an R project.
 This is a wrapper around `renv::dependencies()` that does not report
 dependencies on core R packages, because these are always available.
 }
-\examples{
-findDeps()
-}
 \seealso{
 \code{\link[renv]{dependencies}}
 }

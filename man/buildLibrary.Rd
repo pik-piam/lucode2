@@ -8,7 +8,7 @@ buildLibrary(
   lib = ".",
   cran = TRUE,
   updateType = NULL,
-  checkForUpdates = TRUE,
+  updateLucode2 = TRUE,
   autoCheckRepoUpToDate = TRUE
 )
 }
@@ -26,9 +26,9 @@ buildLibrary(
    0 \tab \code{none} \tab version has already been incremented \cr
 }}
 
-\item{checkForUpdates}{Check for lucode2 updates (default TRUE). Set FALSE in case of problems with the new version.}
+\item{updateLucode2}{Update lucode2 if possible and run buildLibrary with new version instead.}
 
-\item{autoCheckRepoUpToDate}{Automatically check if your repository is up to date. If FALSE the user is simply asked.}
+\item{autoCheckRepoUpToDate}{Automatically check if your repository is up to date. If FALSE the user is asked.}
 }
 \description{
 Builds R libraries. Includes checks for consistency. Find solutions to common problems at

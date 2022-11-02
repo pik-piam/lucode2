@@ -22,12 +22,12 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Pascal Führlich
   \item David Klein
   \item Anastasis Giannousakis
   \item Markus Bonsch
   \item Benjamin Leon Bodirsky
   \item Lavinia Baumstark
-  \item Pascal Führlich
   \item Oliver Richters
 }
 

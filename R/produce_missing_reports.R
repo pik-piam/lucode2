@@ -48,7 +48,8 @@ produce_missing_reports <- function(modeldir = "./") { # nolint
   } else {
     cat("Missing reports found for\n")
     print(produceReport)
-    sw <- readline("Do you want to produce the output for these runs now? (y/n): ")
+    cat("Do you want to produce the output for these runs now? (y/n): ")
+    sw <- getLine()
     if (tolower(sw) %in% c("y", "yes")) {
       # nolint start
       # MAGPIE
