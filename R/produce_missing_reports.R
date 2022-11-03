@@ -38,7 +38,7 @@ produce_missing_reports <- function(modeldir = "./") { # nolint
     } else {
       rem <- file.exists(rem)
     }
-    if (!mag & !rem) {
+    if (!mag && !rem) {
       produceReport <- c(produceReport, r)
     }
   }
