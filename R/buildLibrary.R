@@ -98,12 +98,8 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
 
   fixBuildLibraryMergeConflict()
   modifyRproj()
-  if (packageName == "lucode2" &&
-        download.file("https://pik-piam.r-universe.dev/packages", "./rUniversePackages.json.tmp") == 0) {
-      # when building other packages the r-universe badge is added to readme if package name is in this json
-      # rename after successful download to prevent truncated file when download is unsuccessful
-      file.rename("./rUniversePackages.json.tmp", "./inst/extdata/rUniversePackages.json")
-      write("", "./inst/extdata/rUniversePackages.json", append = TRUE) # append newline to prevent warning
+  if (packageName == "lucode2") {
+      writeLines(pikPiamPackages(), "./inst/extdata/pikPiamPackages")
   }
 
   ############################################################

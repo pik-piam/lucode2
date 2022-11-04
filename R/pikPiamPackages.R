@@ -7,5 +7,9 @@
 #' @export
 pikPiamPackages <- function() {
   packagesUrl <- "https://pik-piam.r-universe.dev/src/contrib/PACKAGES"
-  return(sub("^Package: ", "", grep("^Package: ", readLines(packagesUrl), value = TRUE)))
+  return(tryCatch({
+    sort(sub("^Package: ", "", grep("^Package: ", readLines(packagesUrl), value = TRUE)))
+  }, warning = function(w) {
+    return(readLines(system.file("extdata/pikPiamPackages", package = "lucode2", mustWork = TRUE)))
+  }))
 }
