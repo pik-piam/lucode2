@@ -116,7 +116,6 @@ package2readme <- function(package = ".", add = NULL) { # nolint
   }
 
   fillRUniverse <- function(nameOfPackage, d) {
-    # suppress warning about missing trailing newline
     if (any(grepl(nameOfPackage, pikPiamPackages(), fixed = TRUE))) {
       return(paste0("[![r-universe](https://pik-piam.r-universe.dev/badges/", nameOfPackage,
                     ")](https://pik-piam.r-universe.dev/ui#builds)"))
