@@ -1,7 +1,8 @@
 #' gitAuthors
 #'
-#' Print each git author's first name, last name, and mail address
-#' in a way that can be copy pasted into a DESCRIPTION.
+#' Print each git author's first name, last name, and mail address in a way that could be copy pasted
+#' into DESCRIPTION. Please note that this list usually still needs to be carefully checked
+#' e.g. for duplicates and cleaned.
 #'
 #' @return Invisibly, a data.frame with the following columns: raw, firstName, lastName, mailAdress.
 #'
