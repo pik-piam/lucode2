@@ -110,17 +110,14 @@ package2readme <- function(package = ".", add = NULL) { # nolint
         out <- file.path(folder, "extdata", filename)
       }
       return(out)
-    }
-    else {
+    } else {
       return(system.file("extdata", filename, package = "lucode2"))
     }
   }
 
   fillRUniverse <- function(nameOfPackage, d) {
     # suppress warning about missing trailing newline
-
-    rUniversePackages <- readLines(loadFromLucode2("rUniversePackages.json", d))
-    if (any(grepl(nameOfPackage, rUniversePackages, fixed = TRUE))) {
+    if (any(grepl(nameOfPackage, pikPiamPackages(), fixed = TRUE))) {
       return(paste0("[![r-universe](https://pik-piam.r-universe.dev/badges/", nameOfPackage,
                     ")](https://pik-piam.r-universe.dev/ui#builds)"))
     } else {
