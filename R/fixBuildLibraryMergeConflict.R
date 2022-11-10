@@ -11,6 +11,9 @@
 #' @importFrom withr local_dir
 fixBuildLibraryMergeConflict <- function(lib = ".") {
   local_dir(lib)
+  if (!file.exists(".buildlibrary")) {
+    return(invisible(NULL))
+  }
   lines <- readLines(".buildlibrary")
   if (lines[1] != "<<<<<<< HEAD") {
     # not a buildLibrary merge conflict
