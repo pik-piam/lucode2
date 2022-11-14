@@ -98,9 +98,6 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
 
   fixBuildLibraryMergeConflict()
   modifyRproj()
-  if (packageName == "lucode2") {
-      writeLines(pikPiamPackages(), "./inst/extdata/pikPiamPackages")
-  }
 
   ############################################################
   # load/create .buildLibrary file
