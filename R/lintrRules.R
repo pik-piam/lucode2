@@ -16,14 +16,19 @@
 #' @export
 lintrRules <- function(allowUndesirable = FALSE) {
   # names = deprecated functions, values = replacement hint
-  deprecatedFunctions <- list(`on.exit` = "use withr::defer",
-                              # by default on.exit replaces all code registered to be run on exit,
-                              # making it very dangerous to use on.exit together with withr functions
-                              globalVariables = "rewrite code without global variables",
-                              fulldim = "use magclass::getItems()",
+  deprecatedFunctions <- list(fulldim = "use magclass::getItems()",
                               getRegionList = "use magclass::getItems()",
                               getRegions = "use magclass::getItems()",
                               `getRegions<-` = "use magclass::getItems()")
+
+  # by default on.exit replaces all code registered to be run on exit,
+  # making it very dangerous to use on.exit together with withr functions
+  undesirableFunctions <- list(`on.exit` = "use withr::defer",
+                               globalVariables = "rewrite code without global variables",
+                               q = "use `return` or `stop` instead",
+                               quit = "use `return` or `stop` instead")
+
+  undesirableOperators <- list(`->` = NA)
 
   linters <- linters_with_defaults(absolute_path_linter(),
                                    line_length_linter(120),
@@ -37,8 +42,9 @@ lintrRules <- function(allowUndesirable = FALSE) {
     linters$undesirable_function_linter <- undesirable_function_linter(deprecatedFunctions)
   } else {
     linters$undesirable_operator_linter <- undesirable_operator_linter(c(default_undesirable_operators,
-                                                                         list(`->` = NA)))
+                                                                         undesirableOperators))
     linters$undesirable_function_linter <- undesirable_function_linter(c(default_undesirable_functions,
+                                                                         undesirableFunctions,
                                                                          deprecatedFunctions))
   }
   return(linters)
