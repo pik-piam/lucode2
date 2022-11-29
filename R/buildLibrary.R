@@ -133,7 +133,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
   unlink(rcheckfolders, recursive = TRUE)
 
   ############################################################
-  # add GitHub actions and pre-commit-config
+  # add GitHub actions, pre-commit-config, and Makefile
   ############################################################
   tryCatch(addGitHubActions(), error = function(error) {
     message("Could not add GitHub Actions:", error)
@@ -146,6 +146,8 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
                            readLines(".pre-commit-config.yaml"))
     writeLines(preCommitConfig, ".pre-commit-config.yaml")
   }
+
+  conditionalCopy("Makefile")
 
   ##########################################################
   # Check for version numbers

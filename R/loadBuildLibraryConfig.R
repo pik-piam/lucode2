@@ -36,6 +36,7 @@ loadBuildLibraryConfig <- function(lib = ".") {
     if (file.exists(file.path(lib, ".Rbuildignore"))) readLines(file.path(lib, ".Rbuildignore")) else NULL,
     "^\\.buildlibrary$",
     "^\\.pre-commit-config\\.yaml$",
+    "^Makefile$",
     "^workflow$"
   )
   rbuildIgnore <- rbuildIgnore[!duplicated(rbuildIgnore)]
