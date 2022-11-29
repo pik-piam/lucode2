@@ -29,6 +29,7 @@ Authors:
   \item Benjamin Leon Bodirsky
   \item Lavinia Baumstark
   \item Oliver Richters
+  \item Mika Pflüger
 }
 
 }
