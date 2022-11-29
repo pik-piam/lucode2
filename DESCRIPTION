@@ -11,7 +11,7 @@ Authors@R: c(
     person("Markus", "Bonsch", role = "aut"),
     person("Benjamin Leon", "Bodirsky", role = "aut"),
     person("Lavinia", "Baumstark", role = "aut"),
-    person("Oliver", "Richters", role = "aut")
+    person("Oliver", "Richters", role = "aut"),
     person("Mika", "Pflüger", role = "aut")
   )
 Description: A collection of tools which allow to manipulate and analyze
