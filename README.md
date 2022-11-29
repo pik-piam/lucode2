@@ -39,14 +39,14 @@ In case of questions / problems please contact Jan Philipp Dietrich <dietrich@pi
 
 To cite package **lucode2** in publications use:
 
-Dietrich J, Führlich P, Klein D, Giannousakis A, Bonsch M, Bodirsky B, Baumstark L, Richters O (2022). _lucode2: Code Manipulation and Analysis Tools_. doi:10.5281/zenodo.4389418 <https://doi.org/10.5281/zenodo.4389418>, R package version 0.39.0, <https://github.com/pik-piam/lucode2>.
+Dietrich J, Führlich P, Klein D, Giannousakis A, Bonsch M, Bodirsky B, Baumstark L, Richters O, Pflüger M (2022). _lucode2: Code Manipulation and Analysis Tools_. doi:10.5281/zenodo.4389418 <https://doi.org/10.5281/zenodo.4389418>, R package version 0.39.0, <https://github.com/pik-piam/lucode2>.
 
 A BibTeX entry for LaTeX users is
 
  ```latex
 @Manual{,
   title = {lucode2: Code Manipulation and Analysis Tools},
-  author = {Jan Philipp Dietrich and Pascal Führlich and David Klein and Anastasis Giannousakis and Markus Bonsch and Benjamin Leon Bodirsky and Lavinia Baumstark and Oliver Richters},
+  author = {Jan Philipp Dietrich and Pascal Führlich and David Klein and Anastasis Giannousakis and Markus Bonsch and Benjamin Leon Bodirsky and Lavinia Baumstark and Oliver Richters and Mika Pflüger},
   year = {2022},
   note = {R package version 0.39.0},
   doi = {10.5281/zenodo.4389418},
