@@ -1,4 +1,4 @@
-.PHONY: help
+.PHONY: help build check test lint format
 .DEFAULT_GOAL = help
 
 help:           ## Show this help.
