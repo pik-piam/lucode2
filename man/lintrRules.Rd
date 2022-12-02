@@ -4,11 +4,13 @@
 \alias{lintrRules}
 \title{lintrRules}
 \usage{
-lintrRules(allowUndesirable = FALSE)
+lintrRules(allowUndesirable = FALSE, skip = NULL)
 }
 \arguments{
 \item{allowUndesirable}{If true it is okay to use undesirable operators (such as "<<-")
 and undesirable (but not deprecated) functions (such as "setwd").}
+
+\item{skip}{vector of lintr rules that should be skipped}
 }
 \description{
 This function defines the rules to be used by the linter called lintr. \code{\link{check}} creates ".lintr"

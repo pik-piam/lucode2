@@ -5,6 +5,7 @@
 #'
 #' @param allowUndesirable If true it is okay to use undesirable operators (such as "<<-")
 #' and undesirable (but not deprecated) functions (such as "setwd").
+#' @param skip vector of lintr rules that should be skipped
 #'
 #' @examples
 #' \dontrun{lintr::lint_dir(linters = lintrRules())}
@@ -14,7 +15,7 @@
 #' undesirable_operator_linter default_undesirable_operators T_and_F_symbol_linter object_length_linter
 #' @seealso \code{\link{check}}, \code{\link{lint}}
 #' @export
-lintrRules <- function(allowUndesirable = FALSE) {
+lintrRules <- function(allowUndesirable = FALSE, skip = NULL) {
   # names = deprecated functions, values = replacement hint
   deprecatedFunctions <- list(fulldim = "use magclass::getItems()",
                               getRegionList = "use magclass::getItems()",
@@ -47,5 +48,6 @@ lintrRules <- function(allowUndesirable = FALSE) {
                                                                          undesirableFunctions,
                                                                          deprecatedFunctions))
   }
+  linters <- linters[! names(linters) %in% skip]
   return(linters)
 }
