@@ -1,6 +1,6 @@
 {
   "title": "lucode2: Code Manipulation and Analysis Tools",
-  "version": "0.39.1",
+  "version": "0.41.0",
   "description": "<p>A collection of tools which allow to manipulate and analyze\n    code.<\/p>",
   "creators": [
     {
