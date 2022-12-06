@@ -45,15 +45,6 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
   logs <- list()
   processes <- list()
 
-  ########### Run tests ###########
-  logs[["test"]] <- withr::local_tempfile(pattern = "test", fileext = ".log")
-  message("running tests in background, see ", logs[["test"]])
-  # run tests in separate R session for parallelization and so that test results are independent of
-  # anything set in the current R session
-  processes[["test"]] <- callr::r_bg(function(...) lucode2::verifyTests(...),
-                                     args = list(config[["AcceptedWarnings"]]),
-                                     stdout = logs[["test"]], stderr = "2>&1")
-
   ########### Run linter ###########
   if (runLinter) {
     logs[["linter"]] <- withr::local_tempfile(pattern = "linter", fileext = ".log")
@@ -62,6 +53,15 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
                                          args = list(isFALSE(config[["allowLinterWarnings"]])),
                                          stdout = logs[["linter"]], stderr = "2>&1")
   }
+
+  ########### Run tests ###########
+  logs[["test"]] <- withr::local_tempfile(pattern = "test", fileext = ".log")
+  message("running tests in background, see ", logs[["test"]])
+  # run tests in separate R session for parallelization and so that test results are independent of
+  # anything set in the current R session
+  processes[["test"]] <- callr::r_bg(function(...) lucode2::verifyTests(...),
+                                     args = list(config[["AcceptedWarnings"]]),
+                                     stdout = logs[["test"]], stderr = "2>&1")
 
   ########### Run checks ###########
   processes[["check"]] <- callr::r_bg(function(...) lucode2::verifyCheck(...),
