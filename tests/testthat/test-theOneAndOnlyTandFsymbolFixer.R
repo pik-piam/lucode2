@@ -1,5 +1,5 @@
 test_that(
-  desc = "Test theOneAndonlyTandFsymbolFixer()",
+  desc = "Test theOneAndOnlyTandFsymbolFixer()",
 
   code = {
     tmpFile <- tempfile(pattern = "fool", fileext = ".R")
@@ -14,9 +14,8 @@ test_that(
       "}")
 
     writeLines(text = fool, con = tmpFile)
-    theOneAndonlyTandFsymbolFixer(tmpFile)
+    theOneAndOnlyTandFsymbolFixer(tmpFile)
 
-    expect_identical(object = readLines(tmpFile),
-                     expected = wool)
+    expect_identical(object = readLines(tmpFile), expected = wool)
   }
 )

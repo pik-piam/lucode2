@@ -5,8 +5,6 @@
 #' @param files A character vector of paths to files that should be auto-formatted.
 #' @param ignoreLintFreeFiles If set to TRUE (the default) files without linter warnings are not auto-formatted.
 #' @param lintAfterwards If set to TRUE (the default) return linter results for the auto-formatted files.
-#' @param askTF Ask about whether to replace T/F with TRUE/FALSE, or just do it
-#'     (default).
 #'
 #' @author Pascal Führlich
 #' @seealso \code{\link{getFilesToLint}}
@@ -17,10 +15,10 @@
 #' }
 #' @export
 autoFormat <- function(files = getFilesToLint(), ignoreLintFreeFiles = TRUE,
-                       lintAfterwards = TRUE, askTF = FALSE) {
+                       lintAfterwards = TRUE) {
 
   # fix T_and_F_symbol lint (will only touch files with that kind of lint)
-  theOneAndonlyTandFsymbolFixer(files, askTF)
+  theOneAndOnlyTandFsymbolFixer(files)
 
   if (ignoreLintFreeFiles) {
     # keep only files with linter warnings
@@ -39,7 +37,7 @@ autoFormat <- function(files = getFilesToLint(), ignoreLintFreeFiles = TRUE,
 
 # Fix all instances of T/F rather than TRUE/FALSE indicated by
 # lintr::T_and_F_symbol_linter().
-theOneAndonlyTandFsymbolFixer <- function(files, ask = FALSE) {
+theOneAndOnlyTandFsymbolFixer <- function(files) {
 
   # get all files with this kind of lint
   theLint <- lapply(files, lintr::lint,
@@ -49,7 +47,7 @@ theOneAndonlyTandFsymbolFixer <- function(files, ask = FALSE) {
   for (f in theLint) {
     # read the file text
     t <- readLines(f[[1]][["filename"]])
-    mod <- FALSE
+
     # for each occurrence within the file
     # lint is listed top-to-bottom, left-to-right; so proceed backwards through
     # the list because modifying lines messes up character columns otherwise
@@ -61,32 +59,14 @@ theOneAndonlyTandFsymbolFixer <- function(files, ask = FALSE) {
       # one)
       for (r in rev(i[["ranges"]])) {
         # replace the lint
-        u <- paste0(
+        t[l] <- paste0(
           substr(t[l], 0, r[1] - 1),
           switch(substr(t[l], r[1], r[2] - 1), "T" = "TRUE", "F" = "FALSE"),
           substr(t[l], r[2], nchar(t[l]))
         )
-
-        # if told to ask, ask about replacing or not
-        if (ask) {
-          message(paste("Replace", t[l], "with", u,
-                        paste0("in ", f[[1]][["filename"]], "? (Y/n)"),
-                        sep = "\n"))
-          # if not "yes, please", go to next occurrence
-          if (!tolower(getLine()) %in% c("", "y", "yes")) {
-            next
-          }
-        }
-
-        # if not told to ask, or told to replace, replace
-        t[l] <- u
-        mod <- TRUE
       }
 
-      # if the text was modified, write it back out
-      if (mod) {
-        writeLines(t, f[[1]][["filename"]])
-      }
+      writeLines(t, f[[1]][["filename"]])
     }
   }
 }
