@@ -8,6 +8,7 @@
 #'
 #' @author Pascal Führlich
 #' @seealso \code{\link{getFilesToLint}}
+#' @importFrom rlang is_empty
 #' @importFrom styler style_file
 #' @examples
 #' \dontrun{
@@ -45,6 +46,10 @@ theOneAndOnlyTandFsymbolFixer <- function(files) {
 
   # for each file
   for (f in theLint) {
+    if (0 == length(unlist(f))) {
+      next
+    }
+
     # read the file text
     t <- readLines(f[[1]][["filename"]])
 
