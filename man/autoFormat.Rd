@@ -7,8 +7,7 @@
 autoFormat(
   files = getFilesToLint(),
   ignoreLintFreeFiles = TRUE,
-  lintAfterwards = TRUE,
-  formatTF = FALSE
+  lintAfterwards = TRUE
 )
 }
 \arguments{
@@ -17,13 +16,12 @@ autoFormat(
 \item{ignoreLintFreeFiles}{If set to TRUE (the default) files without linter warnings are not auto-formatted.}
 
 \item{lintAfterwards}{If set to TRUE (the default) return linter results for the auto-formatted files.}
-
-\item{formatTF}{If set to TRUE (the default is FALSE) ask for T and F to be converted into TRUE and FALSE.
-Note that it currently can't find out reliably if T or F are aliases for TRUE and FALSE, so manual intervention
-is needed.}
 }
 \description{
 Apply auto-formatting using styler::style_file to the given files. Does not change indentation.
+Use autoFormat to solve many linter warning at once, but only those which are safe to solve
+automatically. Also check the function formatTF and snakeToCamel for assistance in solving
+specific warnings.
 }
 \examples{
 \dontrun{
@@ -31,7 +29,7 @@ lucode2::autoFormat()
 }
 }
 \seealso{
-\code{\link{getFilesToLint}}
+\code{\link{getFilesToLint}}, \code{\link{formatTF}}, \code{\link{snakeToCamel}}
 }
 \author{
 Pascal Führlich
