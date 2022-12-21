@@ -42,7 +42,7 @@ theOneAndOnlyTandFsymbolFixer <- function(files) {
 
   # get all files with this kind of lint
   theLint <- lapply(files, lintr::lint,
-                    linters = list(lintr::T_and_F_symbol_linter()))
+                    linters = list(lintr::T_and_F_symbol_linter()), parse_settings = FALSE)
 
   # for each file
   for (f in theLint) {
