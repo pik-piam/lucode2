@@ -21,7 +21,7 @@
 eprint <- function(var_name, envir = parent.frame()) { # nolint
   varValue <- try(get(var_name, envir = envir), silent = TRUE)
   if (inherits(varValue, "try-error")) {
-    message(paste(var_name, "not found"))
+    message(paste(var_name, "not defined"))
   } else {
     message(paste(var_name, "<-", paste(varValue, collapse = ", ")))
   }
