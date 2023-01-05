@@ -43,7 +43,7 @@
 #' # ### READ COMMAND LINE - ASSIGNED CONFIGURATION ###
 #' # value1 <- new
 #' # value2 <- 3
-#' # value4 not found
+#' # value4 not defined
 #' # Flags: --parallel, --test
 #' # ### READ COMMAND LINE - CONFIGURATION END ###
 #' #
