@@ -1,16 +1,6 @@
 #' @importFrom utils packageVersion
 #' @importFrom usethis local_project git_default_branch
 checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
-  # asking the user is fallback if automatic check does not work
-  askUser <- function() {
-    message("Is your repo up-to-date? Did you pull from the upstream",
-            "repo immediately before running this check? (Y/n) ", appendLF = FALSE)
-    if (!(tolower(getLine()) %in% c("", "y", "yes"))) {
-      stop("Please update your repository first, before you proceed!")
-    }
-    message()
-  }
-
   if (is.null(autoCheckRepoUpToDate)) {
     return(invisible(NULL))
   } else if (isFALSE(autoCheckRepoUpToDate)) {
@@ -32,23 +22,16 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
     return(invisible(NULL))
   }
 
-  if (!"upstream" %in% gert::git_remote_list()[["name"]]) {
-    remoteUrl <- sub("[^/:]+/([^/]+$)", "pik-piam/\\1", gert::git_remote_list()[[1, "url"]])
-    message("Creating a git remote called 'upstream' pointing to ", remoteUrl)
-    gert::git_remote_add(url = remoteUrl, name = "upstream")
-  }
+  upstreamExists <- function() "upstream" %in% gert::git_remote_list()[["name"]]
 
-  fetch <- function(remote = NULL) {
-    return(tryCatch({
-      gert::git_fetch(remote, verbose = FALSE)
-      TRUE
-    }, error = function(error) {
-      if (Sys.which("git") == "") {
-        return(FALSE)
-      }
-      exitCode <- system2("git", c("fetch", remote))
-      return(exitCode == 0)
-    }))
+  if (!upstreamExists()) {
+    remoteUrl <- sub("[^/:]+/([^/]+$)", "pik-piam/\\1", gert::git_remote_list()[[1, "url"]])
+    gert::git_remote_add(url = remoteUrl, name = "upstream")
+    if (fetch("upstream", silent = TRUE)) {
+      message("Created a git remote called 'upstream' pointing to ", remoteUrl)
+    } else {
+      gert::git_remote_remove("upstream")
+    }
   }
 
   behindTracking <- 0
@@ -63,12 +46,13 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
     behindTracking <- gert::git_ahead_behind()[["behind"]]
   }
 
-  if (!fetch("upstream")) {
-      message("Automatic repo up-to-date check could not fetch from git remote.")
-      askUser()
-      return(invisible(NULL))
-    }
-  behindUpstream <- gert::git_ahead_behind(upstream = paste0("upstream/", git_default_branch()))[["behind"]]
+  if (upstreamExists() && !fetch("upstream")) {
+    message("Automatic repo up-to-date check could not fetch from git remote.")
+    askUser()
+    return(invisible(NULL))
+  }
+  referenceBranch <- if (upstreamExists()) paste0("upstream/", git_default_branch()) else NULL
+  behindUpstream <- gert::git_ahead_behind(referenceBranch)[["behind"]]
 
   if (behindUpstream > 0 || behindTracking > 0) {
     errorMessage <- "Your repo is not up-to-date."
@@ -83,4 +67,28 @@ checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
   } else {
     message("Your repo is up-to-date.")
   }
+}
+
+# asking the user is fallback if automatic check does not work
+askUser <- function() {
+  message("Is your repo up-to-date? Did you pull from the upstream",
+          "repo immediately before running this check? (Y/n) ", appendLF = FALSE)
+  if (!(tolower(getLine()) %in% c("", "y", "yes"))) {
+    stop("Please update your repository first, before you proceed!")
+  }
+  message()
+}
+
+fetch <- function(remote = NULL, silent = FALSE) {
+  return(tryCatch({
+    gert::git_fetch(remote, verbose = FALSE)
+    TRUE
+  }, error = function(error) {
+    if (Sys.which("git") == "") {
+      return(FALSE)
+    }
+    systemOutput <- if (silent) FALSE else ""
+    exitCode <- system2("git", c("fetch", remote), stdout = systemOutput, stderr = systemOutput)
+    return(exitCode == 0)
+  }))
 }
