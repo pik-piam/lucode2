@@ -37,6 +37,8 @@
 #'                                    the README.md file or not (default: yes)
 #' * **AddInReadme** (optional): Additional entries to be added to the autocreated README. Provided either
 #'                               in markdown format or as paths to RMarkdown (Rmd) or Markdown (md) files
+#' * **AddLogoReadme** (optional): Additional logo to be added to the autocreated README. Provided as
+#'                                 path to logo in PNG format
 #' * **AcceptedWarnings** (optional): a list of Warnings which should be ignored by `buildLibrary`
 #'                                    (autocompletion via asterisks allowed)
 #' * **AcceptedNotes** (optional): a list of Notes which should be ignored by `buildLibrary`
@@ -188,7 +190,8 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
   write_yaml(cfg, ".buildlibrary")
   package2zenodo()
   if (isTRUE(cfg$AutocreateReadme)) {
-    package2readme(add = cfg$AddInReadme)
+    package2readme(add = cfg$AddInReadme,
+                   logo = cfg$AddLogoReadme)
   }
 
   ####################################################################

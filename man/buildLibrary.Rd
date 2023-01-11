@@ -54,6 +54,8 @@ It confirms that the package has been successfully build via the function.
 the README.md file or not (default: yes)
 \item \strong{AddInReadme} (optional): Additional entries to be added to the autocreated README. Provided either
 in markdown format or as paths to RMarkdown (Rmd) or Markdown (md) files
+\item \strong{AddLogoReadme} (optional): Additional logo to be added to the autocreated README. Provided as
+path to logo in PNG format
 \item \strong{AcceptedWarnings} (optional): a list of Warnings which should be ignored by \code{buildLibrary}
 (autocompletion via asterisks allowed)
 \item \strong{AcceptedNotes} (optional): a list of Notes which should be ignored by \code{buildLibrary}
