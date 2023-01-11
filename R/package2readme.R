@@ -16,9 +16,7 @@
 #' @examples
 #' package2readme("lucode2")
 #' @export
-package2readme <- function(package = ".",
-                           add = NULL,
-                           logo = NULL) { # nolint
+package2readme <- function(package = ".", add = NULL, logo = NULL) { # nolint
   if (file.exists(file.path(package, "DESCRIPTION"))) {
     d <- desc(file = file.path(package, "DESCRIPTION"))
     folder <- package
