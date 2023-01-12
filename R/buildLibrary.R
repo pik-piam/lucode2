@@ -59,6 +59,8 @@
 #' @export
 buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
                          updateLucode2 = TRUE, autoCheckRepoUpToDate = TRUE) {
+  lib <- normalizePath(lib)
+  local_dir(lib)
   checkRepoUpToDate(".", autoCheckRepoUpToDate)
 
   loadedLucode2Version <- .__NAMESPACE__.$spec[["version"]]
@@ -92,8 +94,6 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
                               show = TRUE, spinner = FALSE, stdin = "")))
   }
 
-  lib <- normalizePath(lib)
-  local_dir(lib)
   stopifnot(`No DESCRIPTION file found` = file.exists("DESCRIPTION"))
 
   packageName <- desc("DESCRIPTION")$get("Package")
