@@ -10,7 +10,7 @@ addGitHubActions(lib = ".")
 \item{lib}{Path to the package}
 }
 \description{
-This function adds a standard Github action workflow called "lucode2-check.yaml" to the project which runs
+This function adds a standard Github action workflow called "check.yaml" to the project which runs
 lucode2::check(), checks the validation key, and creates a coverage report using codecov. This file is overwritten
 automatically each time this function is run and should not be edited by hand. Additional Github actions can be
 added as separate files.
