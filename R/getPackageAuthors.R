@@ -28,11 +28,9 @@ getPackageAuthors <- function(folder = "R") {
     name <- sub(" ", "\", \"", names(ranking)[i])
     if (i == 1) {
       out <- paste0("Authors@R: c(person(\"", name, "\", email = \"@pik-potsdam.de\", role = c(\"aut\",\"cre\")),")
-    }
-    else if (i == length(ranking)) {
+    } else if (i == length(ranking)) {
       out <- c(out, paste0("             person(\"", name, "\", role = \"aut\"))"))
-    }
-    else {
+    } else {
       out <- c(out, paste0("             person(\"", name, "\", role = \"aut\"),"))
     }
   }

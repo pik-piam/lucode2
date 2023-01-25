@@ -27,7 +27,7 @@ sendmail <- function(path = NULL, gitrepo, file, commitmessage, remote = FALSE, 
   if (remote) {
     system(paste0("git -C ", path, " pull"))
   }
-  file.copy(file, paste0(path, "/README.md"), overwrite = T)
+  file.copy(file, paste0(path, "/README.md"), overwrite = TRUE)
   system(paste0("git -C ", path, " commit -m '", commitmessage, "' README.md"))
   if (remote) {
     system(paste0("git -C ", path, " push"))
