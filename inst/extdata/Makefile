@@ -32,6 +32,9 @@ lint-all:       ## Check if code etiquette is followed using lucode2::lint()
 format:         ## Apply auto-formatting to changed files and lint afterwards
 	Rscript -e 'lucode2::autoFormat()'
 
+format-all:     ## Apply auto-formatting to all files and lint afterwards
+	Rscript -e 'lucode2::autoFormat(files=list.files("./R", full.names = TRUE, pattern = "\\.R"))'
+
 install:        ## Install the package locally via devtools::install()
 	Rscript -e 'devtools::install(upgrade = "never")'
 
