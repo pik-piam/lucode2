@@ -15,7 +15,7 @@ validkey <- function(package = ".", stopIfInvalid = FALSE) {
   if (!file.exists(file)) return(list(version = 0, date = 0, roxygen = FALSE, valid = FALSE))
   descfile <- readLines(file, warn = FALSE)
   .read <- function(x, y) {
-    return(sub("[^(0-9)]*$", "", sub(paste0(x, ":[^(0-9)]*"), "", grep(x, y, value = T), perl = T), perl = T))
+    return(sub("[^(0-9)]*$", "", sub(paste0(x, ":[^(0-9)]*"), "", grep(x, y, value = TRUE), perl = TRUE), perl = TRUE))
   }
   version <- .read("Version", descfile)
   date <- as.Date(.read("Date", descfile))
