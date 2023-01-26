@@ -119,7 +119,7 @@ package2readme <- function(package = ".", add = NULL, logo = NULL) { # nolint
   fillRUniverse <- function(nameOfPackage, d) {
     if (any(grepl(nameOfPackage, piamPackages(), fixed = TRUE))) {
       return(paste0("[![r-universe](https://pik-piam.r-universe.dev/badges/", nameOfPackage,
-                    ")](https://pik-piam.r-universe.dev/ui#builds)"))
+                    ")](https://pik-piam.r-universe.dev/builds)"))
     } else {
       return("")
     }
