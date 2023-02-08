@@ -10,14 +10,18 @@
 #' @export
 snakeToCamel <- function(pathToFile, ask = TRUE) {
   lines <- readLines(pathToFile)
-  variables <- lines[grepl("[a-zA-Z._0-9]*_[a-zA-Z._0-9]* <-", lines)] %>%
-    sub(pattern = "^.*?([a-zA-Z._0-9]*) <-.*$", replacement = "\\1") %>%
+  variables <- lines[grepl("[a-zA-Z._0-9 ]*<-", lines)] %>%
+    sub(pattern = "^.*?([a-zA-Z._0-9]*) *<-.*$", replacement = "\\1") %>%
     unique()
   replacements <- variables %>%
     gsub(pattern = "_([a-z])", replacement = "\\U\\1", perl = TRUE) %>%
+    sub(pattern = "^([A-Z])", replacement = "\\L\\1", perl = TRUE) %>%
     gsub(pattern = "_", replacement = "")
 
   for (i in seq_along(variables)) {
+    if (variables[[i]] == replacements[[i]]) {
+      next
+    }
     hitsBeforeReplacement <- grep(replacements[[i]], lines, value = TRUE)
     if (length(hitsBeforeReplacement) > 0) {
       warning(replacements[[i]], " is already present in the original file.")
