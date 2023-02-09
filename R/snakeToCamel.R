@@ -10,30 +10,37 @@
 #' @export
 snakeToCamel <- function(pathToFile, ask = TRUE) {
   lines <- readLines(pathToFile)
-  variables <- lines[grepl("[a-zA-Z._0-9 ]*<-", lines)] %>%
-    sub(pattern = "^.*?([a-zA-Z._0-9]*) *<-.*$", replacement = "\\1") %>%
+  variablePattern <- "(^|^.*?[^\"])\\b([a-zA-Z._0-9]*)\\b *<-.*$"
+  variables <- grep(variablePattern, lines, value = TRUE) %>%
+    sub(pattern = variablePattern, replacement = "\\2", perl = TRUE) %>%
+    Filter(f = function(variable) nchar(variable) > 0) %>%
     unique()
   replacements <- variables %>%
     gsub(pattern = "_([a-z])", replacement = "\\U\\1", perl = TRUE) %>%
     sub(pattern = "^([A-Z])", replacement = "\\L\\1", perl = TRUE) %>%
     gsub(pattern = "_", replacement = "")
 
+  keepIndex <- vapply(seq_along(variables), function(i) variables[[i]] != replacements[[i]], logical(1))
+  variables <- variables[keepIndex]
+  replacements <- replacements[keepIndex]
+
   for (i in seq_along(variables)) {
-    if (variables[[i]] == replacements[[i]]) {
-      next
+    variable <- variables[[i]]
+    problematicReplacements <- grep(pattern = paste0("\\b", variable, "\\b"), x = replacements, value = TRUE)
+    if (length(problematicReplacements) > 0) {
+      warning(variable, ":\n", paste(problematicReplacements, collapse = "\n"), "\nend of warning.", immediate. = TRUE)
     }
-    hitsBeforeReplacement <- grep(replacements[[i]], lines, value = TRUE)
+    hitsBeforeReplacement <- grep(pattern = paste0("\\b", replacements[[i]], "\\b"),
+                                  lines, value = TRUE)
     if (length(hitsBeforeReplacement) > 0) {
-      warning(replacements[[i]], " is already present in the original file.")
+      warning(replacements[[i]], " is already present in the original file:\n",
+              paste("  ", hitsBeforeReplacement, collapse = "\n"), immediate. = TRUE)
     }
     message(variables[[i]], " -> ", replacements[[i]])
     if (!ask || askYesNo("replace?")) {
-      lines <- gsub(variables[[i]], replacements[[i]], lines, fixed = TRUE)
+      lines <- gsub(paste0("\\b", variables[[i]], "\\b"), replacements[[i]], lines)
+      writeLines(lines, pathToFile)
     }
   }
-  if (!ask || askYesNo(paste0("Overwrite ", pathToFile, "?"))) {
-    writeLines(lines, pathToFile)
-    return(invisible(lines))
-  }
-  return(lines)
+  return(invisible(lines))
 }
