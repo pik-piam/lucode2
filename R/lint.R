@@ -41,7 +41,10 @@ lint <- function(files = getFilesToLint()) {
   files <- normalizePath(files)
 
   linterWarnings <- lapply(seq_along(files), function(i) {
-    message("[", i, "/", length(files), '] Running lintr::lint("', files[[i]], '")')
+    if (length(files) > 1) {
+      message("[", i, "/", length(files), "] ", appendLF = FALSE)
+    }
+    message('Running lintr::lint("', files[[i]], '")')
     return(lintr::lint(files[[i]]))
   })
 
