@@ -29,7 +29,7 @@ mergestatistics <- function(dir = ".", file = NULL, renew = FALSE, quickcheck = 
   }
   out <- NULL
   id  <- NULL
-  if (!is.null(file) & !renew) {
+  if (!is.null(file) && !renew) {
     if (file.exists(file)) {
       out <- readRDS(file)
     }

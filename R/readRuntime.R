@@ -57,14 +57,14 @@ readRuntime <- function(path, plot = FALSE, types = NULL, coupled = FALSE, outfn
       stats <- NULL
       load(datafile)
       # try to load detailed runtime information
-      if (!is.null(stats) & !is.null(stats$timePrepareStart)) {
+      if (!is.null(stats) && !is.null(stats$timePrepareStart)) {
         timePrepareStart <- stats$timePrepareStart
         timePrepareEnd   <- stats$timePrepareEnd
         timeGAMSStart    <- stats$timeGAMSStart
         timeGAMSEnd      <- stats$timeGAMSEnd
         timeOutputStart  <- stats$timeOutputStart
         timeOutputEnd    <- stats$timeOutputEnd
-      } else if (!is.null(stats) & !is.null(stats$starttime)) {
+      } else if (!is.null(stats) && !is.null(stats$starttime)) {
         # if no detailed information is available load the old one (it's only the gams runtime)
         start <- stats$starttime
         end   <- stats$endtime
@@ -73,7 +73,7 @@ readRuntime <- function(path, plot = FALSE, types = NULL, coupled = FALSE, outfn
 
     # if no start and end was extractable from runstatistics.rda
     # conclude it from timestamps of the files in the results folder
-    if (is.null(end) & is.null(timePrepareEnd) & is.null(timeGAMSEnd) & is.null(timeOutputEnd)) {
+    if (is.null(end) && is.null(timePrepareEnd) && is.null(timeGAMSEnd) && is.null(timeOutputEnd)) {
       local_dir(d)
       # find all files
       info <- file.info(dir())

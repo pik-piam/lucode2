@@ -11,7 +11,7 @@
 #' @examples
 #'
 #' setup_info()
-setup_info <- function() {
+setup_info <- function() { # nolint: object_name_linter.
   out <- list()
   out$sysinfo <- Sys.info()
   out$sessionInfo <- sessionInfo()

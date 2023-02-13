@@ -14,7 +14,8 @@
 #' a <- 1:3
 #' b <- "blub"
 #' lucode2:::eprint_list(c("a", "b"))
-eprint_list <- function(var_list, envir = parent.frame()) {
+eprint_list <- function(var_list, # nolint: object_name_linter.
+                        envir = parent.frame()) {
   for (varName in var_list) {
     eprint(varName, envir = envir)
   }

@@ -22,26 +22,27 @@
 #' }
 #' @importFrom utils capture.output object.size head
 #' @export
-memCheck <- function(order.by = "Size", decreasing = TRUE, n = NULL, envir = parent.frame(), gc = TRUE) {
-  napply <- function(names, fn, pos) sapply(names, function(x)
-    fn(get(x, pos = pos)))
+memCheck <- function(order.by = "Size", # nolint: object_name_linter.
+                     decreasing = TRUE, n = NULL, envir = parent.frame(), gc = TRUE) {
+  napply <- function(names, fn, pos) {
+    sapply(names, function(x) fn(get(x, pos = pos))) # nolint: undesirable_function_linter.
+  }
   names <- ls(envir)
   if (length(names) == 0) {
     cat("\nEnvironment is empty!\n")
     return(NULL)
   }
-  obj.class <- napply(names, function(x) as.character(class(x))[1], envir)
-  obj.mode <- napply(names, mode, envir)
-  obj.type <- ifelse(is.na(obj.class), obj.mode, obj.class)
-  obj.prettysize <- napply(names, function(x) {
+  objClass <- napply(names, function(x) as.character(class(x))[1], envir)
+  objMode <- napply(names, mode, envir)
+  objType <- ifelse(is.na(objClass), objMode, objClass)
+  objPrettysize <- napply(names, function(x) {
     capture.output(print(object.size(x), units = "auto"))
   }, envir)
-  obj.size <- napply(names, object.size, envir)
-  obj.dim <- t(napply(names, function(x)
-    as.numeric(dim(x))[1:2], envir))
-  vec <- is.na(obj.dim)[, 1] & (obj.type != "function")
-  obj.dim[vec, 1] <- napply(names, length, envir)[vec]
-  out <- data.frame(obj.type, obj.size, obj.prettysize, obj.dim)
+  objSize <- napply(names, object.size, envir)
+  objDim <- t(napply(names, function(x) as.numeric(dim(x))[1:2], envir))
+  vec <- is.na(objDim)[, 1] & (objType != "function")
+  objDim[vec, 1] <- napply(names, length, envir)[vec]
+  out <- data.frame(objType, objSize, objPrettysize, objDim)
   names(out) <- c("Type", "Size", "PrettySize", "Rows", "Columns")
   if (!is.null(order.by))
     out <- out[order(out[[order.by]], decreasing = decreasing), ]

@@ -31,7 +31,7 @@ rmAllbut <- function(..., list = character(), clean = TRUE) {
   keepObjects[[1]] <- NULL
   keepObjects <- lapply(keepObjects, as.character)
   if (!is.null(list)) {
-    if (all(sapply(list, is.character))) {
+    if (all(vapply(list, is.character, logical(1)))) {
       keepObjects <- append(keepObjects, list)
     } else {
       stop("list argument can only contain characters")

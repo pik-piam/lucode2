@@ -24,7 +24,7 @@ runstatistics <- function(file = "runstatistics.Rda", overwrite = TRUE, submit =
   if (file.exists(file)) load(file)
 
   overlap <- intersect(names(x), names(stats))
-  if (length(overlap) > 0 & !overwrite) {
+  if (length(overlap) > 0 && !overwrite) {
     stop("Attempt to overwrite the following entries with overwrite=FALSE: ", paste(overlap, collapse = ", "))
   }
   stats[names(x)] <- x[names(x)]
