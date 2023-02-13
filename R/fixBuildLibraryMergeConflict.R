@@ -25,15 +25,20 @@ fixBuildLibraryMergeConflict <- function(lib = ".") {
   writeLines(lines, ".buildlibrary")
 
   lines <- readLines("DESCRIPTION")
-  dividerIndex <- grep("=======", lines)
   versions <- lines %>%
     grep(pattern = "^Version: (.+)$", value = TRUE) %>%
     sub(pattern = "Version: ", replacement = "") %>%
     package_version()
+
+  mergeMarkerPosition <- c(grep("<<<<<<<", lines), grep("=======", lines), grep(">>>>>>>", lines))
+  stopifnot(identical(mergeMarkerPosition, sort(mergeMarkerPosition)))
   if (versions[[1]] > versions[[2]]) {
-    lines <- lines[-c(dividerIndex - 3, dividerIndex:(dividerIndex + 3))]
+    lines <- lines[-c(mergeMarkerPosition[[1]],
+                      mergeMarkerPosition[[2]]:mergeMarkerPosition[[3]])]
   } else {
-    lines <- lines[-c((dividerIndex - 3):dividerIndex, dividerIndex + 3)]
+    lines <- lines[-c(mergeMarkerPosition[[1]]:mergeMarkerPosition[[2]],
+                      mergeMarkerPosition[[3]])]
   }
+
   writeLines(lines, "DESCRIPTION")
 }

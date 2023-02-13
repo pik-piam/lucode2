@@ -94,12 +94,11 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
                               show = TRUE, spinner = FALSE, stdin = "")))
   }
 
-  stopifnot(`No DESCRIPTION file found` = file.exists("DESCRIPTION"))
-
-  packageName <- desc("DESCRIPTION")$get("Package")
-
   fixBuildLibraryMergeConflict()
   modifyRproj()
+
+  stopifnot(`No DESCRIPTION file found` = file.exists("DESCRIPTION"))
+  packageName <- desc("DESCRIPTION")$get("Package")
 
   ############################################################
   # load/create .buildLibrary file
