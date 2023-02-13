@@ -26,23 +26,23 @@ lint <- function(files = getFilesToLint()) {
   if (dir.exists(gitRoot)) {
     with_dir(gitRoot, {
       writeIfNonExistent(c("linters: lucode2::lintrRules()", 'encoding: "UTF-8"'),
-                          ".lintr")
+                         ".lintr")
       writeIfNonExistent(c("linters: lucode2::lintrRules(allowUndesirable = TRUE)", 'encoding: "UTF-8"'),
-                          file.path("tests", ".lintr", fsep = "/"))
+                         file.path("tests", ".lintr", fsep = "/"))
       writeIfNonExistent(c("linters: lucode2::lintrRules(allowUndesirable = TRUE)", 'encoding: "UTF-8"'),
-                          file.path("vignettes", ".lintr", fsep = "/"))
+                         file.path("vignettes", ".lintr", fsep = "/"))
     })
   }
 
   if (identical(files, ".")) {
-    return(lint_package())
+    files <- list.files(pattern = "[.]R(md)?$", full.names = TRUE, recursive = TRUE)
   }
 
   files <- normalizePath(files)
 
-  linterWarnings <- lapply(files, function(aFile) {
-    message('Running lintr::lint("', aFile, '")')
-    return(lintr::lint(aFile))
+  linterWarnings <- lapply(seq_along(files), function(i) {
+    message("[", i, "/", length(files), '] Running lintr::lint("', files[[i]], '")')
+    return(lintr::lint(files[[i]]))
   })
 
   # combine the results of multiple calls to lintr::lint, taken from lintr:::flatten_lints
