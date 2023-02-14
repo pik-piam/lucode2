@@ -9,7 +9,9 @@
 #' @export
 #' @importFrom utils available.packages
 #'
-check_versions <- function(mail = TRUE, test = FALSE, gitpath = NULL) {
+check_versions <- function(mail = TRUE, # nolint: object_name_linter.
+                           test = FALSE,
+                           gitpath = NULL) {
   a <- available.packages("https://rse.pik-potsdam.de/r/packages/src/contrib")
 
   cran <- suppressWarnings(available.packages("https://cloud.r-project.org/src/contrib", filters = "duplicates"))

@@ -8,7 +8,7 @@
 #' @examples
 #' SystemCommandAvailable("ls")
 #' @export
-SystemCommandAvailable <- function(command) {
+SystemCommandAvailable <- function(command) { # nolint: object_name_linter.
   out <- suppressWarnings(ifelse(system2(command, stdout = FALSE, stderr = FALSE) != 127, TRUE, FALSE))
   return(out)
 }
