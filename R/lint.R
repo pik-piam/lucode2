@@ -40,6 +40,7 @@ lint <- function(files = getFilesToLint()) {
     })
   }
 
+  # separate R session so already attached packages are not considered, and load_all does not affect current R session
   linterWarnings <- callr::r(function(files) {
     devtools::document(roclets = "namespace")
     devtools::load_all(quiet = TRUE)
