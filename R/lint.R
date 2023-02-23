@@ -13,18 +13,24 @@
 
 #' @author Pascal Führlich
 #' @seealso \code{\link{getFilesToLint}}, \code{\link{lintrRules}}, \code{\link{autoFormat}}, \code{\link[lintr]{lint}}
-#' @importFrom lintr lint_package
-#' @importFrom withr with_dir
 #' @examples
 #' \dontrun{
 #' lucode2::lint()
 #' }
 #' @export
 lint <- function(files = getFilesToLint()) {
+  if (identical(files, ".")) {
+    files <- list.files(pattern = "[.]R(md)?$", full.names = TRUE, recursive = TRUE)
+  }
+
+  files <- normalizePath(files)
+
+  withr::local_dir(dirname(files[[1]]))
+
   # create .lintr config files if they do not exist
   gitRoot <- suppressWarnings(system2("git", c("rev-parse", "--show-toplevel"), stdout = TRUE, stderr = TRUE))
   if (dir.exists(gitRoot)) {
-    with_dir(gitRoot, {
+    withr::with_dir(gitRoot, {
       writeIfNonExistent(c("linters: lucode2::lintrRules()", 'encoding: "UTF-8"'),
                          ".lintr")
       writeIfNonExistent(c("linters: lucode2::lintrRules(allowUndesirable = TRUE)", 'encoding: "UTF-8"'),
@@ -34,19 +40,18 @@ lint <- function(files = getFilesToLint()) {
     })
   }
 
-  if (identical(files, ".")) {
-    files <- list.files(pattern = "[.]R(md)?$", full.names = TRUE, recursive = TRUE)
-  }
+  linterWarnings <- callr::r(function(files) {
+    devtools::document(roclets = "namespace")
+    devtools::load_all(quiet = TRUE)
 
-  files <- normalizePath(files)
-
-  linterWarnings <- lapply(seq_along(files), function(i) {
-    if (length(files) > 1) {
-      message("[", i, "/", length(files), "] ", appendLF = FALSE)
-    }
-    message('Running lintr::lint("', files[[i]], '")')
-    return(lintr::lint(files[[i]]))
-  })
+    return(lapply(seq_along(files), function(i) {
+      if (length(files) > 1) {
+        message("[", i, "/", length(files), "] ", appendLF = FALSE)
+      }
+      message('Running lintr::lint("', files[[i]], '")')
+      return(lintr::lint(files[[i]]))
+    }))
+  }, args = list(files = files), show = TRUE)
 
   # combine the results of multiple calls to lintr::lint, taken from lintr:::flatten_lints
   flattenLints <- function(x) {
