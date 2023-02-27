@@ -22,7 +22,7 @@
 #' lucode2::check()
 #' }
 #' @importFrom callr r
-#' @importFrom devtools document check load_all
+#' @importFrom devtools document check
 #' @importFrom withr local_tempdir
 #' @seealso \code{\link{buildLibrary}}, \code{\link{lint}}, \code{\link{lintrRules}}
 #' @seealso \code{\link[devtools]{check}}, \code{\link[devtools]{test}}
@@ -49,13 +49,9 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
   if (runLinter) {
     logs[["linter"]] <- withr::local_tempfile(pattern = "linter", fileext = ".log")
     message("running linter in background, see ", logs[["linter"]])
-    processes[["linter"]] <- callr::r_bg(
-      func = function(...) {
-        devtools::load_all()
-        lucode2::verifyLinter(...)
-      },
-      args = list(isFALSE(config[["allowLinterWarnings"]])),
-      stdout = logs[["linter"]], stderr = "2>&1")
+    processes[["linter"]] <- callr::r_bg(function(...) lucode2::verifyLinter(...),
+                                         args = list(isFALSE(config[["allowLinterWarnings"]])),
+                                         stdout = logs[["linter"]], stderr = "2>&1")
   }
 
   ########### Run tests ###########
