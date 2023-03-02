@@ -19,6 +19,10 @@
 #' }
 #' @export
 lint <- function(files = getFilesToLint()) {
+  if (length(files) == 0) {
+    return(invisible(list()))
+  }
+
   if (identical(files, ".")) {
     files <- list.files(pattern = "[.]R(md)?$", full.names = TRUE, recursive = TRUE)
   }
