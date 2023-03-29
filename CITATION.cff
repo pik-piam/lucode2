@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: If you use this software, please cite it using the metadata from this file.
+type: software
+title: 'lucode2: Code Manipulation and Analysis Tools'
+version: 0.44.0
+date-released: '2023-03-29'
+abstract: A collection of tools which allow to manipulate and analyze code.
+authors:
+- family-names: Dietrich
+  given-names: Jan Philipp
+  email: dietrich@pik-potsdam.de
+- family-names: Führlich
+  given-names: Pascal
+- family-names: Klein
+  given-names: David
+- family-names: Giannousakis
+  given-names: Anastasis
+- family-names: Bonsch
+  given-names: Markus
+- family-names: Bodirsky
+  given-names: Benjamin Leon
+- family-names: Baumstark
+  given-names: Lavinia
+- family-names: Richters
+  given-names: Oliver
+- family-names: Pflüger
+  given-names: Mika
+license: BSD-2-Clause
+repository-code: https://github.com/pik-piam/lucode2
+doi: 10.5281/zenodo.4389418
+
