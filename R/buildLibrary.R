@@ -47,7 +47,6 @@
 #'                            (default: yes)
 #' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Führlich
 #' @seealso \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
-#' @importFrom citation package2zenodo
 #' @importFrom desc desc desc_get_deps
 #' @importFrom utils old.packages update.packages packageVersion download.file
 #' @importFrom withr defer local_connection local_dir
@@ -187,11 +186,21 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
   ##################################################################
   writeLines(descfile, "DESCRIPTION")
   write_yaml(cfg, ".buildlibrary")
-  package2zenodo()
+  citation::r2cff(export = TRUE)
   if (isTRUE(cfg$AutocreateReadme)) {
     package2readme(add = cfg$AddInReadme,
                    logo = cfg$AddLogoReadme)
   }
+
+  ####################################################################
+  # remove existing .zenodo.json files as CITATION.cff is now
+  # being used instead.
+  ###################################################################
+  if (file.exists(".zenodo.json")) {
+    message("Deleted .zenodo.json as it has been replaced by CITATION.cff")
+    file.remove(".zenodo.json")
+  }
+
 
   ####################################################################
   # Make sure man/*.Rd files are not ignored
