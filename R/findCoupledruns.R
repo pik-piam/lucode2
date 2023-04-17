@@ -12,16 +12,14 @@
 findCoupledruns <- function(resultsfolder) {
   cat("\nSearching for all scenarios of coupled runs in", resultsfolder, ": ")
   # Find which runs were performed by searching for all files that contain "-rem-"
-  runs <- Sys.glob(file.path(resultsfolder, "*-rem-*"))
+  runs <- list.files(resultsfolder, "[^[:alnum:]_-]*-rem-[0-9]+$")
   if (length(runs) == 0) {
-    runs <- Sys.glob(file.path(resultsfolder, "*-mag-*"))
+    runs <- list.files(resultsfolder, "[^[:alnum:]_-]*-mag-[0-9]+$")
   }
   # keep directories only (filter out files)
-  runs <- runs[file.info(runs)[, "isdir"]]
+  runs <- runs[file.info(file.path(resultsfolder, runs))[, "isdir"]]
   # Remove "-rem-*" from the folder names and remove remaining double elements to yield the pure runname
   runs <- unique(sub("-(rem|mag)-[0-9]+", "", runs))
-  # Remove path information and leave only scenarioname
-  runs <- sub(paste0(resultsfolder, "/"), "", runs)
-  cat(length(runs), " scenarios found.\n")
+  message(length(runs), " scenarios found.\n")
   return(runs)
 }

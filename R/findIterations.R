@@ -29,9 +29,8 @@ findIterations <- function(runname, modelpath = ".", latest = FALSE) {
       patternRemind <- paste0(p, "/", run, "-rem-*/fulldata.gdx")
       patternMagpie <- paste0(p, "/", run, "-mag-*/fulldata.gdx")
       pattern <- c(patternRemind, patternMagpie)
-      tmp <- Sys.glob(pattern)
-      ind <- grep("-(rem|mag)-", tmp)
-      gdxPathPerRun <- c(gdxPathPerRun, tmp[ind])
+      tmp <- grep("-(rem|mag)-[0-9]+.fulldata\\.gdx", Sys.glob(pattern), value = TRUE)
+      gdxPathPerRun <- c(gdxPathPerRun, tmp)
     }
 
     # sort paths by modification date of fulldata.gdx
