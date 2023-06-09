@@ -8,8 +8,6 @@
 #'
 #' @author Pascal Führlich
 #' @seealso \code{\link{getFilesToLint}}
-#' @importFrom rlang is_empty
-#' @importFrom styler style_file
 #' @examples
 #' \dontrun{
 #' lucode2::autoFormat()
@@ -17,6 +15,7 @@
 #' @export
 autoFormat <- function(files = getFilesToLint(), ignoreLintFreeFiles = TRUE,
                        lintAfterwards = TRUE) {
+  checkRequiredPackages("styler", "auto-formatting")
 
   # fix T_and_F_symbol lint (will only touch files with that kind of lint)
   theOneAndOnlyTandFsymbolFixer(files)
@@ -28,7 +27,7 @@ autoFormat <- function(files = getFilesToLint(), ignoreLintFreeFiles = TRUE,
 
   # strict = FALSE -> keep alignment spaces around assignments, keep extra newlines
   # scope is set to not change indentation, otherwise the alignment of continuation lines would be messed up
-  style_file(files, strict = FALSE, scope = I(c("tokens", "line_breaks", "spaces")))
+  styler::style_file(files, strict = FALSE, scope = I(c("tokens", "line_breaks", "spaces")))
   message("Hint: In RStudio you can fix indentation in selected lines using ctrl + i.")
 
   if (lintAfterwards) {
