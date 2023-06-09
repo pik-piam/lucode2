@@ -58,6 +58,7 @@
 #' @export
 buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
                          updateLucode2 = TRUE, autoCheckRepoUpToDate = TRUE) {
+  if (isTRUE(updateType == "")) updateType <- NULL
   lib <- normalizePath(lib)
   local_dir(lib)
   checkRepoUpToDate(".", autoCheckRepoUpToDate)
