@@ -1,8 +1,8 @@
 Type: Package
 Package: lucode2
 Title: Code Manipulation and Analysis Tools
-Version: 0.44.1
-Date: 2023-04-17
+Version: 0.44.2
+Date: 2023-06-08
 Authors@R: c(
     person("Jan Philipp", "Dietrich", , "dietrich@pik-potsdam.de", role = c("aut", "cre")),
     person("Pascal", "Führlich", role = "aut"),
@@ -29,7 +29,6 @@ Imports:
     dplyr,
     lintr (>= 3.0.0),
     rlang,
-    styler,
     tools,
     usethis (>= 2.1.0),
     withr,
@@ -46,6 +45,7 @@ Suggests:
     poorman,
     renv,
     rmarkdown,
+    styler,
     testthat
 Encoding: UTF-8
 LazyData: no
