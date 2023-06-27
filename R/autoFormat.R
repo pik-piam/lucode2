@@ -22,7 +22,7 @@ autoFormat <- function(files = getFilesToLint(), ignoreLintFreeFiles = TRUE,
 
   if (ignoreLintFreeFiles) {
     # keep only files with linter warnings
-    files <- names(lint(files))
+    files <- unique(names(lint(files)))
   }
 
   # strict = FALSE -> keep alignment spaces around assignments, keep extra newlines
