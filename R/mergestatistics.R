@@ -61,10 +61,10 @@ mergestatistics <- function(dir = ".", file = NULL, renew = FALSE, quickcheck = 
     }
     stats$solution <- modelstat
     stats$id <- gsub("\\.[rR]da", "", f)
-    outlist[[stats$id]] <- as.data.table(t(unlist(c(
-      stats[c("user", "date", "version_management", "revision", "revision_date", "solution")],
-      runtime = as.numeric(stats[["runtime"]], units = "hours"),
-      stats$config[!(names(stats$config) %in% removeCols)]))))
+    outlist[[stats$id]] <- as.data.table(t(unlist(c(stats[c("user", "date", "version_management",
+                                                            "revision", "revision_date", "solution")],
+                                                    runtime = as.numeric(stats[["runtime"]], units = "hours"),
+                                                    stats$config[!(names(stats$config) %in% removeCols)]))))
   }
   out <- rbind(out, rbindlist(outlist, fill = TRUE, idcol = TRUE), fill = TRUE)
   out <- as.data.table(lapply(out, function(x) return(type.convert(as.character(x), as.is = TRUE))))

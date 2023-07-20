@@ -33,7 +33,7 @@ extract_arguments <- function(inputArg) {  # nolint
   }
   if (length(strsplit(inputArg, ":")[[1]]) == 2) {
     if (suppressWarnings(is.na(as.integer(strsplit(inputArg, ":")[[1]][1])) |
-                         is.na(as.integer(strsplit(inputArg, ":")[[1]][2])))) {
+                           is.na(as.integer(strsplit(inputArg, ":")[[1]][2])))) {
       extractedArguments <- inputArg
     } else {
       extractedArguments <- as.integer(strsplit(inputArg, ":")[[1]][1]):as.integer(strsplit(inputArg, ":")[[1]][2])

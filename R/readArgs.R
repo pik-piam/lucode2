@@ -56,15 +56,15 @@
 #'
 #' ### function that reads all allowed arguments from command line ###
 readArgs <- function(..., .argv = commandArgs(trailingOnly = TRUE),
-                          .envir = parent.frame(), .flags = NULL, .silent = FALSE) {
+                     .envir = parent.frame(), .flags = NULL, .silent = FALSE) {
   allowedArgs <- c(...)
   # search for strings that look like -i1asrR and transform them into long flags
   oneDashFlags <- unlist(strsplit(paste0(.argv[grepl("^-[a-zA-Z0-9]*$", .argv)], collapse = ""), split = ""))
   twoDashFlags <- .argv[grepl("^--[a-zA-Z0-9]*$", .argv) & .argv %in% .flags]
   knownFlags <- sort(unique(c(twoDashFlags, unlist(.flags[names(.flags) %in% oneDashFlags]))))
-  unknownFlags <- c(sort(paste0("-", oneDashFlags)[! oneDashFlags %in% c(names(.flags), "-")]),
-                    .argv[grepl("^--[a-zA-Z0-9]*$", .argv) & ! .argv %in% .flags])
-  .argv <- .argv[! grepl("^-", .argv)]
+  unknownFlags <- c(sort(paste0("-", oneDashFlags)[!oneDashFlags %in% c(names(.flags), "-")]),
+                    .argv[grepl("^--[a-zA-Z0-9]*$", .argv) & !.argv %in% .flags])
+  .argv <- .argv[!grepl("^-", .argv)]
   if (length(.argv) > 0) {
     ### apply additional command line arguments ###
     for (argnr in seq_along(.argv)) {

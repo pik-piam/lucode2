@@ -206,9 +206,9 @@ readRuntime <- function(path, plot = FALSE, types = NULL, coupled = FALSE, outfn
     }
 
     pSorted <- ggplot2::ggplot(data = runtime,
-                                ggplot2::aes_string(x = "run",
-                                                    y = "value",
-                                                    fill = ifelse(is.null(types), "NULL", "type"))) +
+                               ggplot2::aes_string(x = "run",
+                                                   y = "value",
+                                                   fill = ifelse(is.null(types), "NULL", "type"))) +
       ggplot2::geom_bar(colour = "black", stat = "identity") +
       ggplot2::coord_flip() +
       ggplot2::ylab(yUnit) +
@@ -225,7 +225,7 @@ readRuntime <- function(path, plot = FALSE, types = NULL, coupled = FALSE, outfn
              section = factor(.data$section, levels = c("total", "prep", "GAMS", "output"), ordered = TRUE))
 
     pTimeline <- ggplot2::ggplot(dat, ggplot2::aes_string(color = ifelse(is.null(types), "NULL", "type"),
-                                                           alpha = "section")) +
+                                                          alpha = "section")) +
       ggplot2::geom_segment(ggplot2::aes_string(x = "start", xend = "end", y = "run", yend = "run"), size = 6) +
       ggplot2::scale_alpha_manual(values = c("total" = 1, "prep" = 0.5, "GAMS" = 1, "output" = 0.5)) +
       ggplot2::scale_color_manual(values = c("rem" = "royalblue3", "mag" = "seagreen")) +
