@@ -230,17 +230,17 @@ handleUpdateType <- function(updateType = NULL, title = "Please choose an update
   if (!is.null(updateType)) {
     # convert character updateType parameters to numbers
     updateType <- switch(as.character(updateType),
-                          "major" = 1,
-                          "1" = 1,
-                          "minor" = 2,
-                          "2" = 2,
-                          "patch" = 3,
-                          "3" = 3,
-                          "development" = 4,
-                          "4" = 4,
-                          "none" = 0,
-                          "0" = 0,
-                          handleUpdateType(title = title))
+                         "major" = 1,
+                         "1" = 1,
+                         "minor" = 2,
+                         "2" = 2,
+                         "patch" = 3,
+                         "3" = 3,
+                         "development" = 4,
+                         "4" = 4,
+                         "none" = 0,
+                         "0" = 0,
+                         handleUpdateType(title = title))
     return(updateType)
   }
   updateType <- c("major revision (for major rewrite of the whole package)",

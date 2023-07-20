@@ -135,9 +135,7 @@ package2readme <- function(package = ".", add = NULL, logo = NULL) { # nolint
     if (!is.null(folder)) {
       try({
         projectPath <- normalizePath(folder, mustWork = TRUE, winslash = "/")
-        ci <- citationDoi(packageDescription(
-          basename(projectPath),
-          lib.loc = dirname(projectPath)))
+        ci <- citationDoi(packageDescription(basename(projectPath), lib.loc = dirname(projectPath)))
       })
     }
     # If previous code did not work or folder is not set, get citation from installed package.

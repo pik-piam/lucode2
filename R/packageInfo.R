@@ -18,9 +18,9 @@ packageInfo <- function(package, repos = c("https://cran.rstudio.com/",
     installed <- "<never>"
   } else {
     version <- as.character(version)
-    installed <- paste(
-      as.integer(difftime(Sys.time(), file.mtime(system.file("DESCRIPTION", package = package)), units = "mins")),
-      "minutes ago")
+    installed <- paste(as.integer(difftime(Sys.time(),
+                                           file.mtime(system.file("DESCRIPTION", package = package)), units = "mins")),
+                       "minutes ago")
   }
 
   cat("\nPackage:", package, "\n")
@@ -31,9 +31,8 @@ packageInfo <- function(package, repos = c("https://cran.rstudio.com/",
     cat("Availability in repositories:\n")
     v <- list()
     for (r in repos) {
-      v$r <- tryCatch(
-        available.packages(file.path(r, "src", "contrib"))[package, "Version"],
-        error = function(e) return("<not available>"))
+      v$r <- tryCatch(available.packages(file.path(r, "src", "contrib"))[package, "Version"],
+                      error = function(e) return("<not available>"))
       cat(v$r, "|", r, "\n")
     }
     cat("\n")

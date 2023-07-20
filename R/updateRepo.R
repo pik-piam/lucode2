@@ -35,8 +35,8 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = T
   repoPaths <- list.dirs(path, recursive = FALSE)
   packageNames <- basename(repoPaths)
   repoPaths <- repoPaths[!startsWith(packageNames, ".") &
-                         !(packageNames %in% skipFolders) &
-                         dir.exists(file.path(repoPaths, ".git"))]
+                           !(packageNames %in% skipFolders) &
+                           dir.exists(file.path(repoPaths, ".git"))]
   repoPaths <- repoPaths[order(tolower(repoPaths))]
 
   collectedErrors <- lapply(repoPaths, function(repoPath) {
@@ -87,8 +87,8 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = T
 
         # add metadata such as remote url to DESCRIPTION e.g. for renv
         remoteUrl <- sub("git@github\\.com:(.+)\\.git",
-                          "https://github.com/\\1",
-                          gert::git_remote_info(repo = repoPath)$url)
+                         "https://github.com/\\1",
+                         gert::git_remote_info(repo = repoPath)$url)
         cat("Repository: ", repoUrl, "\n",
             "RemoteUrl: ", remoteUrl, "\n",
             "RemoteRef: HEAD\n",
@@ -125,7 +125,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = T
         if (cranversion > currentVersion && cranversion > newVersion) {
           message(" .::WARNING! CRAN: ", availablePackagesOnCran[packageName, "Version"], " !WARNING::.")
           stop("Package version of package \"", packageName, "\" is newer on CRAN (", cranversion,
-                ") compared to PIK-CRAN (", currentVersion, ")! Check version on CRAN immediatly!")
+               ") compared to PIK-CRAN (", currentVersion, ")! Check version on CRAN immediatly!")
         } else {
           message(" .::CRAN: ", availablePackagesOnCran[packageName, "Version"], "::.")
         }

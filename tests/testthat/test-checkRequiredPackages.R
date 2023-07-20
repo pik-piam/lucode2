@@ -14,20 +14,18 @@ test_that("checkRequiredPackages works", {
   expect_error(checkRequiredPackages("poorman", readlineFunction = function(question) "n", libPaths = temporaryLibPath),
                "The following package is required, but it is still not available:\n- poorman")
 
-  expect_error(
-    checkRequiredPackages(c("poorman", "ggplot2"), requiredFor = "something nice",
-                          readlineFunction = function(question) {
-                            expect_identical(question, paste(
-                              "The following currently not installed packages are required for something nice:",
-                              "- poorman",
-                              "- ggplot2",
-                              "Do you want to install them now? (y/N)", sep = "\n"))
-                            return("") # answer = "" should trigger the default (FALSE)
-                          },
-                          libPaths = temporaryLibPath),
-    paste("The following packages are required for something nice, but they are still not available:",
-          "- poorman",
-          "- ggplot2", sep = "\n"))
+  readlineFunction <- function(question) {
+    expect_identical(question, paste("The following currently not installed packages are required for something nice:",
+                                     "- poorman",
+                                     "- ggplot2",
+                                     "Do you want to install them now? (y/N)", sep = "\n"))
+    return("") # answer = "" should trigger the default (FALSE)
+  }
+  expect_error(checkRequiredPackages(c("poorman", "ggplot2"), requiredFor = "something nice",
+                                     readlineFunction = readlineFunction, libPaths = temporaryLibPath),
+               paste("The following packages are required for something nice, but they are still not available:",
+                     "- poorman",
+                     "- ggplot2", sep = "\n"))
 
   expect_false(requireNamespace("poorman", lib.loc = temporaryLibPath, quietly = TRUE))
 
@@ -35,28 +33,27 @@ test_that("checkRequiredPackages works", {
   withr::defer({
     unloadNamespace("poorman") # prevent warning; temporaryLibPath (where poorman is loaded from) will be deleted
   })
+  readlineFunction <- function(question) {
+    expect_identical(question, paste("The following currently not installed package is required for something cool:",
+                                     "- poorman",
+                                     "Do you want to install it now? (y/N)", sep = "\n"))
+    return("y")
+  }
   checkRequiredPackages("poorman", requiredFor = "something cool",
-                        readlineFunction = function(question) {
-                          expect_identical(question, paste(
-                            "The following currently not installed package is required for something cool:",
-                            "- poorman",
-                            "Do you want to install it now? (y/N)", sep = "\n"))
-                          return("y")
-                        },
+                        readlineFunction = readlineFunction,
                         installFunction = function(...) install.packages(..., quiet = TRUE),
                         libPaths = temporaryLibPath)
   expect_true(requireNamespace("poorman", lib.loc = temporaryLibPath, quietly = TRUE))
 
-  expect_error(
-    checkRequiredPackages(c("poorman", "ggplot2"), requiredFor = "something important",
-                          readlineFunction = function(question) {
-                            expect_identical(question, paste(
-                              "The following currently not installed package is required for something important:",
-                              "- ggplot2", # poorman was already installed, so only ggplot2 missing
-                              "Do you want to install it now? (y/N)", sep = "\n"))
-                            return("anything") # any answer except y/yes -> FALSE
-                          },
-                          libPaths = temporaryLibPath),
-    paste("The following package is required for something important, but it is still not available:",
-          "- ggplot2", sep = "\n")) # poorman was already installed, so only ggplot2 missing
+  readlineFunction <- function(question) {
+    expect_identical(question,
+                     paste("The following currently not installed package is required for something important:",
+                           "- ggplot2", # poorman was already installed, so only ggplot2 missing
+                           "Do you want to install it now? (y/N)", sep = "\n"))
+    return("anything") # any answer except y/yes -> FALSE
+  }
+  expect_error(checkRequiredPackages(c("poorman", "ggplot2"), requiredFor = "something important",
+                                     readlineFunction = readlineFunction, libPaths = temporaryLibPath),
+               paste("The following package is required for something important, but it is still not available:",
+                     "- ggplot2", sep = "\n")) # poorman was already installed, so only ggplot2 missing
 })
