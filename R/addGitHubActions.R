@@ -12,6 +12,7 @@
 #'
 #' @author Jan Philipp Dietrich
 #' @seealso \code{\link{buildLibrary}}
+#' @importFrom rlang is_empty
 #' @importFrom usethis local_project use_coverage
 #' @examples
 #' \dontrun{
@@ -26,9 +27,32 @@ addGitHubActions <- function(lib = ".") {
 
   conditionalCopy(".github/workflows/check.yaml")
 
-  if (!file.exists("codecov.yml")) {
-    use_coverage("codecov")
-    conditionalCopy("codecov.yml")
+  # if there is only the dummy test, do not run code coverage
+  if (is_empty(setdiff(list.files("./tests/testthat/"), "test-dummy.R"))) {
+    lines <- readLines(".github/workflows/check.yaml")
+
+    # first line of code coverage block
+    linesTestCoverage <- grep("^ *- name: Test coverage$", lines)
+    linesEmpty <- grep("^\\s*$", lines)   # all empty lines
+
+    # also exclude empty line before code coverage block
+    if ((linesTestCoverage - 1) %in% linesEmpty)
+      linesTestCoverage <- linesTestCoverage - 1
+
+    # first empty line after code coverage block, or last line
+    linesEmpty <- linesEmpty[linesEmpty > linesTestCoverage]
+    linesEmpty <- ifelse(is_empty(linesEmpty), length(lines), linesEmpty - 1)
+
+    # all lines of the code coverage block
+    linesTestCoverage <- seq(linesTestCoverage, linesEmpty)
+
+    writeLines(lines[-linesTestCoverage], ".github/workflows/check.yaml")
+
+    if (!file.exists("codecov.yml")) {
+      use_coverage("codecov")
+      conditionalCopy("codecov.yml")
+    }
+
   }
 
   if (!"^\\.github$" %in% readLines(".Rbuildignore")) {
