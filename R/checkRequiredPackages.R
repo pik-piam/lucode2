@@ -11,7 +11,7 @@
 #' something like this: function(...) remotes::install_github("USDA-ERS/MTED-HARr").
 #' @param readlineFunction This argument was added for testing. A function to get an answer from the user.
 #' @param libPaths This argument was added for testing. Where to look for and install the required packages.
-#' @author Pascal Führlich
+#' @author Pascal Sauer
 #' @seealso \code{\link{requireNamespace}}
 #' @importFrom utils install.packages
 #' @examples

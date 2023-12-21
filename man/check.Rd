@@ -44,5 +44,5 @@ lucode2::check()
 \code{\link[devtools]{check}}, \code{\link[devtools]{test}}
 }
 \author{
-Jan Philipp Dietrich, Pascal Führlich
+Jan Philipp Dietrich, Pascal Sauer
 }

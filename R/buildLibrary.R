@@ -45,7 +45,7 @@
 #'                                    (autocompletion via asterisks allowed)
 #' * **allowLinterWarnings**: yes/no - If set to "no" linter warnings will stop the build process.
 #'                            (default: yes)
-#' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Führlich
+#' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Sauer
 #' @seealso \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
 #' @importFrom desc desc desc_get_deps
 #' @importFrom utils old.packages update.packages packageVersion download.file

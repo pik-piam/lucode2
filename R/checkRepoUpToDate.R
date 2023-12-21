@@ -6,7 +6,7 @@
 #' @param pathToRepo The path to the git repo.
 #' @param autoCheckRepoUpToDate If FALSE do not check automatically and instead
 #' just ask the user.
-#' @author Pascal Führlich
+#' @author Pascal Sauer
 #' @export
 checkRepoUpToDate <- function(pathToRepo = ".", autoCheckRepoUpToDate = TRUE) {
   if (is.null(autoCheckRepoUpToDate)) {

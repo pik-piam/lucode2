@@ -73,5 +73,5 @@ buildLibrary()
 \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
 }
 \author{
-Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Führlich
+Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Sauer
 }

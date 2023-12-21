@@ -22,7 +22,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Pascal Führlich
+  \item Pascal Sauer
   \item David Klein
   \item Anastasis Giannousakis
   \item Markus Bonsch

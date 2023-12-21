@@ -6,7 +6,7 @@
 #'
 #' @return Invisibly, a data.frame with the following columns: raw, firstName, lastName, mailAdress.
 #'
-#' @author Pascal Führlich
+#' @author Pascal Sauer
 #' @export
 gitAuthors <- function() {
   if (Sys.which("git") == "") {

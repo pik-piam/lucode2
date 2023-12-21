@@ -15,5 +15,5 @@ into DESCRIPTION. Please note that this list usually still needs to be carefully
 e.g. for duplicates and cleaned.
 }
 \author{
-Pascal Führlich
+Pascal Sauer
 }

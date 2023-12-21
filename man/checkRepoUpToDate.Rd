@@ -18,5 +18,5 @@ and the default branch of the upstream remote. Will throw an error if not
 up-to-date and prints a git command to update.
 }
 \author{
-Pascal Führlich
+Pascal Sauer
 }

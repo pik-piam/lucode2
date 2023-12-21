@@ -11,7 +11,7 @@
 #' @return A named list, where the names are the paths to the linted files and the values are lists containing the
 #' linter warnings.
 
-#' @author Pascal Führlich
+#' @author Pascal Sauer
 #' @seealso \code{\link{getFilesToLint}}, \code{\link{lintrRules}}, \code{\link{autoFormat}}, \code{\link[lintr]{lint}}
 #' @examples
 #' \dontrun{

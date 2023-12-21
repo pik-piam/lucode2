@@ -23,5 +23,5 @@ dependencies on core R packages, because these are always available.
 \code{\link[renv]{dependencies}}
 }
 \author{
-Pascal Führlich
+Pascal Sauer
 }

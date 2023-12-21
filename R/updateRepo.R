@@ -11,7 +11,7 @@
 #' @param clean Option to clean repos before updating/pulling to avoid merge conflicts
 #' @param skipFolders Which folders/packages should not be built.
 #' @param repoUrl Url of the package repo. Will be added to DESCRIPTION files in the Repository field.
-#' @author Jan Philipp Dietrich, Pascal Führlich
+#' @author Jan Philipp Dietrich, Pascal Sauer
 #' @seealso \code{\link{buildLibrary}}
 #' @importFrom devtools document build install_deps
 #' @importFrom tools write_PACKAGES

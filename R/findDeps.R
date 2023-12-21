@@ -7,7 +7,7 @@
 #'
 #' @param devDeps Whether development dependencies should also be checked.
 #' @return A dataframe documenting which dependency is needed where.
-#' @author Pascal Führlich
+#' @author Pascal Sauer
 #' @seealso \code{\link[renv]{dependencies}}
 #' @importFrom utils installed.packages
 #' @export

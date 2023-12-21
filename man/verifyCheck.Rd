@@ -19,5 +19,5 @@ A note will result in an error unless it matches one of these regular expression
 Run R CMD check completely without stopping. Then stop on errors, or unaccepted warnings and notes.
 }
 \author{
-Pascal Führlich
+Pascal Sauer
 }

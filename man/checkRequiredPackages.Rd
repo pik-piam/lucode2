@@ -39,5 +39,5 @@ checkRequiredPackages(c("ggplot2", "lusweave"), "lucode2::readRuntime(..., plot 
 \code{\link{requireNamespace}}
 }
 \author{
-Pascal Führlich
+Pascal Sauer
 }

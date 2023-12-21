@@ -6,7 +6,7 @@
 #' @param ignoreLintFreeFiles If set to TRUE (the default) files without linter warnings are not auto-formatted.
 #' @param lintAfterwards If set to TRUE (the default) return linter results for the auto-formatted files.
 #'
-#' @author Pascal Führlich
+#' @author Pascal Sauer
 #' @seealso \code{\link{getFilesToLint}}
 #' @examples
 #' \dontrun{
