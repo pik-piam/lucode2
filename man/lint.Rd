@@ -31,5 +31,5 @@ lucode2::lint()
 \code{\link{getFilesToLint}}, \code{\link{lintrRules}}, \code{\link{autoFormat}}, \code{\link[lintr]{lint}}
 }
 \author{
-Pascal Führlich
+Pascal Sauer
 }

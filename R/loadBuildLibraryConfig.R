@@ -4,7 +4,7 @@
 #'
 #' @param lib Path to the package
 #' @return The configuration loaded from .buildLibrary as a list.
-#' @author Jan Philipp Dietrich, Pascal Führlich
+#' @author Jan Philipp Dietrich, Pascal Sauer
 #' @seealso \code{\link{buildLibrary}}
 #' @importFrom utils askYesNo
 #' @importFrom yaml read_yaml write_yaml

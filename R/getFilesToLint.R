@@ -10,7 +10,7 @@
 #'
 #' @param pathToGitRepo path to a git repository
 #'
-#' @author Pascal Führlich
+#' @author Pascal Sauer
 #' @seealso \code{\link{lint}}, \code{\link{autoFormat}}
 #' @importFrom withr local_dir
 #' @examples

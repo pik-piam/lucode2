@@ -29,5 +29,5 @@ lucode2::autoFormat()
 \code{\link{getFilesToLint}}
 }
 \author{
-Pascal Führlich
+Pascal Sauer
 }

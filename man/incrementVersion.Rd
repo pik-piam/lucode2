@@ -27,5 +27,5 @@ lucode2:::incrementVersion("1.23.45", 3)
 \code{\link{buildLibrary}}
 }
 \author{
-Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Führlich
+Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Sauer
 }

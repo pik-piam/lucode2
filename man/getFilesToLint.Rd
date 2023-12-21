@@ -26,5 +26,5 @@ lucode2:::getFilesToLint()
 \code{\link{lint}}, \code{\link{autoFormat}}
 }
 \author{
-Pascal Führlich
+Pascal Sauer
 }

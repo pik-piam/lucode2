@@ -16,6 +16,7 @@
 #' even if the merge statistics are incomplete.
 #' @param pattern detection pattern for rda files that should be merged
 #' @param removeCols vector of columns that will be filtered out
+#' @param keepCols only these columns will be kept, if NULL all columns will be kept
 #' @return A data table containing the merged run statistics or NULL in case the data was not recalculated
 #' @author Jan Philipp Dietrich
 #' @importFrom data.table as.data.table rbindlist
@@ -23,10 +24,13 @@
 #' @importFrom withr local_dir
 #' @export
 mergestatistics <- function(dir = ".", file = NULL, renew = FALSE, quickcheck = FALSE, pattern = "*\\.[rR]da",
-                            removeCols = NULL) {
+                            removeCols = NULL, keepCols = NULL) {
   if (quickcheck && file.exists(file) && all(file.info(Sys.glob(paste0(dir, "/*")))$mtime < file.info(file)$mtime)) {
     return(NULL)
   }
+
+  keepCols <- setdiff(keepCols, removeCols)
+
   out <- NULL
   id  <- NULL
   if (!is.null(file) && !renew) {
@@ -61,11 +65,19 @@ mergestatistics <- function(dir = ".", file = NULL, renew = FALSE, quickcheck = 
     }
     stats$solution <- modelstat
     stats$id <- gsub("\\.[rR]da", "", f)
+
+    if (!is.null(keepCols)) {
+      filteredConfigData <- stats$config[keepCols]
+    } else {
+      filteredConfigData <- stats$config[!(names(stats$config) %in% removeCols)]
+    }
+
     outlist[[stats$id]] <- as.data.table(t(unlist(c(stats[c("user", "date", "version_management",
                                                             "revision", "revision_date", "solution")],
                                                     runtime = as.numeric(stats[["runtime"]], units = "hours"),
-                                                    stats$config[!(names(stats$config) %in% removeCols)]))))
+                                                    filteredConfigData))))
   }
+  message("loading files done")
   out <- rbind(out, rbindlist(outlist, fill = TRUE, idcol = TRUE), fill = TRUE)
   out <- as.data.table(lapply(out, function(x) return(type.convert(as.character(x), as.is = TRUE))))
   names(out) <- make.unique(names(out))

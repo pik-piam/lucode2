@@ -4,7 +4,7 @@
 #'
 #' @return Invisibly, the report as a list.
 #'
-#' @author Pascal Führlich
+#' @author Pascal Sauer
 #'
 #' @importFrom stats setNames
 #' @importFrom tools md5sum

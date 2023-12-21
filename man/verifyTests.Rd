@@ -14,5 +14,5 @@ A warning will result in an error unless it matches one of these regular express
 Run tests and stop on error or unaccepted warning.
 }
 \author{
-Pascal Führlich
+Pascal Sauer
 }

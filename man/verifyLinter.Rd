@@ -13,5 +13,5 @@ verifyLinter(allowLinterWarnings = FALSE)
 Run linter and stop on linter warning unless linter warnings are allowed.
 }
 \author{
-Pascal Führlich
+Pascal Sauer
 }

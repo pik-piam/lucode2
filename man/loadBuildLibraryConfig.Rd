@@ -19,5 +19,5 @@ Load the build configuration from .buildLibrary. If the file does not exist it i
 \code{\link{buildLibrary}}
 }
 \author{
-Jan Philipp Dietrich, Pascal Führlich
+Jan Philipp Dietrich, Pascal Sauer
 }

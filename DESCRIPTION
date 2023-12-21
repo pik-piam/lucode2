@@ -1,11 +1,11 @@
 Type: Package
 Package: lucode2
 Title: Code Manipulation and Analysis Tools
-Version: 0.45.1
-Date: 2023-11-03
+Version: 0.46.0
+Date: 2023-12-21
 Authors@R: c(
     person("Jan Philipp", "Dietrich", , "dietrich@pik-potsdam.de", role = c("aut", "cre")),
-    person("Pascal", "Führlich", role = "aut"),
+    person("Pascal", "Sauer", role = "aut"),
     person("David", "Klein", role = "aut"),
     person("Anastasis", "Giannousakis", role = "aut"),
     person("Markus", "Bonsch", role = "aut"),

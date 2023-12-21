@@ -7,7 +7,7 @@
 #'                 2 for minor, 3 for patch/bugfix, 4 for development.
 #' @param defLengths An integer defining how many parts make up the resulting version number.
 #' @return The new version string.
-#' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Führlich
+#' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Sauer
 #' @seealso \code{\link{buildLibrary}}
 #' @examples
 #' lucode2:::incrementVersion("1.23.45", 3)

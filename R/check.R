@@ -16,7 +16,7 @@
 #' .buildLibrary file is read.
 #' @param runLinter Set to FALSE to skip the linter.
 #'
-#' @author Jan Philipp Dietrich, Pascal Führlich
+#' @author Jan Philipp Dietrich, Pascal Sauer
 #' @examples
 #' \dontrun{
 #' lucode2::check()
@@ -109,7 +109,7 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
 #' @param acceptedWarnings A character vector of regular expressions.
 #' A warning will result in an error unless it matches one of these regular expressions.
 #'
-#' @author Pascal Führlich
+#' @author Pascal Sauer
 #' @export
 verifyTests <- function(acceptedWarnings) {
   testResults <- devtools::test(stop_on_failure = TRUE, reporter = "summary") %>%
@@ -141,7 +141,7 @@ verifyTests <- function(acceptedWarnings) {
 #'
 #' @param allowLinterWarnings If FALSE (the default) will stop on linter warnings.
 #'
-#' @author Pascal Führlich
+#' @author Pascal Sauer
 #' @export
 verifyLinter <- function(allowLinterWarnings = FALSE) {
   linterResults <- lucode2::lint()
@@ -175,7 +175,7 @@ verifyLinter <- function(allowLinterWarnings = FALSE) {
 #' @param acceptedNotes A character vector of regular expressions.
 #' A note will result in an error unless it matches one of these regular expressions.
 #'
-#' @author Pascal Führlich
+#' @author Pascal Sauer
 #' @export
 verifyCheck <- function(cran, acceptedWarnings, acceptedNotes) {
   withr::local_options(crayon.enabled = TRUE)
