@@ -34,10 +34,7 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
 
   packageDocumentation <- file.path("R", paste0(packageName, "-package.R"))
   if (!file.exists(packageDocumentation) && !file.exists(file.path("R", paste0(packageName, ".R")))) {
-    writeLines(c("# The package documentation is defined in this file.",
-                 "# You can get it via `library(<package>); ?<package>`.",
-                 "#' @docType package",
-                 '"_PACKAGE"'), packageDocumentation)
+    usethis::use_package_doc(open = FALSE)
   }
 
   document(pkg = ".", roclets = c("rd", "collate", "namespace", "vignette"))
