@@ -2,12 +2,13 @@
 #'
 #' Checks if the version number in the DESCRIPTION file of a given package has
 #' been updated.
-
+#' @param repo package repository to determine latest version
 #' @importFrom desc desc
 #' @importFrom utils packageVersion
 #' @author Falk Benke
 #' @export
-isVersionUpdated <- function() {
+isVersionUpdated <- function(repo = "https://rse.pik-potsdam.de/r/packages/") {
+
   if (!file.exists("DESCRIPTION")) stop("No DESCRIPTION file found")
 
   env <- desc("DESCRIPTION")
@@ -15,7 +16,7 @@ isVersionUpdated <- function() {
   package <- env$get_field("Package")
 
   version <- tryCatch(
-    available.packages(file.path("https://rse.pik-potsdam.de/r/packages/", "src", "contrib"))[package, "Version"],
+    available.packages(file.path(repo, "src", "contrib"))[package, "Version"],
     error = function(e) {
       stop("Failed to retrieve latest version of this package.")
     }

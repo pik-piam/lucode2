@@ -4,7 +4,10 @@
 \alias{isVersionUpdated}
 \title{isVersionUpdated}
 \usage{
-isVersionUpdated()
+isVersionUpdated(repo = "https://rse.pik-potsdam.de/r/packages/")
+}
+\arguments{
+\item{repo}{package repository to determine latest version}
 }
 \description{
 Checks if the version number in the DESCRIPTION file of a given package has
