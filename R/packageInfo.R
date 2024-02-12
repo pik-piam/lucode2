@@ -18,9 +18,9 @@ packageInfo <- function(package, repos = c("https://cran.rstudio.com/",
     installed <- "<never>"
   } else {
     version <- as.character(version)
-    installed <- paste(as.integer(difftime(Sys.time(),
-                                           file.mtime(system.file("DESCRIPTION", package = package)), units = "mins")),
-                       "minutes ago")
+    versiontime <- file.mtime(system.file("DESCRIPTION", package = package))
+    installed <- paste(as.integer(difftime(Sys.time(), versiontime, units = "mins")), "minutes /",
+                       as.integer(difftime(Sys.time(), versiontime, units = "days")), "days ago")
   }
 
   cat("\nPackage:", package, "\n")
