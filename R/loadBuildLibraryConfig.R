@@ -57,5 +57,9 @@ loadBuildLibraryConfig <- function(lib = ".") {
     cfg$allowLinterWarnings <- TRUE
   }
 
+  if (is.null(cfg$enforceVersionUpdate)) {
+    cfg$enforceVersionUpdate <- FALSE
+  }
+
   return(cfg)
 }

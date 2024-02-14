@@ -4,10 +4,16 @@
 \alias{isVersionUpdated}
 \title{isVersionUpdated}
 \usage{
-isVersionUpdated(repo = "https://rse.pik-potsdam.de/r/packages/")
+isVersionUpdated(
+  repo = "https://rse.pik-potsdam.de/r/packages/",
+  config = loadBuildLibraryConfig()
+)
 }
 \arguments{
 \item{repo}{package repository to determine latest version}
+
+\item{config}{A configuration defining enforceVersionUpdate. By default
+the .buildLibrary file is read.}
 }
 \description{
 Checks if the version number in the DESCRIPTION file of a given package has
