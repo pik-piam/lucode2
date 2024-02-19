@@ -3,12 +3,14 @@
 #' Checks if the version number in the DESCRIPTION file of a given package has
 #' been updated.
 #' @param repo package repository to determine latest version
+#' @param config A configuration defining enforceVersionUpdate. By default
+#' the .buildLibrary file is read.
 #' @importFrom desc desc
 #' @importFrom utils packageVersion
 #' @author Falk Benke
 #' @export
-isVersionUpdated <- function(repo = "https://rse.pik-potsdam.de/r/packages/") {
-
+isVersionUpdated <- function(repo = "https://rse.pik-potsdam.de/r/packages/",
+                             config = loadBuildLibraryConfig()) {
   if (!file.exists("DESCRIPTION")) stop("No DESCRIPTION file found")
 
   env <- desc("DESCRIPTION")
@@ -24,6 +26,10 @@ isVersionUpdated <- function(repo = "https://rse.pik-potsdam.de/r/packages/") {
   latestVersion <- package_version(version)
 
   if (thisVersion <= latestVersion) {
-    stop(paste0("Version has not been updated. Did you run lucode2::buildLibrary()?\n Latest: ", latestVersion))
+    msg <- paste0("Version has not been updated. Did you run lucode2::buildLibrary()?\n Latest: ",
+                  latestVersion, ". Local: ", thisVersion)
+
+    if (config[["enforceVersionUpdate"]]) stop(msg) else warning(msg)
+
   }
 }
