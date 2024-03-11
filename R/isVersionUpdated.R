@@ -17,10 +17,15 @@ isVersionUpdated <- function(repo = "https://rse.pik-potsdam.de/r/packages/",
   thisVersion <- env$get_version()
   package <- env$get_field("Package")
 
+  if (length(unlist(thisVersion)[-(1:3)])) {
+    msg <- paste0("Version number for packages in development stage found: ", thisVersion)
+    if (config[["enforceVersionUpdate"]]) stop(msg) else warning(msg)
+  }
+
   version <- tryCatch(
     available.packages(file.path(repo, "src", "contrib"))[package, "Version"],
     error = function(e) {
-      stop("Failed to retrieve latest version of this package.")
+      if (config[["enforceVersionUpdate"]]) stop("Failed to retrieve latest version of this package.")
     }
   )
   latestVersion <- package_version(version)

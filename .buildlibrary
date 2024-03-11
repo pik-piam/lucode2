@@ -1,4 +1,4 @@
-ValidationKey: '9290490'
+ValidationKey: '9322503'
 AutocreateReadme: yes
 AcceptedWarnings:
 - 'Warning: package ''.*'' was built under R version'
@@ -7,3 +7,4 @@ AcceptedNotes:
 - unable to verify current time
 - 'Package suggested but not available for checking: .poorman.'
 allowLinterWarnings: no
+enforceVersionUpdate: no
