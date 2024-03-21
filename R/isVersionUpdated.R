@@ -28,13 +28,19 @@ isVersionUpdated <- function(repo = "https://rse.pik-potsdam.de/r/packages/",
       if (config[["enforceVersionUpdate"]]) stop("Failed to retrieve latest version of this package.") else return()
     }
   )
+
+  if (is.null(version)) {
+    if (config[["enforceVersionUpdate"]]) stop("Package not found on RSE server.") else return()
+  }
+
   latestVersion <- package_version(version)
 
   if (thisVersion <= latestVersion) {
-    msg <- paste0("Version has not been updated. Did you run lucode2::buildLibrary()?\n Latest: ",
-                  latestVersion, ". Local: ", thisVersion)
+    msg <- paste0(
+      "Version has not been updated. Did you run lucode2::buildLibrary()?\n Latest: ",
+      latestVersion, ". Local: ", thisVersion
+    )
 
     if (config[["enforceVersionUpdate"]]) stop(msg) else warning(msg)
-
   }
 }
