@@ -32,7 +32,8 @@ lintrRules <- function(allowUndesirable = FALSE, modification = list()) {
   deprecatedFunctions <- list(fulldim = "use magclass::getItems()",
                               getRegionList = "use magclass::getItems()",
                               getRegions = "use magclass::getItems()",
-                              `getRegions<-` = "use magclass::getItems()")
+                              `getRegions<-` = "use magclass::getItems()",
+                              speed_aggregate = "use madrat::toolAggregate()")
 
   # by default on.exit replaces all code registered to be run on exit,
   # making it very dangerous to use on.exit together with withr functions
