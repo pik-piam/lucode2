@@ -21,7 +21,7 @@ incrementVersion <- function(currentVersion, position, defLengths = 3) {
       currentVersion[1, i] <- 0
     }
   }
-  if (currentVersion[1, position] == 0 && position == 4) {
+  if (currentVersion[1, position] == "0" && position == 4) {
     currentVersion[1, position] <- 9000
   }
 
