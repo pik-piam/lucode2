@@ -20,7 +20,7 @@
 #'
 #'   | **number**  | **string**    | **description**                          |
 #'   |-------------|---------------|------------------------------------------|
-#'   | 1           | `major`       | for major rewrite of the whole package   |
+#'   | 1           | `major`       | for API breaking changes                 |
 #'   | 2 (default) | `minor`       | for new features or improvements         |
 #'   | 3           | `patch`       | for bugfixes and corrections             |
 #'   | 4           | `development` | only for packages in development stage   |
@@ -243,7 +243,7 @@ handleUpdateType <- function(updateType = NULL, title = "Please choose an update
                          handleUpdateType(title = title))
     return(updateType)
   }
-  updateType <- c("major revision (for major rewrite of the whole package)",
+  updateType <- c("major revision (for API breaking changes)",
                   "minor revision (for new features or improvements)",
                   "patch (for bugfixes and corrections)",
                   "only for packages in development stage",
