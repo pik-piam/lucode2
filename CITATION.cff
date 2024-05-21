@@ -2,30 +2,38 @@ cff-version: 1.2.0
 message: If you use this software, please cite it using the metadata from this file.
 type: software
 title: 'lucode2: Code Manipulation and Analysis Tools'
-version: 0.47.6
-date-released: '2024-04-25'
+version: 0.47.7
+date-released: '2024-05-17'
 abstract: A collection of tools which allow to manipulate and analyze code.
 authors:
 - family-names: Dietrich
   given-names: Jan Philipp
   email: dietrich@pik-potsdam.de
+  orcid: 0000-0002-4309-6431
+  affiliation: Potsdam Institute for Climate Impact Research
 - family-names: Sauer
   given-names: Pascal
+  affiliation: Potsdam Institute for Climate Impact Research
 - family-names: Klein
   given-names: David
+  affiliation: Potsdam Institute for Climate Impact Research
 - family-names: Giannousakis
   given-names: Anastasis
 - family-names: Bonsch
   given-names: Markus
 - family-names: Bodirsky
   given-names: Benjamin Leon
+  affiliation: Potsdam Institute for Climate Impact Research
 - family-names: Baumstark
   given-names: Lavinia
+  affiliation: Potsdam Institute for Climate Impact Research
 - family-names: Richters
   given-names: Oliver
+  affiliation: Potsdam Institute for Climate Impact Research
 - family-names: Pflüger
   given-names: Mika
 license: BSD-2-Clause
+keywords: tool
 repository-code: https://github.com/pik-piam/lucode2
 doi: 10.5281/zenodo.4389418
 

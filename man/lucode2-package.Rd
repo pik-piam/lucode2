@@ -18,17 +18,17 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Jan Philipp Dietrich \email{dietrich@pik-potsdam.de}
+\strong{Maintainer}: Jan Philipp Dietrich \email{dietrich@pik-potsdam.de} (\href{https://orcid.org/0000-0002-4309-6431}{ORCID}) (Potsdam Institute for Climate Impact Research)
 
 Authors:
 \itemize{
-  \item Pascal Sauer
-  \item David Klein
+  \item Pascal Sauer (Potsdam Institute for Climate Impact Research)
+  \item David Klein (Potsdam Institute for Climate Impact Research)
   \item Anastasis Giannousakis
   \item Markus Bonsch
-  \item Benjamin Leon Bodirsky
-  \item Lavinia Baumstark
-  \item Oliver Richters
+  \item Benjamin Leon Bodirsky (Potsdam Institute for Climate Impact Research)
+  \item Lavinia Baumstark (Potsdam Institute for Climate Impact Research)
+  \item Oliver Richters (Potsdam Institute for Climate Impact Research)
   \item Mika Pflüger
 }
 
