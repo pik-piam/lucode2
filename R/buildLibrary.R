@@ -20,7 +20,7 @@
 #'
 #'   | **number**  | **string**    | **description**                          |
 #'   |-------------|---------------|------------------------------------------|
-#'   | 1           | `major`       | API breaking changes                     |
+#'   | 1           | `major`       | for API breaking changes                 |
 #'   | 2 (default) | `minor`       | for new features or improvements         |
 #'   | 3           | `patch`       | for bugfixes and corrections             |
 #'   | 4           | `development` | only for packages in development stage   |
