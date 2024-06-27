@@ -20,7 +20,7 @@
 #'
 #'   | **number**  | **string**    | **description**                          |
 #'   |-------------|---------------|------------------------------------------|
-#'   | 1           | `major`       | for major rewrite of the whole package   |
+#'   | 1           | `major`       | API breaking changes                     |
 #'   | 2 (default) | `minor`       | for new features or improvements         |
 #'   | 3           | `patch`       | for bugfixes and corrections             |
 #'   | 4           | `development` | only for packages in development stage   |
@@ -45,7 +45,7 @@
 #'                                    (autocompletion via asterisks allowed)
 #' * **allowLinterWarnings**: yes/no - If set to "no" linter warnings will stop the build process.
 #'                            (default: yes)
-#' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Führlich
+#' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Sauer
 #' @seealso \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
 #' @importFrom desc desc desc_get_deps
 #' @importFrom utils old.packages update.packages packageVersion download.file
@@ -58,6 +58,7 @@
 #' @export
 buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
                          updateLucode2 = TRUE, autoCheckRepoUpToDate = TRUE) {
+  if (isTRUE(updateType == "")) updateType <- NULL
   lib <- normalizePath(lib)
   local_dir(lib)
   checkRepoUpToDate(".", autoCheckRepoUpToDate)
@@ -242,7 +243,7 @@ handleUpdateType <- function(updateType = NULL, title = "Please choose an update
                          handleUpdateType(title = title))
     return(updateType)
   }
-  updateType <- c("major revision (for major rewrite of the whole package)",
+  updateType <- c("major revision (for API breaking changes)",
                   "minor revision (for new features or improvements)",
                   "patch (for bugfixes and corrections)",
                   "only for packages in development stage",
