@@ -19,7 +19,7 @@ buildLibrary(
 
 \item{updateType}{Either an integer or character string:\tabular{lll}{
    \strong{number} \tab \strong{string} \tab \strong{description} \cr
-   1 \tab \code{major} \tab for API breaking changes \cr
+   1 \tab \code{major} \tab for major rewrite of the whole package \cr
    2 (default) \tab \code{minor} \tab for new features or improvements \cr
    3 \tab \code{patch} \tab for bugfixes and corrections \cr
    4 \tab \code{development} \tab only for packages in development stage \cr
@@ -73,5 +73,5 @@ buildLibrary()
 \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
 }
 \author{
-Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Sauer
+Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Führlich
 }
