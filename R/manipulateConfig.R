@@ -47,7 +47,7 @@ manipulateConfig <- function(configFile, ...) {
                                                        i, "(|\\([^\\)]*\\))(/|[\\t ]+(\"[^\"]*\"|)[^\"/;]*/))[^/]*",
                                                        sep = "")
       m[[paste(i, "_pattern2", sep = "")]][2] <- paste("\\1 ", rpl, " ", sep = "")
-      m[[paste(i, "_pattern3", sep = "")]][1] <- paste("((^|[\\n\\t ])", i, "[ \\t]*=[ \\t]*[\"\']?)[^\"\';]*",
+      m[[paste(i, "_pattern3", sep = "")]][1] <- paste("((^|\\n)[ \\t]*", i, "[ \\t]*=[ \\t]*[\"\']?)[^\"\';]*",
                                                        sep = "")
       m[[paste(i, "_pattern3", sep = "")]][2] <- paste("\\1", rpl, sep = "")
     }
