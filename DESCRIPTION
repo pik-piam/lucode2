@@ -1,8 +1,8 @@
 Type: Package
 Package: lucode2
 Title: Code Manipulation and Analysis Tools
-Version: 0.47.8
-Date: 2024-06-27
+Version: 0.47.9
+Date: 2024-08-06
 Authors@R: c(
     person("Jan Philipp", "Dietrich", email = "dietrich@pik-potsdam.de", 
     comment = c(affiliation = "Potsdam Institute for Climate Impact Research", ORCID = "0000-0002-4309-6431"), role = c("aut","cre")),
@@ -50,7 +50,7 @@ Suggests:
     testthat
 Encoding: UTF-8
 LazyData: no
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Config/testthat/parallel: true
 Config/testthat/edition: 3
 Config/testthat/start-first: checkRequiredPackages, updateRepo
