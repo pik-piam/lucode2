@@ -9,7 +9,7 @@ updateRepo(
   check = TRUE,
   forceRebuild = FALSE,
   clean = TRUE,
-  skipFolders = c("Archive", "gdxrrw", "HARr", "SPARQL"),
+  skipFolders = "Archive",
   repoUrl = "https://rse.pik-potsdam.de/r/packages"
 )
 }
