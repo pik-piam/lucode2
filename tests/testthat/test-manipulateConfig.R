@@ -23,7 +23,10 @@ test_that("manipulateConfig works", {
              paste0("bazz = ", cfg$bazz, ";"),
              paste0("buzz = ", cfg$buzz, ";"),
              paste0("bla_blub = ", cfg$bla_blub, ";"),
-             paste0("bla = ", cfg$bla, ";"))
+             paste0("bla = ", cfg$bla, ";"),
+             "*** bla = shouldstaylikethis",
+             "*' not for bazz = shouldnotchange",
+             paste0("bla=   ", cfg$bla, ";"))
       return(x)
     }
 
