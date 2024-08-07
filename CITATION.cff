@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: If you use this software, please cite it using the metadata from this file.
 type: software
 title: 'lucode2: Code Manipulation and Analysis Tools'
-version: 0.47.9
-date-released: '2024-08-06'
+version: 0.47.10
+date-released: '2024-08-07'
 abstract: A collection of tools which allow to manipulate and analyze code.
 authors:
 - family-names: Dietrich
