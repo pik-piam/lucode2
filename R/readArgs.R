@@ -64,7 +64,7 @@ readArgs <- function(..., .argv = commandArgs(trailingOnly = TRUE),
   knownFlags <- sort(unique(c(twoDashFlags, unlist(.flags[names(.flags) %in% oneDashFlags]))))
   unknownFlags <- c(sort(paste0("-", oneDashFlags)[!oneDashFlags %in% c(names(.flags), "-")]),
                     .argv[grepl("^--[a-zA-Z0-9]*$", .argv) & !.argv %in% .flags])
-  .argv <- .argv[!grepl("^-", .argv)]
+  .argv <- gsub("^--", "", setdiff(.argv, c(oneDashFlags, twoDashFlags)))
   if (length(.argv) > 0) {
     ### apply additional command line arguments ###
     for (argnr in seq_along(.argv)) {
