@@ -4,7 +4,7 @@
 \alias{package2readme}
 \title{package2readme}
 \usage{
-package2readme(package = ".", add = NULL, logo = NULL)
+package2readme(package = ".", add = NULL, logo = NULL, logoHeight = NULL)
 }
 \arguments{
 \item{package}{either the path to the main folder of a package (containing a DESCRIPTION file)
@@ -14,6 +14,8 @@ or the name of the package}
 1) a line of markdown code, 2) a path to a markdown file, or 3) a path to a Rmarkdown file}
 
 \item{logo}{a character string for a path to a logo file used in the title of the README file}
+
+\item{logoHeight}{numeric, logo height in px}
 }
 \description{
 Creates a README.md for a R package.

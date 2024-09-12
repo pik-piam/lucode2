@@ -7,6 +7,7 @@
 #' @param add a character vector with additions to the README file. Each element of the vector can be either
 #' 1) a line of markdown code, 2) a path to a markdown file, or 3) a path to a Rmarkdown file
 #' @param logo a character string for a path to a logo file used in the title of the README file
+#' @param logoHeight numeric, logo height in px
 #' @author Jan Philipp Dietrich
 #' @importFrom desc desc
 #' @importFrom utils citation vignette packageDescription
@@ -16,7 +17,7 @@
 #' @examples
 #' package2readme("lucode2")
 #' @export
-package2readme <- function(package = ".", add = NULL, logo = NULL) { # nolint
+package2readme <- function(package = ".", add = NULL, logo = NULL, logoHeight = NULL) { # nolint
   if (file.exists(file.path(package, "DESCRIPTION"))) {
     d <- desc(file = file.path(package, "DESCRIPTION"))
     folder <- package
@@ -218,17 +219,19 @@ package2readme <- function(package = ".", add = NULL, logo = NULL) { # nolint
     return(x)
   }
 
-  getTitle <- function(x, logo) {
+  getTitle <- function(x, logo, height) {
     if (!is.null(logo)) {
-      x <- paste0("<a href=''><img src='",
-                  logo,
-                  "' align='right' height=139 width=300 /></a>",
+      if (is.null(height)) {
+        height <- 139
+      }
+      x <- paste0("<a href=''><img src='", logo, "' align='right' alt='logo' ",
+                  "height=", height, " /></a> ",
                   x)
     }
     return(x)
   }
 
-  fill <- list(title         = getTitle(d$get("Title"), logo),
+  fill <- list(title         = getTitle(d$get("Title"), logo, logoHeight),
                package       = d$get("Package"),
                description   = d$get("Description"),
                additions     = fillAdditions(add, folder),
