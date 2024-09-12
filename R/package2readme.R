@@ -220,10 +220,10 @@ package2readme <- function(package = ".", add = NULL, logo = NULL) { # nolint
 
   getTitle <- function(x, logo) {
     if (!is.null(logo)) {
-      x <- paste0(x,
-                  " <a href=''><img src='",
+      x <- paste0("<a href=''><img src='",
                   logo,
-                  "' align='right' height='139' /></a>")
+                  "' align='right' height=139 width=300 /></a>",
+                  x)
     }
     return(x)
   }
