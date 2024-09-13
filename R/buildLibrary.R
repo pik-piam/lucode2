@@ -39,6 +39,7 @@
 #'                               in markdown format or as paths to RMarkdown (Rmd) or Markdown (md) files
 #' * **AddLogoReadme** (optional): Additional logo to be added to the autocreated README. Provided as
 #'                                 path to logo in PNG format
+#' * **LogoHeightReadme** (optional): Height of the logo in README in px
 #' * **AcceptedWarnings** (optional): a list of Warnings which should be ignored by `buildLibrary`
 #'                                    (autocompletion via asterisks allowed)
 #' * **AcceptedNotes** (optional): a list of Notes which should be ignored by `buildLibrary`
@@ -190,7 +191,8 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
   citation::r2cff(export = TRUE)
   if (isTRUE(cfg$AutocreateReadme)) {
     package2readme(add = cfg$AddInReadme,
-                   logo = cfg$AddLogoReadme)
+                   logo = cfg$AddLogoReadme,
+                   logoHeight = cfg$LogoHeightReadme)
   }
 
   ####################################################################
