@@ -63,6 +63,11 @@ path to logo in PNG format
 (autocompletion via asterisks allowed)
 \item \strong{allowLinterWarnings}: yes/no - If set to "no" linter warnings will stop the build process.
 (default: yes)
+\item \strong{enforceVersionUpdate}: yes/no - If set to "yes", the version number must
+be incremented to a non-dev version number
+for the build process to succeed. (default: no)
+\item \strong{skipCoverage}: yes/no - If set to "yes", running code coverage using covr
+as part of the GitHub workflow will be skipped. (default: no)
 }
 }
 \examples{

@@ -17,7 +17,7 @@ the .buildLibrary file is read.}
 }
 \description{
 Checks if the version number in the DESCRIPTION file of a given package has
-been updated.
+been updated (may not be a version number for development stage packages).
 }
 \author{
 Falk Benke

@@ -46,6 +46,11 @@
 #'                                    (autocompletion via asterisks allowed)
 #' * **allowLinterWarnings**: yes/no - If set to "no" linter warnings will stop the build process.
 #'                            (default: yes)
+#' * **enforceVersionUpdate**: yes/no - If set to "yes", the version number must
+#'                                    be incremented to a non-dev version number
+#'                                    for the build process to succeed. (default: no)
+#' * **skipCoverage**: yes/no - If set to "yes", running code coverage using covr
+#'                              as part of the GitHub workflow will be skipped. (default: no)
 #' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Sauer
 #' @seealso \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
 #' @importFrom desc desc desc_get_deps
