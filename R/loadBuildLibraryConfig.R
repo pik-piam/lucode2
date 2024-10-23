@@ -61,5 +61,9 @@ loadBuildLibraryConfig <- function(lib = ".") {
     cfg$enforceVersionUpdate <- FALSE
   }
 
+  if (is.null(cfg$skipCoverage)) {
+    cfg$skipCoverage <- FALSE
+  }
+
   return(cfg)
 }
