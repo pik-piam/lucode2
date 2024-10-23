@@ -1,7 +1,7 @@
 #' isVersionUpdated
 #'
 #' Checks if the version number in the DESCRIPTION file of a given package has
-#' been updated.
+#' been updated (may not be a version number for development stage packages).
 #' @param repo package repository to determine latest version
 #' @param config A configuration defining enforceVersionUpdate. By default
 #' the .buildLibrary file is read.
