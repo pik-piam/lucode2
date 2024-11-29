@@ -4,7 +4,7 @@
 \alias{verifyLinter}
 \title{verifyLinter}
 \usage{
-verifyLinter(allowLinterWarnings = TRUE)
+verifyLinter(allowLinterWarnings = FALSE)
 }
 \arguments{
 \item{allowLinterWarnings}{If FALSE will stop on linter warnings.}
