@@ -140,7 +140,7 @@ verifyTests <- function(acceptedWarnings) {
 #'
 #' @author Pascal Sauer
 #' @export
-verifyLinter <- function(allowLinterWarnings = TRUE) {
+verifyLinter <- function(allowLinterWarnings = FALSE) {
   linterResults <- lucode2::lint()
   message("linter results:")
   print(linterResults)
