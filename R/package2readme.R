@@ -83,6 +83,15 @@ package2readme <- function(package = ".", add = NULL, logo = NULL, logoHeight = 
     return(out)
   }
 
+  fillJOSS <- function(d) {
+    z <- grep("joss", d$get_urls(), value = TRUE)
+    if (length(z) == 0) return("")
+    doi <- strsplit(z, "doi.org/", fixed = TRUE)[[1]][2]
+    out <- paste0("[![DOI](https://joss.theoj.org/papers/", doi,
+                  "/status.svg)](https://doi.org/", doi, ")")
+    return(out)
+  }
+
   fillZenodo <- function(d) {
     z <- grep("zenodo", d$get_urls(), value = TRUE)
     if (length(z) == 0) return("")
@@ -216,6 +225,9 @@ package2readme <- function(package = ".", add = NULL, logo = NULL, logoHeight = 
       if (is.null(fill[[what]])) fill[[what]] <- ""
       x <- gsub(paste0("[:", what, ":]"), fill[[what]], x, fixed = TRUE)
     }
+    # Replace multiple spaces between `)`and `[` due to empty placeholders
+    # with a single space
+    x <- gsub("\\)\\s+\\[", ") [", x)
     return(x)
   }
 
@@ -238,6 +250,7 @@ package2readme <- function(package = ".", add = NULL, logo = NULL, logoHeight = 
                version       = d$get("Version"),
                maintainer    = d$get_maintainer(),
                cran          = fillCRAN(d),
+               joss          = fillJOSS(d),
                zenodo        = fillZenodo(d),
                githubactions = fillGithubActions(d, folder),
                codecov       = fillCodecov(d, folder),
