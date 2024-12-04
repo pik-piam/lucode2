@@ -88,7 +88,7 @@ package2readme <- function(package = ".", add = NULL, logo = NULL, logoHeight = 
     if (length(z) == 0) return("")
     doi <- strsplit(z, "doi.org/", fixed = TRUE)[[1]][2]
     out <- paste0("[![DOI](https://joss.theoj.org/papers/", doi,
-                  "/status.svg)](https://doi.org/", doi, ")")
+                  "/status.svg)](https://doi.org/", doi, ") ")
     return(out)
   }
 
