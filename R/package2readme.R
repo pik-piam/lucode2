@@ -88,7 +88,7 @@ package2readme <- function(package = ".", add = NULL, logo = NULL, logoHeight = 
     if (length(z) == 0) return("")
     doi <- strsplit(z, "doi.org/", fixed = TRUE)[[1]][2]
     out <- paste0("[![DOI](https://joss.theoj.org/papers/", doi,
-                  "/status.svg)](https://doi.org/", doi, ") ")
+                  "/status.svg)](https://doi.org/", doi, ")")
     return(out)
   }
 
@@ -225,6 +225,9 @@ package2readme <- function(package = ".", add = NULL, logo = NULL, logoHeight = 
       if (is.null(fill[[what]])) fill[[what]] <- ""
       x <- gsub(paste0("[:", what, ":]"), fill[[what]], x, fixed = TRUE)
     }
+    # Replace multiple spaces between `)`and `[` due to empty placeholders
+    # with a single space
+    x <- gsub("\\)\\s+\\[", ") [", x)
     return(x)
   }
 
