@@ -7,7 +7,7 @@
 verifyLinter(allowLinterWarnings = FALSE)
 }
 \arguments{
-\item{allowLinterWarnings}{If FALSE (the default) will stop on linter warnings.}
+\item{allowLinterWarnings}{If FALSE will stop on linter warnings.}
 }
 \description{
 Run linter and stop on linter warning unless linter warnings are allowed.

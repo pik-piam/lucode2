@@ -47,7 +47,7 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
     logs[["linter"]] <- withr::local_tempfile(pattern = "linter", fileext = ".log")
     message("running linter in background, see ", logs[["linter"]])
     processes[["linter"]] <- callr::r_bg(function(...) lucode2::verifyLinter(...),
-                                         args = list(isFALSE(config[["allowLinterWarnings"]])),
+                                         args = list(config[["allowLinterWarnings"]]),
                                          stdout = logs[["linter"]], stderr = "2>&1")
   }
 
@@ -136,7 +136,7 @@ verifyTests <- function(acceptedWarnings) {
 #'
 #' Run linter and stop on linter warning unless linter warnings are allowed.
 #'
-#' @param allowLinterWarnings If FALSE (the default) will stop on linter warnings.
+#' @param allowLinterWarnings If FALSE will stop on linter warnings.
 #'
 #' @author Pascal Sauer
 #' @export
@@ -148,7 +148,7 @@ verifyLinter <- function(allowLinterWarnings = FALSE) {
     autoFormatExcludeInfo <- paste("Running lucode2::autoFormat() might fix some warnings. If really needed (e.g.",
                                    "to prevent breaking an interface), see ?lintr::exclude on how to disable the",
                                    "linter for some lines.")
-    if (allowLinterWarnings) {
+    if (isFALSE(allowLinterWarnings)) {
       stop("There were linter warnings. They have to be fixed to successfully complete lucode2::buildLibrary. ",
            autoFormatExcludeInfo,
            " You can find solutions to common problems at https://github.com/pik-piam/discussions/discussions/18")
