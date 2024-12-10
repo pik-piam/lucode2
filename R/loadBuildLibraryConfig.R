@@ -24,6 +24,7 @@ loadBuildLibraryConfig <- function(lib = ".") {
     # if not yet available, add .buildlibrary and add to .Rbuildignore
     cfg <- list(ValidationKey = 0,
                 AutocreateReadme = TRUE,
+                AutocreateCITATION = TRUE,
                 AcceptedWarnings = c("Warning: package '.*' was built under R version",
                                      "Warning: namespace '.*' is not available and has been replaced"),
                 AcceptedNotes = NULL,
@@ -53,6 +54,11 @@ loadBuildLibraryConfig <- function(lib = ".") {
   if (is.null(cfg$AutocreateReadme)) {
     cfg$AutocreateReadme <- TRUE # nolint
   }
+
+  if (is.null(cfg$AutocreateCITATION)) {
+    cfg$AutocreateCITATION <- TRUE
+  }
+
   if (is.null(cfg$allowLinterWarnings)) {
     cfg$allowLinterWarnings <- TRUE
   }

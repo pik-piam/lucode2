@@ -35,6 +35,8 @@
 #'                      It confirms that the package has been successfully build via the function.
 #' * **AutocreateReadme** (optional): yes/no - decides whether `buildLibrary` automatically updates
 #'                                    the README.md file or not (default: yes)
+#' * **AutocreateCITATION** (optional): yes/no - decides whether `buildLibrary` automatically creates
+#'                                    the CITATION.cff file or not (default: yes)
 #' * **AddInReadme** (optional): Additional entries to be added to the autocreated README. Provided either
 #'                               in markdown format or as paths to RMarkdown (Rmd) or Markdown (md) files
 #' * **AddLogoReadme** (optional): Additional logo to be added to the autocreated README. Provided as
@@ -193,7 +195,9 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
   ##################################################################
   writeLines(descfile, "DESCRIPTION")
   write_yaml(cfg, ".buildlibrary")
-  citation::r2cff(export = TRUE)
+  if (isTRUE(cfg$AutocreateCITATION)) {
+    citation::r2cff(export = TRUE)
+  }
   if (isTRUE(cfg$AutocreateReadme)) {
     package2readme(add = cfg$AddInReadme,
                    logo = cfg$AddLogoReadme,
@@ -268,9 +272,8 @@ handleUpdateType <- function(updateType = NULL, title = "Please choose an update
 }
 
 unignoreManFiles <- function() {
-  gitignore <- suppressWarnings(tryCatch({
-    readLines(".gitignore")
-  }, error = function(error) return(character(0))))
+  gitignore <- suppressWarnings(tryCatch(readLines(".gitignore"),
+                                         error = function(error) return(character(0))))
   if ("*.Rd" %in% gitignore || file.exists(file.path("man", ".gitignore"))) {
     message("*.Rd files are currently ignored, but they should be commited.")
 
