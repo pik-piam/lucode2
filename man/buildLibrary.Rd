@@ -52,6 +52,8 @@ main folder of the package. It uses YAML format and can contain the following en
 It confirms that the package has been successfully build via the function.
 \item \strong{AutocreateReadme} (optional): yes/no - decides whether \code{buildLibrary} automatically updates
 the README.md file or not (default: yes)
+\item \strong{AutocreateCITATION} (optional): yes/no - decides whether \code{buildLibrary} automatically creates
+the CITATION.cff file or not (default: yes)
 \item \strong{AddInReadme} (optional): Additional entries to be added to the autocreated README. Provided either
 in markdown format or as paths to RMarkdown (Rmd) or Markdown (md) files
 \item \strong{AddLogoReadme} (optional): Additional logo to be added to the autocreated README. Provided as

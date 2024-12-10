@@ -143,13 +143,22 @@ package2readme <- function(package = ".", add = NULL, logo = NULL, logoHeight = 
     ci <- NULL
     # If `folder` is set, try to get citation from this project folder.
     if (!is.null(folder)) {
-      try({
-        projectPath <- normalizePath(folder, mustWork = TRUE, winslash = "/")
-        ci <- citationDoi(packageDescription(basename(projectPath), lib.loc = dirname(projectPath)))
-      })
+      cff <- paste0(folder, "/CITATION.cff")
+      if (file.exists(cff)) {
+        message("Use CITATION.cff")
+        ci <- citation::cff2bibentry(cff)
+        class(h) <- c("citation", "bibentry")
+      } else {
+        message("Use citationDOI function")
+        try({
+          projectPath <- normalizePath(folder, mustWork = TRUE, winslash = "/")
+          ci <- citationDoi(packageDescription(basename(projectPath), lib.loc = dirname(projectPath)))
+        })
+      }
     }
     # If previous code did not work or folder is not set, get citation from installed package.
     if (is.null(ci)) {
+      message("use citation function")
       ci <- citation(package = d$get("Package"))
     }
 
