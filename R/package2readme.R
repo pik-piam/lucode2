@@ -147,7 +147,7 @@ package2readme <- function(package = ".", add = NULL, logo = NULL, logoHeight = 
       if (file.exists(cff)) {
         message("Use CITATION.cff")
         ci <- citation::cff2bibentry(cff)
-        class(h) <- c("citation", "bibentry")
+        class(ci) <- c("citation", "bibentry")
       } else {
         message("Use citationDOI function")
         try({
