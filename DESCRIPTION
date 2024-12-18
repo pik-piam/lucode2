@@ -1,18 +1,23 @@
 Type: Package
 Package: lucode2
 Title: Code Manipulation and Analysis Tools
-Version: 0.49.0
-Date: 2024-12-16
+Version: 0.49.1
+Date: 2024-12-18
 Authors@R: c(
-    person("Jan Philipp", "Dietrich", email = "dietrich@pik-potsdam.de", 
-    comment = c(affiliation = "Potsdam Institute for Climate Impact Research", ORCID = "0000-0002-4309-6431"), role = c("aut","cre")),
-    person("Pascal", "Sauer", comment = c(affiliation = "Potsdam Institute for Climate Impact Research"), role = "aut"),
-    person("David", "Klein", comment = c(affiliation = "Potsdam Institute for Climate Impact Research"), role = "aut"),
+    person("Jan Philipp", "Dietrich", , "dietrich@pik-potsdam.de", role = c("aut", "cre"),
+           comment = c(affiliation = "Potsdam Institute for Climate Impact Research", ORCID = "0000-0002-4309-6431")),
+    person("Pascal", "Sauer", role = "aut",
+           comment = c(affiliation = "Potsdam Institute for Climate Impact Research")),
+    person("David", "Klein", role = "aut",
+           comment = c(affiliation = "Potsdam Institute for Climate Impact Research")),
     person("Anastasis", "Giannousakis", role = "aut"),
     person("Markus", "Bonsch", role = "aut"),
-    person("Benjamin Leon", "Bodirsky", comment = c(affiliation = "Potsdam Institute for Climate Impact Research"), role = "aut"),
-    person("Lavinia", "Baumstark", comment = c(affiliation = "Potsdam Institute for Climate Impact Research"), role = "aut"),
-    person("Oliver", "Richters", comment = c(affiliation = "Potsdam Institute for Climate Impact Research"), role = "aut"),
+    person("Benjamin Leon", "Bodirsky", role = "aut",
+           comment = c(affiliation = "Potsdam Institute for Climate Impact Research")),
+    person("Lavinia", "Baumstark", role = "aut",
+           comment = c(affiliation = "Potsdam Institute for Climate Impact Research")),
+    person("Oliver", "Richters", role = "aut",
+           comment = c(affiliation = "Potsdam Institute for Climate Impact Research")),
     person("Mika", "Pflüger", role = "aut")
   )
 Description: A collection of tools which allow to manipulate and analyze
@@ -48,10 +53,10 @@ Suggests:
     rmarkdown,
     styler,
     testthat
+Config/Keywords: tool
+Config/testthat/edition: 3
+Config/testthat/parallel: true
+Config/testthat/start-first: checkRequiredPackages, updateRepo
 Encoding: UTF-8
 LazyData: no
 RoxygenNote: 7.3.2
-Config/testthat/parallel: true
-Config/testthat/edition: 3
-Config/testthat/start-first: checkRequiredPackages, updateRepo
-Config/Keywords: tool

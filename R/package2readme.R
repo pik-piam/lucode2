@@ -162,6 +162,7 @@ package2readme <- function(package = ".", add = NULL, logo = NULL, logoHeight = 
       ci <- citation(package = d$get("Package"))
     }
 
+    withr::local_options(useFancyQuotes = FALSE)
     out <- c("\nTo cite package **", d$get("Package"), "** in publications use:\n\n",
              format(ci, style = "text"),
              "\n\nA BibTeX entry for LaTeX users is\n\n ```latex\n",
