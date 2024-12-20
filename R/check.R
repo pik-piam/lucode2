@@ -176,6 +176,13 @@ verifyLinter <- function(allowLinterWarnings = FALSE) {
 #' @export
 verifyCheck <- function(cran, acceptedWarnings, acceptedNotes) {
   withr::local_options(crayon.enabled = TRUE)
+  if (!requireNamespace("renv", quietly = TRUE) || is.null(renv::project())) {
+    # during "checking whether the package can be loaded" renv tries to cleanup
+    # RENV_PATHS_ROOT with "find . -type d -empty -delete" which takes a long time
+    # and currently fails with ".../.cache.lock’: Permission denied", so unset
+    # RENV_PATHS_ROOT tmeporarily
+    withr::local_envvar(RENV_PATHS_ROOT = NA)
+  }
   # _R_CHECK_SYSTEM_CLOCK_ = 0 should prevent "unable to verify current time" when time server is down
   checkResults <- devtools::check(document = FALSE, cran = cran, args = c("--timings", "--no-tests"),
                                   env_vars = c(NOT_CRAN = "true", `_R_CHECK_SYSTEM_CLOCK_` = "0"),
