@@ -26,6 +26,7 @@ conditionalCopy <- function(relativePath, nameInInstExtdata = basename(relativeP
     }
     file.copy(relativePath, instExtdataPath, overwrite = TRUE)
   } else {
+    # copy.mode = FALSE because in case lucode2 is loaded from renv cache where files have no write permission
     file.copy(system.file("extdata", nameInInstExtdata, package = "lucode2"), relativePath,
               overwrite = TRUE, copy.mode = FALSE)
   }
