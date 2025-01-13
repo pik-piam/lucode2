@@ -26,7 +26,8 @@ conditionalCopy <- function(relativePath, nameInInstExtdata = basename(relativeP
     }
     file.copy(relativePath, instExtdataPath, overwrite = TRUE)
   } else {
-    file.copy(system.file("extdata", nameInInstExtdata, package = "lucode2"), relativePath, overwrite = TRUE)
+    file.copy(system.file("extdata", nameInInstExtdata, package = "lucode2"), relativePath,
+              overwrite = TRUE, copy.mode = FALSE)
   }
   return(invisible(NULL))
 }
