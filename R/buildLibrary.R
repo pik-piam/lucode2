@@ -150,12 +150,6 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
 
   # hidden files in inst/extdata produce NOTE during check, so remove leading dot from .pre-commit-config.yaml
   conditionalCopy(".pre-commit-config.yaml", "pre-commit-config.yaml")
-  if (packageName != "lucode2") {
-    preCommitConfig <- sub("autoupdate_schedule: weekly", "autoupdate_schedule: quarterly",
-                           readLines(".pre-commit-config.yaml"))
-    writeLines(preCommitConfig, ".pre-commit-config.yaml")
-  }
-
   conditionalCopy("Makefile")
 
   ##########################################################
