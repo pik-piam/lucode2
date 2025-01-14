@@ -39,6 +39,8 @@ jobs:
         with:
           python-version: 3.9
 
+      - uses: pre-commit/action@v3.0.1
+
       - name: Install python dependencies if applicable
         run: |
           [ -f requirements.txt ] && python -m pip install --upgrade pip wheel || true
