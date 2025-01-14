@@ -73,7 +73,7 @@ jobs:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v3
     - uses: r-lib/actions/setup-r@v2
-        with:
-          use-public-rspm: true
-          extra-repositories: "https://rse.pik-potsdam.de/r/packages"
+      with:
+        use-public-rspm: true
+        extra-repositories: "https://rse.pik-potsdam.de/r/packages"
     - uses: pre-commit/action@v3.0.1
