@@ -39,8 +39,6 @@ jobs:
         with:
           python-version: 3.9
 
-      - uses: pre-commit/action@v3.0.1
-
       - name: Install python dependencies if applicable
         run: |
           [ -f requirements.txt ] && python -m pip install --upgrade pip wheel || true
@@ -68,3 +66,10 @@ jobs:
           if(length(nonDummyTests) > 0 && !lucode2:::loadBuildLibraryConfig()[["skipCoverage"]]) covr::codecov(quiet = FALSE)
         env:
           NOT_CRAN: "true"
+
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v3
+    - uses: pre-commit/action@v3.0.1
