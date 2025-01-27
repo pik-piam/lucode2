@@ -20,6 +20,9 @@ autoFormat <- function(files = getFilesToLint(), ignoreLintFreeFiles = TRUE,
   # fix T_and_F_symbol lint (will only touch files with that kind of lint)
   theOneAndOnlyTandFsymbolFixer(files)
 
+  # fix indentation lint (will only touch files with that kind of lint)
+  theOneAndOnlyLinospace(files)
+
   if (ignoreLintFreeFiles) {
     # keep only files with linter warnings
     files <- unique(names(lint(files)))
@@ -72,5 +75,42 @@ theOneAndOnlyTandFsymbolFixer <- function(files) {
 
       writeLines(t, f[[1]][["filename"]])
     }
+  }
+}
+
+# Fix all indentation to please the linter god
+theOneAndOnlyLinospace <- function(files, iterMax = 10000L) {
+  for (f in files) {
+    t <- readLines(f)
+    i <- 1
+    while (0 < length(theLint <- lintr::lint(
+                                             filename = paste(t, collapse = "\n"),
+                                             linters = list(lintr::indentation_linter()),
+                                             parse_settings = FALSE))
+           && i < iterMax
+    ) {
+
+      for (j in seq_along(theLint)) {
+        line <- theLint[[j]][["line_number"]]
+        should <- as.integer(sub(".*be ([0-9]+) spaces but is.*", "\\1",
+                                 theLint[[j]][["message"]]))
+        is     <- as.integer(sub(".*but is ([0-9]+) spaces.$", "\\1",
+                                 theLint[[j]][["message"]]))
+
+        t[[line]] <- if (is < should) {
+          paste(c(rep(" ", should - is), t[[line]]), collapse = "")
+        } else {
+          substr(t[[line]], is - should + 1, 1000000L)
+        }
+
+        i <- i + 1
+      }
+    }
+
+    if (i == iterMax) {
+      stop("Reached maximum number of iterations.")
+    }
+
+    writeLines(t, f)
   }
 }
