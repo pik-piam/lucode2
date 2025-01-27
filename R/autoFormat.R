@@ -87,7 +87,7 @@ theOneAndOnlyLinospace <- function(files, iterMax = 10000L) {
                                              filename = paste(t, collapse = "\n"),
                                              linters = list(lintr::indentation_linter()),
                                              parse_settings = FALSE))
-           && i < iterMax
+    && i < iterMax
     ) {
 
       for (j in seq_along(theLint)) {
