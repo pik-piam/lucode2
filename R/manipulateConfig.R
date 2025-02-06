@@ -34,7 +34,7 @@ manipulateConfig <- function(configFile, ...) {
     for (i in names(tmp)) {
       if (length(tmp[[i]]) > 1) {
         rpl <- capture.output(cat(paste0(tmp[[i]], ", "), fill = maxchar))
-        rpl <- paste(rpl, collapse = "\n\t\t")
+        rpl <- paste(rpl, collapse = "\n        ")
         rpl <- substr(rpl, 1, nchar(rpl) - 2)
       } else {
         rpl <- tmp[[i]]
