@@ -52,6 +52,9 @@ lintrRules <- function(allowUndesirable = FALSE, modification = list()) {
                                    T_and_F_symbol_linter(),
                                    object_length_linter(100))
 
+  # remove linters we don't want to support
+  linters$return_linter <- NULL
+
   if (allowUndesirable) {
     linters$undesirable_function_linter <- undesirable_function_linter(deprecatedFunctions)
   } else {
