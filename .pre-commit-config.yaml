@@ -15,7 +15,7 @@ repos:
     -   id: mixed-line-ending
 
 -   repo: https://github.com/lorenzwalthert/precommit
-    rev: 3b70240796cdccbe1474b0176560281aaded97e6  # frozen: v0.4.3.9003
+    rev: 4feed82627c7859085ef85f7a6aceb5929bcda99  # frozen: v0.4.3.9007
     hooks:
     -   id: parsable-R
     -   id: deps-in-desc
