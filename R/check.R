@@ -109,6 +109,9 @@ check <- function(lib = ".", cran = TRUE, config = loadBuildLibraryConfig(lib), 
 #' @author Pascal Sauer
 #' @export
 verifyTests <- function(acceptedWarnings) {
+  withr::local_options(warnPartialMatchAttr = TRUE,
+                       warnPartialMatchDollar = TRUE,
+                       warnPartialMatchArgs = TRUE)
   testResults <- devtools::test(stop_on_failure = TRUE, reporter = "summary") %>%
     Reduce(f = function(a, b) append(a, b[["results"]]), init = list()) # combine results from all tests
 
