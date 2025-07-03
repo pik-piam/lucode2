@@ -38,7 +38,7 @@ snakeToCamel <- function(pathToFile, ask = TRUE) {
     }
     message(variables[[i]], " -> ", replacements[[i]])
     if (!ask || askYesNo("replace?")) {
-      lines <- gsub(paste0("\\b", variables[[i]], "\\b"), replacements[[i]], lines)
+      lines <- gsub(paste0("(?<![\"$'])\\b", variables[[i]], "\\b"), replacements[[i]], lines, perl = TRUE)
       writeLines(lines, pathToFile)
     }
   }
