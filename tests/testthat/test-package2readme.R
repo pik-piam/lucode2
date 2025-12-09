@@ -17,7 +17,7 @@ test_that("readme title does not contain newlines", {
   local_mocked_bindings(
     desc = function(...) {
       originalDesc <- desc::desc(...)
-      originalDesc$set("Title", "a\nzZzZz \nc")
+      originalDesc$set("Title", "a\n\tzZzZz \nc")
       return(originalDesc)
     }
   )

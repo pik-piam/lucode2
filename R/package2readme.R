@@ -242,8 +242,8 @@ package2readme <- function(package = ".", add = NULL, logo = NULL, logoHeight = 
   }
 
   getTitle <- function(x, logo, height) {
-    # Replace newline with space, and then replace any potential double spaces
-    x <- gsub("  ", " ", gsub("\n", " ", x, fixed = TRUE))
+    # Replace newline with space, and then replace any potential double whitespaces
+    x <- gsub("\\s+", " ", gsub("\n", " ", x, fixed = TRUE))
 
     if (!is.null(logo)) {
       if (is.null(height)) {
