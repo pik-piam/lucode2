@@ -70,6 +70,9 @@ be incremented to a non-dev version number
 for the build process to succeed. (default: no)
 \item \strong{skipCoverage}: yes/no - If set to "yes", running code coverage using covr
 as part of the GitHub workflow will be skipped. (default: no)
+\item \strong{UsePkgDown}: yes/no - If set to "yes", a GitHub Action workflow will be added
+that builds and deploys pkgdown documentation to GitHub Pages.
+(default: no)
 }
 }
 \examples{
