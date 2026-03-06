@@ -71,5 +71,9 @@ loadBuildLibraryConfig <- function(lib = ".") {
     cfg$skipCoverage <- FALSE
   }
 
+  if (is.null(cfg$UsePkgDown)) {
+    cfg$UsePkgDown <- FALSE
+  }
+
   return(cfg)
 }

@@ -53,6 +53,9 @@
 #'                                    for the build process to succeed. (default: no)
 #' * **skipCoverage**: yes/no - If set to "yes", running code coverage using covr
 #'                              as part of the GitHub workflow will be skipped. (default: no)
+#' * **UsePkgDown**: yes/no - If set to "yes", a GitHub Action workflow will be added
+#'                            that builds and deploys pkgdown documentation to GitHub Pages.
+#'                            (default: no)
 #' @author Jan Philipp Dietrich, Anastasis Giannousakis, Markus Bonsch, Pascal Sauer
 #' @seealso \code{\link{package2readme}}, \code{\link{lint}}, \code{\link{autoFormat}}
 #' @importFrom desc desc desc_get_deps
@@ -144,7 +147,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
   ############################################################
   # add GitHub actions, pre-commit-config, and Makefile
   ############################################################
-  tryCatch(addGitHubActions(), error = function(error) {
+  tryCatch(addGitHubActions(config = cfg), error = function(error) {
     message("Could not add GitHub Actions:", error)
   })
 
