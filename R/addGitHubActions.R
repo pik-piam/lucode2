@@ -37,9 +37,10 @@ addGitHubActions <- function(lib = ".", config = NULL) {
 
   if (isTRUE(config$UsePkgDown)) {
     conditionalCopy(".github/workflows/pkgdown.yaml")
-    if (!file.exists("_pkgdown.yml")) {
-      conditionalCopy("_pkgdown.yml")
-    }
+    conditionalCopy("_pkgdown.yml")
+  } else {
+    unlink(".github/workflows/pkgdown.yaml")
+    unlink("_pkgdown.yml")
   }
 
   if (!file.exists("codecov.yml")) {
