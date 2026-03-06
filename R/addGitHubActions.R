@@ -35,13 +35,7 @@ addGitHubActions <- function(lib = ".", config = NULL) {
 
   conditionalCopy(".github/workflows/check.yaml")
 
-  if (isTRUE(config$UsePkgDown)) {
-    conditionalCopy(".github/workflows/pkgdown.yaml")
-    conditionalCopy("_pkgdown.yml")
-  } else {
-    unlink(".github/workflows/pkgdown.yaml")
-    unlink("_pkgdown.yml")
-  }
+  .addPkgDownAction(config)
 
   if (!file.exists("codecov.yml")) {
     use_coverage("codecov")
@@ -55,4 +49,26 @@ addGitHubActions <- function(lib = ".", config = NULL) {
     write("^_pkgdown\\.yml$", ".Rbuildignore", append = TRUE)
   }
 
+}
+
+.addPkgDownAction <- function(config) {
+  d <- desc::desc("DESCRIPTION")
+  if (isTRUE(config$UsePkgDown)) {
+    conditionalCopy(".github/workflows/pkgdown.yaml")
+    conditionalCopy("_pkgdown.yml")
+    # Add Config/Needs/website to DESCRIPTION for pkgdown dependencies
+    if (is.na(d$get("Config/Needs/website"))) {
+      d$set("Config/Needs/website" = "tidyverse/tidytemplate")
+      d$write()
+    }
+  } else {
+    if (file.exists(".github/workflows/pkgdown.yaml")) {
+      unlink(".github/workflows/pkgdown.yaml")
+      unlink("_pkgdown.yml")
+      if (!is.na(d$get("Config/Needs/website"))) {
+        d$del("Config/Needs/website")
+        d$write()
+      }
+    }
+  }
 }
