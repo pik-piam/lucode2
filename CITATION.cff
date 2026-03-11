@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: If you use this software, please cite it using the metadata from this file.
 type: software
 title: 'lucode2: Code Manipulation and Analysis Tools'
-version: 0.53.1
-date-released: '2026-03-10'
+version: 0.53.2
+date-released: '2026-03-11'
 abstract: A collection of tools which allow to manipulate and analyze code.
 authors:
 - family-names: Dietrich
@@ -32,6 +32,11 @@ authors:
   affiliation: Potsdam Institute for Climate Impact Research
 - family-names: Pflüger
   given-names: Mika
+- family-names: Rein
+  given-names: Patrick
+  email: patrick.rein@pik-potsdam.de
+  orcid: https://orcid.org/0000-0001-9454-8381
+  affiliation: Potsdam Institute for Climate Impact Research
 license: BSD-2-Clause
 keywords:
 - tool

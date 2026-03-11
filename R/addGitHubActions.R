@@ -55,7 +55,9 @@ addGitHubActions <- function(lib = ".", config = NULL) {
   d <- desc::desc("DESCRIPTION")
   if (isTRUE(config$UsePkgDown)) {
     conditionalCopy(".github/workflows/pkgdown.yaml")
-    conditionalCopy("_pkgdown.yml")
+    if (!file.exists("_pkgdown.yml")) {
+      conditionalCopy("_pkgdown.yml")
+    }
     # Add Config/Needs/website to DESCRIPTION for pkgdown dependencies
     if (is.na(d$get("Config/Needs/website"))) {
       d$set("Config/Needs/website" = "tidyverse/tidytemplate")
