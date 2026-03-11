@@ -38,7 +38,8 @@ loadBuildLibraryConfig <- function(lib = ".") {
     "^\\.buildlibrary$",
     "^\\.pre-commit-config\\.yaml$",
     "^Makefile$",
-    "^workflow$"
+    "^workflow$",
+    "^\\.claude$"
   )
   rbuildIgnore <- rbuildIgnore[!duplicated(rbuildIgnore)]
   writeLines(rbuildIgnore, file.path(lib, ".Rbuildignore"))
