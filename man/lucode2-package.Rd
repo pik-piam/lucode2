@@ -30,6 +30,7 @@ Authors:
   \item Lavinia Baumstark (Potsdam Institute for Climate Impact Research)
   \item Oliver Richters (Potsdam Institute for Climate Impact Research)
   \item Mika Pflüger
+  \item Patrick Rein \email{patrick.rein@pik-potsdam.de} (\href{https://orcid.org/0000-0001-9454-8381}{ORCID}) (Potsdam Institute for Climate Impact Research)
 }
 
 }
