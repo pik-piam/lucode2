@@ -1,0 +1,46 @@
+# readRuntime
+
+Reads all runtime information from given experiments. The runtime is
+given in hours and is the runtime of GAMS.
+
+## Usage
+
+``` r
+readRuntime(path, plot = FALSE, types = NULL, coupled = FALSE, outfname = NULL)
+```
+
+## Arguments
+
+- path:
+
+  Path to a run or a vector of paths.
+
+- plot:
+
+  Logical indicating whether the output should be plotted to a pdf with
+  the name runtime.pdf.
+
+- types:
+
+  A vector of names of different types of runs which should be
+  distinguished by colors. The names have to be part of the folder name
+  in order to allow the function to map the given types to the runs.
+
+- coupled:
+
+  Logical indicating if comparison plots should be added for coupled
+  REMIND and MAgPIE runs. `TRUE` automatically sets `types` to
+  `c("-rem-","-mag-")` and overwrites user defined `types`
+
+- outfname:
+
+  Optional name of the pdf. If nothing is given the default "runtime"
+  will be used.
+
+## Value
+
+A data frame containing the run names and runtime information in hours.
+
+## Author
+
+David Klein
