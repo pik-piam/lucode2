@@ -1,4 +1,4 @@
-ValidationKey: '10971030'
+ValidationKey: '11097540'
 AutocreateReadme: yes
 AutocreateCITATION: yes
 AcceptedWarnings:
@@ -10,4 +10,4 @@ AcceptedNotes:
 allowLinterWarnings: no
 enforceVersionUpdate: no
 skipCoverage: no
-UsePkgDown: no
+UsePkgDown: yes
