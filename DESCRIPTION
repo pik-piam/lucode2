@@ -1,7 +1,7 @@
 Type: Package
 Package: lucode2
 Title: Code Manipulation and Analysis Tools
-Version: 0.54.0
+Version: 0.54.1
 Date: 2026-04-08
 Authors@R: c(
     person("Jan Philipp", "Dietrich", , "dietrich@pik-potsdam.de", role = c("aut", "cre"),
@@ -63,3 +63,4 @@ Config/testthat/start-first: checkRequiredPackages, updateRepo
 Encoding: UTF-8
 LazyData: no
 RoxygenNote: 7.3.3
+Config/Needs/website: tidyverse/tidytemplate
