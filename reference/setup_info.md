@@ -65,7 +65,7 @@ setup_info()
 #> [7] base     
 #> 
 #> other attached packages:
-#> [1] lucode2_0.54.1
+#> [1] lucode2_0.54.2
 #> 
 #> loaded via a namespace (and not attached):
 #>  [1] generics_0.1.4      rappdirs_0.3.4      sass_0.4.10        
@@ -417,7 +417,7 @@ setup_info()
 #> lintr        "3.3.0-1"    NA           
 #> lpjmlkit     "1.8.0"      NA           
 #> lubridate    "1.9.5"      NA           
-#> lucode2      "0.54.1"     NA           
+#> lucode2      "0.54.2"     NA           
 #> lusweave     "1.46.5"     NA           
 #> madrat       "3.36.2"     NA           
 #> magclass     "6.13.2"     NA           
