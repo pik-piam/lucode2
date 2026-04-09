@@ -1,8 +1,14 @@
 test_that("updateRepo works", {
   capture.output({
-    reposFolder <- withr::local_tempdir()
+    baseFolder <- withr::local_tempdir()
+    reposFolder <- file.path(baseFolder, "repos")
+    miniPackageRepo <- file.path(baseFolder, "repo-miniPackage")
 
-    gert::git_clone("https://github.com/pik-piam/miniPackage.git",
+    # The following indirection via a local repo makes this test less
+    # susceptible to system-local libgit issues.
+    system(paste0("git clone --depth=1 https://github.com/pik-piam/miniPackage.git", " ", miniPackageRepo),
+           ignore.stdout = TRUE, ignore.stderr = TRUE)
+    gert::git_clone(miniPackageRepo,
                     file.path(reposFolder, "miniPackage"),
                     verbose = FALSE)
     expect_message({
