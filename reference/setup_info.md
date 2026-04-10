@@ -23,22 +23,22 @@ Jan Philipp Dietrich
 ``` r
 setup_info()
 #> $sysinfo
-#>                                              sysname 
-#>                                              "Linux" 
-#>                                              release 
-#>                                  "6.17.0-1008-azure" 
-#>                                              version 
-#> "#8~24.04.1-Ubuntu SMP Mon Jan 26 18:35:40 UTC 2026" 
-#>                                             nodename 
-#>                                      "runnervm727z3" 
-#>                                              machine 
-#>                                             "x86_64" 
-#>                                                login 
-#>                                            "unknown" 
-#>                                                 user 
-#>                                             "runner" 
-#>                                       effective_user 
-#>                                             "runner" 
+#>                                               sysname 
+#>                                               "Linux" 
+#>                                               release 
+#>                                   "6.17.0-1010-azure" 
+#>                                               version 
+#> "#10~24.04.1-Ubuntu SMP Fri Mar  6 22:00:57 UTC 2026" 
+#>                                              nodename 
+#>                                       "runnervm35a4x" 
+#>                                               machine 
+#>                                              "x86_64" 
+#>                                                 login 
+#>                                             "unknown" 
+#>                                                  user 
+#>                                              "runner" 
+#>                                        effective_user 
+#>                                              "runner" 
 #> 
 #> $sessionInfo
 #> R version 4.5.3 (2026-03-11)
@@ -65,7 +65,7 @@ setup_info()
 #> [7] base     
 #> 
 #> other attached packages:
-#> [1] lucode2_0.54.2
+#> [1] lucode2_0.54.3
 #> 
 #> loaded via a namespace (and not attached):
 #>  [1] generics_0.1.4      rappdirs_0.3.4      sass_0.4.10        
@@ -75,7 +75,7 @@ setup_info()
 #> [13] pkgbuild_1.4.8      sessioninfo_1.2.3   whisker_0.4.1      
 #> [16] backports_1.5.1     ps_1.9.2            purrr_1.2.1        
 #> [19] fansi_1.0.7         lintr_3.3.0-1       textshaping_1.0.5  
-#> [22] httr2_1.2.2         jquerylib_0.1.4     cli_3.6.5          
+#> [22] httr2_1.2.2         jquerylib_0.1.4     cli_3.6.6          
 #> [25] rlang_1.2.0         tidytemplate_1.0.0  ellipsis_0.3.3     
 #> [28] withr_3.0.2         cachem_1.1.0        yaml_2.3.12        
 #> [31] devtools_2.5.0      otel_0.2.0          tools_4.5.3        
@@ -347,7 +347,7 @@ setup_info()
 #> cellranger   "1.1.0"      NA           
 #> checkmate    "2.3.4"      NA           
 #> citation     "0.12.2"     NA           
-#> cli          "3.6.5"      NA           
+#> cli          "3.6.6"      NA           
 #> clipr        "0.8.0"      NA           
 #> collections  "0.3.12"     NA           
 #> colorspace   "2.1-2"      NA           
@@ -417,7 +417,7 @@ setup_info()
 #> lintr        "3.3.0-1"    NA           
 #> lpjmlkit     "1.8.0"      NA           
 #> lubridate    "1.9.5"      NA           
-#> lucode2      "0.54.2"     NA           
+#> lucode2      "0.54.3"     NA           
 #> lusweave     "1.46.5"     NA           
 #> madrat       "3.36.2"     NA           
 #> magclass     "6.13.2"     NA           
@@ -430,7 +430,7 @@ setup_info()
 #> numDeriv     "2016.8-1.1" NA           
 #> openssl      "2.3.5"      NA           
 #> otel         "0.2.0"      NA           
-#> pak          "0.9.2"      NA           
+#> pak          "0.9.3"      NA           
 #> pander       "0.6.6"      NA           
 #> pbapply      "1.7-4"      NA           
 #> pbivnorm     "0.6.0"      NA           
@@ -508,7 +508,7 @@ setup_info()
 #> yaml         "2.3.12"     NA           
 #> zip          "2.3.3"      NA           
 #> zoo          "1.8-15"     NA           
-#> pak          "0.9.2"      NA           
+#> pak          "0.9.3"      NA           
 #> KernSmooth   "2.23-26"    "recommended"
 #> MASS         "7.3-65"     "recommended"
 #> Matrix       "1.7-4"      "recommended"
@@ -2276,7 +2276,7 @@ setup_info()
 #> yaml         "yes"            "4.5.0"
 #> zip          "yes"            "4.5.0"
 #> zoo          "yes"            "4.5.0"
-#> pak          "yes"            "4.5.2"
+#> pak          "yes"            "4.5.3"
 #> KernSmooth   "yes"            "4.5.3"
 #> MASS         "yes"            "4.5.3"
 #> Matrix       "yes"            "4.5.3"

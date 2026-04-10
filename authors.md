@@ -37,11 +37,11 @@ Source:
 
 Dietrich J, Sauer P, Klein D, Giannousakis A, Bonsch M, Bodirsky B,
 Baumstark L, Richters O, Pflüger M, Rein P (2026). *lucode2: Code
-Manipulation and Analysis Tools*. R package version 0.54.2.
+Manipulation and Analysis Tools*. R package version 0.54.3.
 
     @Manual{,
       title = {lucode2: Code Manipulation and Analysis Tools},
       author = {Jan Philipp Dietrich and Pascal Sauer and David Klein and Anastasis Giannousakis and Markus Bonsch and Benjamin Leon Bodirsky and Lavinia Baumstark and Oliver Richters and Mika Pflüger and Patrick Rein},
       year = {2026},
-      note = {R package version 0.54.2},
+      note = {R package version 0.54.3},
     }
