@@ -1,4 +1,5 @@
 test_that("updateRepo works", {
+  skip_if(Sys.getenv("UNIVERSE_NAME") == "pik-piam", "the git operations lead to certifacte issues on r-universe CI")
   capture.output({
     baseFolder <- withr::local_tempdir()
     reposFolder <- file.path(baseFolder, "repos")
