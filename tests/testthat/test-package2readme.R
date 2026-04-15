@@ -15,11 +15,15 @@ test_that("readme can be created from package", {
 
 test_that("CRAN badge shown when CRAN-SUBMISSION exists", {
   tmpdir <- withr::local_tempdir()
+  tmpdir <- file.path(tmpdir, "fakepkg")
+  dir.create(tmpdir)
+
   file.copy(system.file("DESCRIPTION", package = "lucode2"), tmpdir)
   d <- desc::desc(file.path(tmpdir, "DESCRIPTION"))
   d$set(Package = "fakepkg")
   d$write()
   file.create(file.path(tmpdir, "CRAN-SUBMISSION"))
+
   r <- paste0(package2readme(tmpdir), collapse = "\n")
   expect_match(r, "CRAN status")
 })
