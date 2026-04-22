@@ -8,9 +8,24 @@ test_that("readme can be created from package", {
   expect_match(r, "Dietrich")
   expect_match(r, "Installation")
   expect_match(r, "version")
-  expect_match(r, "CRAN status")
+  expect_no_match(r, "CRAN status")
   expect_match(r, "BibTeX")
   expect_match(r, "install")
+})
+
+test_that("CRAN badge shown when CRAN-SUBMISSION exists", {
+  tmpdir <- withr::local_tempdir()
+  tmpdir <- file.path(tmpdir, "fakepkg")
+  dir.create(tmpdir)
+
+  file.copy(system.file("DESCRIPTION", package = "lucode2"), tmpdir)
+  d <- desc::desc(file.path(tmpdir, "DESCRIPTION"))
+  d$set(Package = "fakepkg")
+  d$write()
+  file.create(file.path(tmpdir, "CRAN-SUBMISSION"))
+
+  r <- paste0(package2readme(tmpdir), collapse = "\n")
+  expect_match(r, "CRAN status")
 })
 
 test_that("readme title does not contain newlines", {

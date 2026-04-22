@@ -76,11 +76,19 @@ package2readme <- function(package = ".", add = NULL, logo = NULL, logoHeight = 
     return(out)
   }
 
-  fillCRAN <- function(d) {
-    pkg <- d$get("Package")
-    out <- paste0("[![CRAN status](https://www.r-pkg.org/badges/version/", pkg,
-                  ")](https://cran.r-project.org/package=", pkg, ")")
-    return(out)
+  fillCRAN <- function(d, folder) {
+    if (is.null(folder)) return("")
+    isCRANPackage <- file.exists(file.path(folder, "CRAN-SUBMISSION")) || 
+      file.exists(file.path(folder, "CRAN-RELEASE"))
+
+    if (isCRANPackage) {
+      pkg <- d$get("Package")
+      out <- paste0("[![CRAN status](https://www.r-pkg.org/badges/version/", pkg,
+                    ")](https://cran.r-project.org/package=", pkg, ")")
+      return(out)
+    } else {
+      return("")
+    }
   }
 
   fillJOSS <- function(d) {
@@ -262,7 +270,7 @@ package2readme <- function(package = ".", add = NULL, logo = NULL, logoHeight = 
                additions     = fillAdditions(add, folder),
                version       = d$get("Version"),
                maintainer    = d$get_maintainer(),
-               cran          = fillCRAN(d),
+               cran          = fillCRAN(d, folder),
                joss          = fillJOSS(d),
                zenodo        = fillZenodo(d),
                githubactions = fillGithubActions(d, folder),
