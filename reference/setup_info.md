@@ -30,7 +30,7 @@ setup_info()
 #>                                               version 
 #> "#10~24.04.1-Ubuntu SMP Fri Mar  6 22:00:57 UTC 2026" 
 #>                                              nodename 
-#>                                       "runnervm35a4x" 
+#>                                       "runnervmeorf1" 
 #>                                               machine 
 #>                                              "x86_64" 
 #>                                                 login 
@@ -65,31 +65,31 @@ setup_info()
 #> [7] base     
 #> 
 #> other attached packages:
-#> [1] lucode2_0.54.3
+#> [1] lucode2_0.54.4
 #> 
 #> loaded via a namespace (and not attached):
 #>  [1] generics_0.1.4      rappdirs_0.3.4      sass_0.4.10        
-#>  [4] renv_1.2.0          xml2_1.5.2          digest_0.6.39      
+#>  [4] renv_1.2.2          xml2_1.5.2          digest_0.6.39      
 #>  [7] magrittr_2.0.5      evaluate_1.0.5      pkgload_1.5.1      
 #> [10] fastmap_1.2.0       jsonlite_2.0.0      processx_3.8.7     
 #> [13] pkgbuild_1.4.8      sessioninfo_1.2.3   whisker_0.4.1      
-#> [16] backports_1.5.1     ps_1.9.2            purrr_1.2.1        
+#> [16] backports_1.5.1     ps_1.9.3            purrr_1.2.2        
 #> [19] fansi_1.0.7         lintr_3.3.0-1       textshaping_1.0.5  
 #> [22] httr2_1.2.2         jquerylib_0.1.4     cli_3.6.6          
 #> [25] rlang_1.2.0         tidytemplate_1.0.0  ellipsis_0.3.3     
 #> [28] withr_3.0.2         cachem_1.1.0        yaml_2.3.12        
-#> [31] devtools_2.5.0      otel_0.2.0          tools_4.5.3        
+#> [31] devtools_2.5.1      otel_0.2.0          tools_4.5.3        
 #> [34] memoise_2.0.1       dplyr_1.2.1         curl_7.0.0         
-#> [37] vctrs_0.7.2         R6_2.6.1            lifecycle_1.0.5    
-#> [40] htmlwidgets_1.6.4   fs_2.0.1            usethis_3.2.1      
+#> [37] vctrs_0.7.3         R6_2.6.1            lifecycle_1.0.5    
+#> [40] htmlwidgets_1.6.4   fs_2.1.0            usethis_3.2.1      
 #> [43] ragg_1.5.2          fontawesome_0.5.3   pkgconfig_2.0.3    
 #> [46] desc_1.4.3          callr_3.7.6         rex_1.2.2          
 #> [49] pkgdown_2.2.0       pillar_1.11.1       bslib_0.10.0       
-#> [52] glue_1.8.0          data.table_1.18.2.1 systemfonts_1.3.2  
+#> [52] glue_1.8.1          data.table_1.18.2.1 systemfonts_1.3.2  
 #> [55] tidyselect_1.2.1    xfun_0.57           tibble_3.3.1       
 #> [58] rstudioapi_0.18.0   knitr_1.51          htmltools_0.5.9    
 #> [61] rmarkdown_2.31      compiler_4.5.3      downlit_0.4.5      
-#> [64] askpass_1.2.1       openssl_2.3.5      
+#> [64] askpass_1.2.1       openssl_2.4.0      
 #> 
 #> $libPaths
 #> [1] "/home/runner/work/_temp/Library" "/opt/R/4.5.3/lib/R/site-library"
@@ -329,8 +329,8 @@ setup_info()
 #> R.utils      "2.13.0"     NA           
 #> R6           "2.6.1"      NA           
 #> RColorBrewer "1.1-3"      NA           
-#> Rcpp         "1.1.1"      NA           
-#> S7           "0.2.1"      NA           
+#> Rcpp         "1.1.1-1"    NA           
+#> S7           "0.2.1-1"    NA           
 #> WDI          "2.7.10"     NA           
 #> abind        "1.4-8"      NA           
 #> askpass      "1.2.1"      NA           
@@ -361,7 +361,7 @@ setup_info()
 #> curl         "7.0.0"      NA           
 #> data.table   "1.18.2.1"   NA           
 #> desc         "1.4.3"      NA           
-#> devtools     "2.5.0"      NA           
+#> devtools     "2.5.1"      NA           
 #> diffobj      "0.3.6"      NA           
 #> digest       "0.6.39"     NA           
 #> doParallel   "1.0.17"     NA           
@@ -377,7 +377,7 @@ setup_info()
 #> fontawesome  "0.5.3"      NA           
 #> forcats      "1.0.1"      NA           
 #> foreach      "1.5.2"      NA           
-#> fs           "2.0.1"      NA           
+#> fs           "2.1.0"      NA           
 #> gamstransfer "3.0.8"      NA           
 #> gdx          "1.53.1"     NA           
 #> gdxrrw       "1.0.10"     NA           
@@ -387,7 +387,7 @@ setup_info()
 #> gh           "1.5.0"      NA           
 #> gitcreds     "0.1.2"      NA           
 #> glasso       "1.11"       NA           
-#> glue         "1.8.0"      NA           
+#> glue         "1.8.1"      NA           
 #> gms          "0.33.7"     NA           
 #> goxygen      "1.5.0"      NA           
 #> gridExtra    "2.3"        NA           
@@ -417,10 +417,10 @@ setup_info()
 #> lintr        "3.3.0-1"    NA           
 #> lpjmlkit     "1.8.0"      NA           
 #> lubridate    "1.9.5"      NA           
-#> lucode2      "0.54.3"     NA           
-#> lusweave     "1.46.5"     NA           
+#> lucode2      "0.54.4"     NA           
+#> lusweave     "1.46.6"     NA           
 #> madrat       "3.36.2"     NA           
-#> magclass     "6.13.2"     NA           
+#> magclass     "7.4.3"      NA           
 #> magrittr     "2.0.5"      NA           
 #> memoise      "2.0.1"      NA           
 #> mime         "0.13"       NA           
@@ -428,9 +428,9 @@ setup_info()
 #> mnormt       "2.1.2"      NA           
 #> ncdf4        "1.24"       NA           
 #> numDeriv     "2016.8-1.1" NA           
-#> openssl      "2.3.5"      NA           
+#> openssl      "2.4.0"      NA           
 #> otel         "0.2.0"      NA           
-#> pak          "0.9.3"      NA           
+#> pak          "0.9.4"      NA           
 #> pander       "0.6.6"      NA           
 #> pbapply      "1.7-4"      NA           
 #> pbivnorm     "0.6.0"      NA           
@@ -447,9 +447,9 @@ setup_info()
 #> processx     "3.8.7"      NA           
 #> profvis      "0.4.0"      NA           
 #> promises     "1.5.0"      NA           
-#> ps           "1.9.2"      NA           
+#> ps           "1.9.3"      NA           
 #> psych        "2.6.3"      NA           
-#> purrr        "1.2.1"      NA           
+#> purrr        "1.2.2"      NA           
 #> qgraph       "1.9.8"      NA           
 #> quadprog     "1.5-8"      NA           
 #> quitte       "0.3148.0"   NA           
@@ -460,7 +460,7 @@ setup_info()
 #> readr        "2.2.0"      NA           
 #> readxl       "1.4.5"      NA           
 #> rematch      "2.0.0"      NA           
-#> renv         "1.2.0"      NA           
+#> renv         "1.2.2"      NA           
 #> reshape2     "1.4.5"      NA           
 #> rex          "1.2.2"      NA           
 #> rlang        "1.2.0"      NA           
@@ -493,7 +493,7 @@ setup_info()
 #> urlchecker   "1.0.1"      NA           
 #> usethis      "3.2.1"      NA           
 #> utf8         "1.2.6"      NA           
-#> vctrs        "0.7.2"      NA           
+#> vctrs        "0.7.3"      NA           
 #> viridisLite  "0.4.3"      NA           
 #> vroom        "1.7.1"      NA           
 #> waldo        "0.6.2"      NA           
@@ -508,7 +508,7 @@ setup_info()
 #> yaml         "2.3.12"     NA           
 #> zip          "2.3.3"      NA           
 #> zoo          "1.8-15"     NA           
-#> pak          "0.9.3"      NA           
+#> pak          "0.9.4"      NA           
 #> KernSmooth   "2.23-26"    "recommended"
 #> MASS         "7.3-65"     "recommended"
 #> Matrix       "1.7-4"      "recommended"
@@ -608,7 +608,7 @@ setup_info()
 #> gh           "R (>= 4.1)"                                                               
 #> gitcreds     "R (>= 3.4)"                                                               
 #> glasso       NA                                                                         
-#> glue         "R (>= 3.6)"                                                               
+#> glue         "R (>= 4.1)"                                                               
 #> gms          NA                                                                         
 #> goxygen      NA                                                                         
 #> gridExtra    NA                                                                         
@@ -641,7 +641,7 @@ setup_info()
 #> lucode2      NA                                                                         
 #> lusweave     "methods, R (>= 2.10.0)"                                                   
 #> madrat       "magclass (>= 7.2.0), R (>= 2.10.0)"                                       
-#> magclass     "R (>= 2.10.0), methods"                                                   
+#> magclass     "methods, R (>= 2.10.0)"                                                   
 #> magrittr     "R (>= 3.4.0)"                                                             
 #> memoise      NA                                                                         
 #> mime         NA                                                                         
@@ -803,7 +803,7 @@ setup_info()
 #> curl         NA                                                                                                                                                                                                                                                                                                                                                                                                                
 #> data.table   "methods"                                                                                                                                                                                                                                                                                                                                                                                                         
 #> desc         "cli, R6, utils"                                                                                                                                                                                                                                                                                                                                                                                                  
-#> devtools     "cli (>= 3.6.5), desc (>= 1.4.3), ellipsis (>= 0.3.2), fs (>=\n1.6.7), lifecycle (>= 1.0.5), memoise (>= 2.0.1), miniUI (>=\n0.1.2), pak (>= 0.9.2), pkgbuild (>= 1.4.8), pkgdown (>=\n2.2.0), pkgload (>= 1.5.0), profvis (>= 0.4.0), rcmdcheck (>=\n1.4.0), rlang (>= 1.1.7), roxygen2 (>= 7.3.3), rversions (>=\n3.0.0), sessioninfo (>= 1.2.3), testthat (>= 3.3.2), urlchecker\n(>= 1.0.1), withr (>= 3.0.2)"
+#> devtools     "cli (>= 3.6.6), desc (>= 1.4.3), ellipsis (>= 0.3.3), fs (>=\n2.0.1), lifecycle (>= 1.0.5), memoise (>= 2.0.1), miniUI (>=\n0.1.2), pak (>= 0.9.3), pkgbuild (>= 1.4.8), pkgdown (>=\n2.2.0), pkgload (>= 1.5.1), profvis (>= 0.4.0), rcmdcheck (>=\n1.4.0), rlang (>= 1.2.0), roxygen2 (>= 7.3.3), rversions (>=\n3.0.0), sessioninfo (>= 1.2.3), testthat (>= 3.3.2), urlchecker\n(>= 1.0.1), withr (>= 3.0.2)"
 #> diffobj      "crayon (>= 1.3.2), tools, methods, utils, stats"                                                                                                                                                                                                                                                                                                                                                                 
 #> digest       "utils"                                                                                                                                                                                                                                                                                                                                                                                                           
 #> doParallel   NA                                                                                                                                                                                                                                                                                                                                                                                                                
@@ -862,7 +862,7 @@ setup_info()
 #> lucode2      "callr, citation (>= 0.11.3), data.table, desc, devtools,\ndplyr, lintr (>= 3.1.0), pak, rlang, tools, usethis (>= 2.1.0),\nwithr, yaml"                                                                                                                                                                                                                                                                          
 #> lusweave     "knitr (>= 1.38), withr, xtable"                                                                                                                                                                                                                                                                                                                                                                                  
 #> madrat       "callr, digest, filelock (>= 1.0.3), igraph (>= 2.1.1), Matrix,\nmethods, pkgload, renv, stringi, tools, utils, withr, yaml"                                                                                                                                                                                                                                                                                      
-#> magclass     "abind, data.table, stats"                                                                                                                                                                                                                                                                                                                                                                                        
+#> magclass     "abind, data.table, rlang, stats"                                                                                                                                                                                                                                                                                                                                                                                 
 #> magrittr     NA                                                                                                                                                                                                                                                                                                                                                                                                                
 #> memoise      "rlang (>= 0.4.10), cachem"                                                                                                                                                                                                                                                                                                                                                                                       
 #> mime         "tools"                                                                                                                                                                                                                                                                                                                                                                                                           
@@ -1271,7 +1271,7 @@ setup_info()
 #> gh           "connectcreds, covr, knitr, rmarkdown, rprojroot, spelling,\ntestthat (>= 3.0.0), withr"                                                                                                                                                                                                                                                                                                  
 #> gitcreds     "codetools, covr, knitr, mockery, oskeyring, rmarkdown,\ntestthat (>= 3.0.0), withr"                                                                                                                                                                                                                                                                                                      
 #> glasso       NA                                                                                                                                                                                                                                                                                                                                                                                        
-#> glue         "crayon, DBI (>= 1.2.0), dplyr, knitr, magrittr, rlang,\nrmarkdown, RSQLite, testthat (>= 3.2.0), vctrs (>= 0.3.0),\nwaldo (>= 0.5.3), withr"                                                                                                                                                                                                                                             
+#> glue         "crayon, DBI (>= 1.2.0), dplyr, knitr, rlang, rmarkdown,\nRSQLite, testthat (>= 3.2.0), vctrs (>= 0.3.0), waldo (>=\n0.5.3), withr"                                                                                                                                                                                                                                                       
 #> gms          "covr, curl, magclass, qgraph, testthat, callr"                                                                                                                                                                                                                                                                                                                                           
 #> goxygen      "covr, knitr, rmarkdown, testthat"                                                                                                                                                                                                                                                                                                                                                        
 #> gridExtra    "ggplot2, egg, lattice, knitr, testthat"                                                                                                                                                                                                                                                                                                                                                  
@@ -1304,7 +1304,7 @@ setup_info()
 #> lucode2      "covr, gdx, gdxrrw, gert, ggplot2, knitr, lusweave, magclass,\npoorman, renv, rmarkdown, styler, testthat"                                                                                                                                                                                                                                                                                
 #> lusweave     "covr, testthat (>= 3.0.0)"                                                                                                                                                                                                                                                                                                                                                               
 #> madrat       "covr, ggplot2, graphics, grDevices, knitr, rmarkdown, terra,\ntestthat, tibble"                                                                                                                                                                                                                                                                                                          
-#> magclass     "covr, lpjmlkit, knitr, ncdf4, pkgconfig, quitte, raster,\nrmarkdown, terra, testthat (>= 3.1.5), tibble, withr"                                                                                                                                                                                                                                                                          
+#> magclass     "covr, ggplot2, knitr, lpjmlkit, ncdf4, pkgconfig, quitte,\nraster, rmarkdown, terra, testthat (>= 3.1.5), tibble, withr"                                                                                                                                                                                                                                                                 
 #> magrittr     "covr, knitr, rlang, rmarkdown, testthat"                                                                                                                                                                                                                                                                                                                                                 
 #> memoise      "digest, aws.s3, covr, googleAuthR, googleCloudStorageR, httr,\ntestthat"                                                                                                                                                                                                                                                                                                                 
 #> mime         NA                                                                                                                                                                                                                                                                                                                                                                                        
@@ -2228,7 +2228,7 @@ setup_info()
 #> readr        "yes"            "4.5.0"
 #> readxl       "yes"            "4.5.0"
 #> rematch      "no"             "4.5.0"
-#> renv         "yes"            "4.5.0"
+#> renv         "no"             "4.5.0"
 #> reshape2     "yes"            "4.5.0"
 #> rex          "no"             "4.5.0"
 #> rlang        "yes"            "4.5.0"
