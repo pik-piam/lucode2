@@ -37,6 +37,6 @@ Pascal Sauer
 
 ``` r
 lucode2:::getFilesToLint()
-#> Warning: running command 'git config user.email' had status 1
+#> Warning: running command 'git config user.email' had status 1 and error message 'Function not implemented'
 #> character(0)
 ```

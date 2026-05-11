@@ -47,8 +47,8 @@ f <- tempfile()
  runstatistics(file = f, user = Sys.info()[["user"]])
  print(runstatistics(file = f))
 #> $user
-#> [1] "runner"
+#> [1] "root"
 #> 
  runstatistics(file = f, submit = tempdir())
-#> Submitted run statistics to /tmp/Rtmp9N3giD 
+#> Submitted run statistics to /tmp/RtmpySsNQT 
 ```
