@@ -78,7 +78,7 @@ package2readme <- function(package = ".", add = NULL, logo = NULL, logoHeight = 
 
   fillCRAN <- function(d, folder) {
     if (is.null(folder)) return("")
-    isCRANPackage <- file.exists(file.path(folder, "CRAN-SUBMISSION")) || 
+    isCRANPackage <- file.exists(file.path(folder, "CRAN-SUBMISSION")) ||
       file.exists(file.path(folder, "CRAN-RELEASE"))
 
     if (isCRANPackage) {

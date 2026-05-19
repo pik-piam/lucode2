@@ -18,19 +18,20 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Jan Philipp Dietrich \email{dietrich@pik-potsdam.de} (\href{https://orcid.org/0000-0002-4309-6431}{ORCID}) (Potsdam Institute for Climate Impact Research)
+\strong{Maintainer}: Jan Philipp Dietrich \email{dietrich@pik-potsdam.de} (\href{https://orcid.org/0000-0002-4309-6431}{ORCID}) (affiliation: Potsdam Institute for Climate Impact Research)
 
 Authors:
 \itemize{
-  \item Pascal Sauer (Potsdam Institute for Climate Impact Research)
-  \item David Klein (Potsdam Institute for Climate Impact Research)
+  \item Jan Philipp Dietrich \email{dietrich@pik-potsdam.de} (\href{https://orcid.org/0000-0002-4309-6431}{ORCID}) (affiliation: Potsdam Institute for Climate Impact Research)
+  \item Pascal Sauer (affiliation: Potsdam Institute for Climate Impact Research)
+  \item David Klein (affiliation: Potsdam Institute for Climate Impact Research)
   \item Anastasis Giannousakis
   \item Markus Bonsch
-  \item Benjamin Leon Bodirsky (Potsdam Institute for Climate Impact Research)
-  \item Lavinia Baumstark (Potsdam Institute for Climate Impact Research)
-  \item Oliver Richters (Potsdam Institute for Climate Impact Research)
+  \item Benjamin Leon Bodirsky (affiliation: Potsdam Institute for Climate Impact Research)
+  \item Lavinia Baumstark (affiliation: Potsdam Institute for Climate Impact Research)
+  \item Oliver Richters (affiliation: Potsdam Institute for Climate Impact Research)
   \item Mika Pflüger
-  \item Patrick Rein \email{patrick.rein@pik-potsdam.de} (\href{https://orcid.org/0000-0001-9454-8381}{ORCID}) (Potsdam Institute for Climate Impact Research)
+  \item Patrick Rein \email{patrick.rein@pik-potsdam.de} (\href{https://orcid.org/0000-0001-9454-8381}{ORCID}) (affiliation: Potsdam Institute for Climate Impact Research)
 }
 
 }

@@ -61,10 +61,12 @@ mergestatistics <- function(dir = ".", file = NULL, renew = FALSE, quickcheck = 
         cond
       }
     )
-     
+
     # skip if current file could not be loaded
-    if(inherits(status, "error")) next
-        
+    if (inherits(status, "error")) {
+      next
+    }
+
     if (anyNA(stats$modelstat)) {
       modelstat <- "unknown"
     } else if (all(stats$modelstat <= 2)) {
