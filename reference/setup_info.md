@@ -26,11 +26,11 @@ setup_info()
 #>                                               sysname 
 #>                                               "Linux" 
 #>                                               release 
-#>                                   "6.17.0-1010-azure" 
+#>                                   "6.17.0-1013-azure" 
 #>                                               version 
-#> "#10~24.04.1-Ubuntu SMP Fri Mar  6 22:00:57 UTC 2026" 
+#> "#13~24.04.1-Ubuntu SMP Wed Apr 15 16:52:17 UTC 2026" 
 #>                                              nodename 
-#>                                        "d0fc0c5cbf75" 
+#>                                        "db50d49d63ef" 
 #>                                               machine 
 #>                                              "x86_64" 
 #>                                                 login 
@@ -65,11 +65,11 @@ setup_info()
 #> [7] base     
 #> 
 #> other attached packages:
-#> [1] lucode2_0.55.2
+#> [1] lucode2_0.55.3
 #> 
 #> loaded via a namespace (and not attached):
 #>  [1] generics_0.1.4     rappdirs_0.3.4     sass_0.4.10       
-#>  [4] renv_1.2.2         xml2_1.5.2         digest_0.6.39     
+#>  [4] renv_1.2.3         xml2_1.5.2         digest_0.6.39     
 #>  [7] magrittr_2.0.5     evaluate_1.0.5     pkgload_1.5.2     
 #> [10] fastmap_1.2.0      jsonlite_2.0.0     processx_3.9.0    
 #> [13] pkgbuild_1.4.8     sessioninfo_1.2.3  whisker_0.4.1     
@@ -84,12 +84,12 @@ setup_info()
 #> [40] htmlwidgets_1.6.4  fs_2.1.0           usethis_3.2.1     
 #> [43] ragg_1.5.2         fontawesome_0.5.3  pkgconfig_2.0.3   
 #> [46] desc_1.4.3         callr_3.7.6        rex_1.2.2         
-#> [49] pkgdown_2.2.0      pillar_1.11.1      bslib_0.10.0      
+#> [49] pkgdown_2.2.0      pillar_1.11.1      bslib_0.11.0      
 #> [52] glue_1.8.1         data.table_1.18.4  systemfonts_1.3.2 
 #> [55] tidyselect_1.2.1   xfun_0.57          tibble_3.3.1      
 #> [58] rstudioapi_0.18.0  knitr_1.51         htmltools_0.5.9   
 #> [61] rmarkdown_2.31     compiler_4.5.3     downlit_0.4.5     
-#> [64] askpass_1.2.1      openssl_2.4.0     
+#> [64] askpass_1.2.1      openssl_2.4.1     
 #> 
 #> $libPaths
 #> [1] "/usr/local/lib/R/site-library" "/usr/local/lib/R/library"     
@@ -406,8 +406,8 @@ setup_info()
 #> bit64              "/usr/local/lib/R/site-library" "4.8.0"      
 #> brew               "/usr/local/lib/R/site-library" "1.0-10"     
 #> brio               "/usr/local/lib/R/site-library" "1.1.5"      
-#> broom              "/usr/local/lib/R/site-library" "1.0.12"     
-#> bslib              "/usr/local/lib/R/site-library" "0.10.0"     
+#> broom              "/usr/local/lib/R/site-library" "1.0.13"     
+#> bslib              "/usr/local/lib/R/site-library" "0.11.0"     
 #> cachem             "/usr/local/lib/R/site-library" "1.1.0"      
 #> callr              "/usr/local/lib/R/site-library" "3.7.6"      
 #> car                "/usr/local/lib/R/site-library" "3.1-5"      
@@ -504,14 +504,14 @@ setup_info()
 #> lpjclass           "/usr/local/lib/R/site-library" "1.19.7"     
 #> lpjmlkit           "/usr/local/lib/R/site-library" "1.8.1"      
 #> lubridate          "/usr/local/lib/R/site-library" "1.9.5"      
-#> lucode2            "/usr/local/lib/R/site-library" "0.55.2"     
+#> lucode2            "/usr/local/lib/R/site-library" "0.55.3"     
 #> luplot             "/usr/local/lib/R/site-library" "4.1.4"      
 #> luscale            "/usr/local/lib/R/site-library" "3.2.0"      
 #> lusweave           "/usr/local/lib/R/site-library" "1.46.6"     
 #> madrat             "/usr/local/lib/R/site-library" "3.36.2"     
 #> magclass           "/usr/local/lib/R/site-library" "7.4.3"      
 #> magic              "/usr/local/lib/R/site-library" "1.6-1"      
-#> magpie4            "/usr/local/lib/R/site-library" "2.75.1"     
+#> magpie4            "/usr/local/lib/R/site-library" "2.75.2"     
 #> magpiesets         "/usr/local/lib/R/site-library" "0.48.0"     
 #> magrittr           "/usr/local/lib/R/site-library" "2.0.5"      
 #> maps               "/usr/local/lib/R/site-library" "3.4.3"      
@@ -521,15 +521,15 @@ setup_info()
 #> miniUI             "/usr/local/lib/R/site-library" "0.1.2"      
 #> minqa              "/usr/local/lib/R/site-library" "1.2.8"      
 #> minty              "/usr/local/lib/R/site-library" "0.0.6"      
-#> mip                "/usr/local/lib/R/site-library" "0.155.11"   
+#> mip                "/usr/local/lib/R/site-library" "0.155.12"   
 #> modelr             "/usr/local/lib/R/site-library" "0.1.11"     
-#> mrcommons          "/usr/local/lib/R/site-library" "1.67.1"     
+#> mrcommons          "/usr/local/lib/R/site-library" "1.67.3"     
 #> mrdownscale        "/usr/local/lib/R/site-library" "0.50.0"     
 #> mrdrivers          "/usr/local/lib/R/site-library" "7.2.0"      
 #> mrfaocore          "/usr/local/lib/R/site-library" "1.7.0"      
-#> mrindustry         "/usr/local/lib/R/site-library" "1.1.5"      
+#> mrindustry         "/usr/local/lib/R/site-library" "1.1.6"      
 #> mrlandcore         "/usr/local/lib/R/site-library" "1.7.0"      
-#> mrremind           "/usr/local/lib/R/site-library" "0.265.4"    
+#> mrremind           "/usr/local/lib/R/site-library" "0.265.5"    
 #> mrtransport        "/usr/local/lib/R/site-library" "0.14.0"     
 #> mstools            "/usr/local/lib/R/site-library" "0.15.0"     
 #> ncdf4              "/usr/local/lib/R/site-library" "1.24"       
@@ -538,7 +538,7 @@ setup_info()
 #> nnls               "/usr/local/lib/R/site-library" "1.6"        
 #> nonparaeff         "/usr/local/lib/R/site-library" "0.5-15"     
 #> numDeriv           "/usr/local/lib/R/site-library" "2016.8-1.1" 
-#> openssl            "/usr/local/lib/R/site-library" "2.4.0"      
+#> openssl            "/usr/local/lib/R/site-library" "2.4.1"      
 #> openxlsx           "/usr/local/lib/R/site-library" "4.2.8.1"    
 #> otel               "/usr/local/lib/R/site-library" "0.2.0"      
 #> pak                "/usr/local/lib/R/site-library" "0.9.5"      
@@ -562,7 +562,7 @@ setup_info()
 #> purrr              "/usr/local/lib/R/site-library" "1.2.2"      
 #> qualV              "/usr/local/lib/R/site-library" "0.3-5"      
 #> quantreg           "/usr/local/lib/R/site-library" "6.1"        
-#> quitte             "/usr/local/lib/R/site-library" "0.3148.0"   
+#> quitte             "/usr/local/lib/R/site-library" "0.3149.0"   
 #> ragg               "/usr/local/lib/R/site-library" "1.5.2"      
 #> rappdirs           "/usr/local/lib/R/site-library" "0.3.4"      
 #> raster             "/usr/local/lib/R/site-library" "3.6-32"     
@@ -570,12 +570,12 @@ setup_info()
 #> rcmdcheck          "/usr/local/lib/R/site-library" "1.4.0"      
 #> readODS            "/usr/local/lib/R/site-library" "2.3.5"      
 #> readr              "/usr/local/lib/R/site-library" "2.2.0"      
-#> readxl             "/usr/local/lib/R/site-library" "1.4.5"      
+#> readxl             "/usr/local/lib/R/site-library" "1.5.0"      
 #> reformulas         "/usr/local/lib/R/site-library" "0.4.4"      
 #> rematch            "/usr/local/lib/R/site-library" "2.0.0"      
-#> remind2            "/usr/local/lib/R/site-library" "2.0.17"     
+#> remind2            "/usr/local/lib/R/site-library" "2.0.18"     
 #> remulator          "/usr/local/lib/R/site-library" "1.22.0"     
-#> renv               "/usr/local/lib/R/site-library" "1.2.2"      
+#> renv               "/usr/local/lib/R/site-library" "1.2.3"      
 #> reporttransport    "/usr/local/lib/R/site-library" "1.3.1"      
 #> reshape            "/usr/local/lib/R/site-library" "0.8.10"     
 #> reshape2           "/usr/local/lib/R/site-library" "1.4.5"      
@@ -1138,7 +1138,7 @@ setup_info()
 #> rcmdcheck          NA                                                                                                                                                                         
 #> readODS            "R (>= 4.1)"                                                                                                                                                               
 #> readr              "R (>= 4.1)"                                                                                                                                                               
-#> readxl             "R (>= 3.6)"                                                                                                                                                               
+#> readxl             "R (>= 4.1)"                                                                                                                                                               
 #> reformulas         NA                                                                                                                                                                         
 #> rematch            NA                                                                                                                                                                         
 #> remind2            "R (>= 4.1.0), magclass (>= 6.17.2)"                                                                                                                                       
@@ -1706,7 +1706,7 @@ setup_info()
 #> rcmdcheck          NA                                                              
 #> readODS            "cpp11 (>= 0.5.0)"                                              
 #> readr              "cpp11, tzdb (>= 0.1.1)"                                        
-#> readxl             "cpp11 (>= 0.4.0), progress"                                    
+#> readxl             "cpp11 (>= 0.5.5), progress"                                    
 #> reformulas         NA                                                              
 #> rematch            NA                                                              
 #> remind2            NA                                                              
@@ -1827,7 +1827,7 @@ setup_info()
 #> brew               "testthat (>= 3.0.0)"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 #> brio               "covr, testthat (>= 3.0.0)"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
 #> broom              "AER, AUC, bbmle, betareg (>= 3.2-1), biglm, binGroup, boot,\nbtergm (>= 1.10.6), car (>= 3.1-2), carData, caret, cluster,\ncmprsk, coda, covr, drc, e1071, emmeans, epiR (>= 2.0.85), ergm\n(>= 3.10.4), fixest (>= 0.9.0), gam (>= 1.15), gee, geepack,\nggplot2, glmnet, glmnetUtils, gmm, Hmisc, interp, irlba,\njoineRML, Kendall, knitr, ks, Lahman, lavaan (>= 0.6.18),\nleaps, lfe, lm.beta, lme4, lmodel2, lmtest (>= 0.9.38),\nlsmeans, maps, margins, MASS, mclust, mediation, metafor, mfx,\nmgcv, mlogit, modeldata, modeltests (>= 0.1.6), muhaz,\nmultcomp, network, nnet, ordinal, plm, poLCA, psych, quantreg,\nrmarkdown, robust, robustbase, rsample, sandwich, spatialreg,\nspdep (>= 1.1), speedglm, spelling, stats4, survey, survival\n(>= 3.6-4), systemfit, testthat (>= 3.0.0), tseries, vars, zoo"
-#> bslib              "brand.yml, bsicons, curl, fontawesome, future, ggplot2,\nknitr, lattice, magrittr, rappdirs, rmarkdown (>= 2.7), shiny\n(>= 1.11.1), testthat, thematic, tools, utils, withr, yaml"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+#> bslib              "brand.yml, bsicons, curl, fontawesome, future, ggplot2,\nknitr, lattice, magrittr, rappdirs, rmarkdown (>= 2.7), shiny\n(>= 1.11.1.9000), testthat, thematic, tools, utils, withr, yaml"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 #> cachem             "testthat"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 #> callr              "asciicast (>= 2.3.1), cli (>= 1.1.0), mockery, ps, rprojroot,\nspelling, testthat (>= 3.2.0), withr (>= 2.3.0)"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 #> car                "alr4, boot, coxme, effects, knitr, leaps, lmtest, Matrix,\nMatrixModels, ordinal, plotrix, mvtnorm, rgl (>= 0.111.3), rio,\nsandwich, SparseM, survival, survey"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
