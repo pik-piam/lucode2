@@ -49,17 +49,17 @@ ls()
 #> [1] "a" "b" "c"
 # delete all but b and c
 rmAllbut(b, c)
-#>           used (Mb) gc trigger (Mb) max used  (Mb)
-#> Ncells 1402284 74.9    2320061  124  2320061 124.0
-#> Vcells 2610512 20.0    8388608   64  6380478  48.7
+#>           used (Mb) gc trigger  (Mb) max used  (Mb)
+#> Ncells 1403311   75    2313210 123.6  2313210 123.6
+#> Vcells 2611910   20    8388608  64.0  6377224  48.7
 ls()
 #> [1] "b" "c"
 # delete all but b
 test <- "b"
 rmAllbut(list = test)
-#>           used (Mb) gc trigger (Mb) max used  (Mb)
-#> Ncells 1402283 74.9    2320061  124  2320061 124.0
-#> Vcells 2610505 20.0    8388608   64  6380478  48.7
+#>           used (Mb) gc trigger  (Mb) max used  (Mb)
+#> Ncells 1403334   75    2313210 123.6  2313210 123.6
+#> Vcells 2611943   20    8388608  64.0  6377224  48.7
 ls()
 #> [1] "b"
 ```
