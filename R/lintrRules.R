@@ -1,15 +1,17 @@
 #' lintrRules
 #'
-#' This function defines the rules to be used by the linter called lintr. \code{\link{check}} creates ".lintr"
-#' config files that use this function.
+#' This function defines the rules to be used by the linter called lintr.
+#' \code{\link{check}} creates ".lintr" config files that use this function.
 #'
-#' To change which linters are applied for a package edit the .lintr file to use the modification
-#' argument, see example.
+#' To change which linters are applied for a package edit the .lintr file to
+#' use the modification argument, see example.
 #'
-#' @param allowUndesirable If true it is okay to use undesirable operators (such as "<<-")
-#' and undesirable (but not deprecated) functions (such as "setwd").
-#' @param modification A named list mapping linter names to NULL (removes that linter)
-#' or a corresponding linter function. Will be applied to the result with utils::modifyList.
+#' @param allowUndesirable If true it is okay to use undesirable operators
+#' (such as "<<-") and undesirable (but not deprecated) functions
+#' (such as "setwd").
+#' @param modification A named list mapping linter names to NULL
+#' (removes that linter) or a corresponding linter function. Will be applied
+#' to the result with utils::modifyList.
 #' @return A named list mapping linter names to linter functions.
 #'
 #' @examples
@@ -18,13 +20,15 @@
 #'
 #' # return usual linters with a different object_name_linter and without the todo_comment_linter
 #' snakeCaseLinter <- lintr::object_name_linter(styles = "snake_case")
-#' lucode2::lintrRules(modification = list(object_name_linter = snakeCaseLinter,
-#'                                         todo_comment_linter = NULL))
+#' lucode2::lintrRules(modification = list(
+#'   object_name_linter = snakeCaseLinter, todo_comment_linter = NULL
+#' ))
 #' }
 #'
 #' @importFrom lintr linters_with_defaults absolute_path_linter line_length_linter object_name_linter
-#' todo_comment_linter undesirable_function_linter cyclocomp_linter default_undesirable_functions
-#' undesirable_operator_linter default_undesirable_operators T_and_F_symbol_linter object_length_linter
+#' @importFrom lintr todo_comment_linter undesirable_function_linter cyclocomp_linter default_undesirable_functions
+#' @importFrom lintr undesirable_operator_linter default_undesirable_operators T_and_F_symbol_linter
+#' @importFrom lintr object_length_linter
 #' @seealso \code{\link{check}}, \code{\link{lint}}
 #' @export
 lintrRules <- function(allowUndesirable = FALSE, modification = list()) {
