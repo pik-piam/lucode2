@@ -45,7 +45,6 @@ Imports:
 Suggests:
     covr,
     gdx,
-    gdxrrw,
     gert,
     ggplot2,
     knitr,

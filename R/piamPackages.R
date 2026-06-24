@@ -9,7 +9,7 @@ piamPackages <- function() {
   packagesUrl <- "https://pik-piam.r-universe.dev/src/contrib/PACKAGES"
   fallback <- c("biospheremetrics", "blackmagicc", "boundaries", "brick", "citation",
                 "edgeTransport", "edgeTrpLib", "GDPuc", "gdx", "gdx2",
-                "gdxrrw", "ggtrace", "gms", "goxygen", "HARr", "iamc", "limes",
+                "ggtrace", "gms", "goxygen", "HARr", "iamc", "limes",
                 "lpjclass", "lpjmlkit", "lpjmlstats", "lucode2", "luplot", "luscale",
                 "lusweave", "m4fsdp", "madrat", "magclass", "magpie4", "MagpieNCGains",
                 "magpiesets", "mip", "modelstats", "mrcommons", "mrdieter", "mrdrivers",
