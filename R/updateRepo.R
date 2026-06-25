@@ -63,7 +63,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = T
 
       if (!(validationKey$valid || !check || forceRebuild)) {
         message(messageStart, " -> ", newVersion, " invalid validation key ::.")
-        str(gert::git_commit_info(repo = repoPath)[c("id", "author", "message", "time")])
+        utils::str(gert::git_commit_info(repo = repoPath)[c("id", "author", "message", "time")])
         stop("invalid validation key")
       }
 
