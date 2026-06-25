@@ -44,7 +44,8 @@ lintr::lint_dir(linters = lucode2::lintrRules())
 
 # return usual linters with a different object_name_linter and without the todo_comment_linter
 snakeCaseLinter <- lintr::object_name_linter(styles = "snake_case")
-lucode2::lintrRules(modification = list(object_name_linter = snakeCaseLinter,
-                                        todo_comment_linter = NULL))
+lucode2::lintrRules(modification = list(
+  object_name_linter = snakeCaseLinter, todo_comment_linter = NULL
+))
 } # }
 ```

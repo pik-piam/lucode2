@@ -30,7 +30,7 @@ setup_info()
 #>                                               version 
 #> "#18~24.04.1-Ubuntu SMP Thu May 28 16:39:11 UTC 2026" 
 #>                                              nodename 
-#>                                        "423347f85edd" 
+#>                                        "b2595dc75eea" 
 #>                                               machine 
 #>                                              "x86_64" 
 #>                                                 login 
@@ -65,19 +65,19 @@ setup_info()
 #> [7] base     
 #> 
 #> other attached packages:
-#> [1] lucode2_0.55.4
+#> [1] lucode2_0.56.0
 #> 
 #> loaded via a namespace (and not attached):
 #>  [1] generics_0.1.4     rappdirs_0.3.4     sass_0.4.10       
 #>  [4] renv_1.2.3         xml2_1.5.2         digest_0.6.39     
-#>  [7] magrittr_2.0.5     evaluate_1.0.5     pkgload_1.5.2     
+#>  [7] magrittr_2.0.5     evaluate_1.0.5     pkgload_1.5.3     
 #> [10] fastmap_1.2.0      jsonlite_2.0.0     processx_3.9.0    
 #> [13] pkgbuild_1.4.8     sessioninfo_1.2.4  whisker_0.4.1     
 #> [16] backports_1.5.1    ps_1.9.3           purrr_1.2.2       
 #> [19] fansi_1.0.7        lintr_3.3.0-1      textshaping_1.0.5 
 #> [22] httr2_1.2.2        jquerylib_0.1.4    cli_3.6.6         
 #> [25] rlang_1.2.0        tidytemplate_1.0.0 ellipsis_0.3.3    
-#> [28] withr_3.0.2        cachem_1.1.0       yaml_2.3.12       
+#> [28] withr_3.0.3        cachem_1.1.0       yaml_2.3.12       
 #> [31] devtools_2.5.2     otel_0.2.0         tools_4.5.3       
 #> [34] memoise_2.0.1      dplyr_1.2.1        curl_7.1.0        
 #> [37] vctrs_0.7.3        R6_2.6.1           lifecycle_1.0.5   
@@ -86,10 +86,10 @@ setup_info()
 #> [46] desc_1.4.3         callr_3.8.0        rex_1.2.2         
 #> [49] pkgdown_2.2.0      pillar_1.11.1      bslib_0.11.0      
 #> [52] glue_1.8.1         data.table_1.18.4  systemfonts_1.3.2 
-#> [55] tidyselect_1.2.1   xfun_0.58          tibble_3.3.1      
-#> [58] rstudioapi_0.18.0  knitr_1.51         htmltools_0.5.9   
+#> [55] tidyselect_1.2.1   xfun_0.59          tibble_3.3.1      
+#> [58] rstudioapi_0.19.0  knitr_1.51         htmltools_0.5.9   
 #> [61] rmarkdown_2.31     compiler_4.5.3     downlit_0.4.5     
-#> [64] askpass_1.2.1      openssl_2.4.1     
+#> [64] askpass_1.2.1      openssl_2.4.2     
 #> 
 #> $libPaths
 #> [1] "/usr/local/lib/R/site-library" "/usr/local/lib/R/library"     
@@ -386,7 +386,7 @@ setup_info()
 #> Deriv              "/usr/local/lib/R/site-library" "4.2.0"      
 #> Formula            "/usr/local/lib/R/site-library" "1.2-5"      
 #> GDPuc              "/usr/local/lib/R/site-library" "1.6.1"      
-#> Hmisc              "/usr/local/lib/R/site-library" "5.2-5"      
+#> Hmisc              "/usr/local/lib/R/site-library" "5.2-6"      
 #> Lmoments           "/usr/local/lib/R/site-library" "1.3-2"      
 #> MatrixModels       "/usr/local/lib/R/site-library" "0.5-4"      
 #> R.cache            "/usr/local/lib/R/site-library" "0.17.0"     
@@ -444,7 +444,7 @@ setup_info()
 #> dotCall64          "/usr/local/lib/R/site-library" "1.2"        
 #> downlit            "/usr/local/lib/R/site-library" "0.4.5"      
 #> dplyr              "/usr/local/lib/R/site-library" "1.2.1"      
-#> edgeTransport      "/usr/local/lib/R/site-library" "3.14.0"     
+#> edgeTransport      "/usr/local/lib/R/site-library" "3.16.0"     
 #> ellipsis           "/usr/local/lib/R/site-library" "0.3.3"      
 #> elliptic           "/usr/local/lib/R/site-library" "1.5-1"      
 #> evaluate           "/usr/local/lib/R/site-library" "1.0.5"      
@@ -508,14 +508,14 @@ setup_info()
 #> lpjclass           "/usr/local/lib/R/site-library" "1.19.7"     
 #> lpjmlkit           "/usr/local/lib/R/site-library" "1.8.1"      
 #> lubridate          "/usr/local/lib/R/site-library" "1.9.5"      
-#> lucode2            "/usr/local/lib/R/site-library" "0.55.4"     
+#> lucode2            "/usr/local/lib/R/site-library" "0.56.0"     
 #> luplot             "/usr/local/lib/R/site-library" "4.1.4"      
 #> luscale            "/usr/local/lib/R/site-library" "3.2.0"      
 #> lusweave           "/usr/local/lib/R/site-library" "1.46.6"     
 #> madrat             "/usr/local/lib/R/site-library" "3.36.4"     
 #> magclass           "/usr/local/lib/R/site-library" "7.4.3"      
 #> magic              "/usr/local/lib/R/site-library" "1.6-1"      
-#> magpie4            "/usr/local/lib/R/site-library" "2.76.3"     
+#> magpie4            "/usr/local/lib/R/site-library" "2.76.4"     
 #> magpiesets         "/usr/local/lib/R/site-library" "0.48.0"     
 #> magrittr           "/usr/local/lib/R/site-library" "2.0.5"      
 #> maps               "/usr/local/lib/R/site-library" "3.4.3"      
@@ -527,13 +527,13 @@ setup_info()
 #> minty              "/usr/local/lib/R/site-library" "0.0.6"      
 #> mip                "/usr/local/lib/R/site-library" "0.155.12"   
 #> modelr             "/usr/local/lib/R/site-library" "0.1.11"     
-#> mrcommons          "/usr/local/lib/R/site-library" "1.69.2"     
+#> mrcommons          "/usr/local/lib/R/site-library" "1.69.4"     
 #> mrdownscale        "/usr/local/lib/R/site-library" "0.51.1"     
 #> mrdrivers          "/usr/local/lib/R/site-library" "7.2.1"      
 #> mrfaocore          "/usr/local/lib/R/site-library" "1.8.0"      
-#> mrindustry         "/usr/local/lib/R/site-library" "1.1.6"      
+#> mrindustry         "/usr/local/lib/R/site-library" "1.2.0"      
 #> mrlandcore         "/usr/local/lib/R/site-library" "1.7.0"      
-#> mrremind           "/usr/local/lib/R/site-library" "0.270.1"    
+#> mrremind           "/usr/local/lib/R/site-library" "0.271.8"    
 #> mrtransport        "/usr/local/lib/R/site-library" "0.16.0"     
 #> mstools            "/usr/local/lib/R/site-library" "0.15.0"     
 #> ncdf4              "/usr/local/lib/R/site-library" "1.24"       
@@ -542,19 +542,19 @@ setup_info()
 #> nnls               "/usr/local/lib/R/site-library" "1.6"        
 #> nonparaeff         "/usr/local/lib/R/site-library" "0.5-15"     
 #> numDeriv           "/usr/local/lib/R/site-library" "2016.8-1.1" 
-#> openssl            "/usr/local/lib/R/site-library" "2.4.1"      
+#> openssl            "/usr/local/lib/R/site-library" "2.4.2"      
 #> openxlsx           "/usr/local/lib/R/site-library" "4.2.8.1"    
 #> otel               "/usr/local/lib/R/site-library" "0.2.0"      
-#> pak                "/usr/local/lib/R/site-library" "0.9.5"      
+#> pak                "/usr/local/lib/R/site-library" "0.10.0"     
 #> pbkrtest           "/usr/local/lib/R/site-library" "0.5.5"      
-#> piamInterfaces     "/usr/local/lib/R/site-library" "0.60.0"     
+#> piamInterfaces     "/usr/local/lib/R/site-library" "0.62.0"     
 #> piamPlotComparison "/usr/local/lib/R/site-library" "0.1.5"      
 #> piamutils          "/usr/local/lib/R/site-library" "0.1.1"      
 #> pillar             "/usr/local/lib/R/site-library" "1.11.1"     
 #> pkgbuild           "/usr/local/lib/R/site-library" "1.4.8"      
 #> pkgconfig          "/usr/local/lib/R/site-library" "2.0.3"      
 #> pkgdown            "/usr/local/lib/R/site-library" "2.2.0"      
-#> pkgload            "/usr/local/lib/R/site-library" "1.5.2"      
+#> pkgload            "/usr/local/lib/R/site-library" "1.5.3"      
 #> plotly             "/usr/local/lib/R/site-library" "4.12.0"     
 #> plyr               "/usr/local/lib/R/site-library" "1.8.9"      
 #> poorman            "/usr/local/lib/R/site-library" "0.2.7"      
@@ -578,7 +578,7 @@ setup_info()
 #> readxl             "/usr/local/lib/R/site-library" "1.5.0"      
 #> reformulas         "/usr/local/lib/R/site-library" "0.4.4"      
 #> rematch            "/usr/local/lib/R/site-library" "2.0.0"      
-#> remind2            "/usr/local/lib/R/site-library" "2.2.0"      
+#> remind2            "/usr/local/lib/R/site-library" "2.2.1"      
 #> remulator          "/usr/local/lib/R/site-library" "1.22.0"     
 #> renv               "/usr/local/lib/R/site-library" "1.2.3"      
 #> reporttransport    "/usr/local/lib/R/site-library" "1.3.2"      
@@ -591,7 +591,7 @@ setup_info()
 #> rootSolve          "/usr/local/lib/R/site-library" "1.8.2.4"    
 #> roxygen2           "/usr/local/lib/R/site-library" "8.0.0"      
 #> rprojroot          "/usr/local/lib/R/site-library" "2.1.1"      
-#> rstudioapi         "/usr/local/lib/R/site-library" "0.18.0"     
+#> rstudioapi         "/usr/local/lib/R/site-library" "0.19.0"     
 #> rversions          "/usr/local/lib/R/site-library" "3.0.0"      
 #> rworldmap          "/usr/local/lib/R/site-library" "1.3-8"      
 #> sass               "/usr/local/lib/R/site-library" "0.4.10"     
@@ -607,7 +607,7 @@ setup_info()
 #> svglite            "/usr/local/lib/R/site-library" "2.2.2"      
 #> sys                "/usr/local/lib/R/site-library" "3.4.3"      
 #> systemfonts        "/usr/local/lib/R/site-library" "1.3.2"      
-#> terra              "/usr/local/lib/R/site-library" "1.9-27"     
+#> terra              "/usr/local/lib/R/site-library" "1.9-34"     
 #> testthat           "/usr/local/lib/R/site-library" "3.3.2"      
 #> textshaping        "/usr/local/lib/R/site-library" "1.0.5"      
 #> tibble             "/usr/local/lib/R/site-library" "3.3.1"      
@@ -616,7 +616,7 @@ setup_info()
 #> tidytemplate       "/usr/local/lib/R/site-library" "1.0.0"      
 #> timeDate           "/usr/local/lib/R/site-library" "4052.112"   
 #> timechange         "/usr/local/lib/R/site-library" "0.4.0"      
-#> tinytex            "/usr/local/lib/R/site-library" "0.59"       
+#> tinytex            "/usr/local/lib/R/site-library" "0.60"       
 #> trafficlight       "/usr/local/lib/R/site-library" "1.15.1"     
 #> tzdb               "/usr/local/lib/R/site-library" "0.5.0"      
 #> urca               "/usr/local/lib/R/site-library" "1.3-4"      
@@ -629,16 +629,16 @@ setup_info()
 #> waldo              "/usr/local/lib/R/site-library" "0.6.2"      
 #> whisker            "/usr/local/lib/R/site-library" "0.4.1"      
 #> whoami             "/usr/local/lib/R/site-library" "1.3.0"      
-#> withr              "/usr/local/lib/R/site-library" "3.0.2"      
+#> withr              "/usr/local/lib/R/site-library" "3.0.3"      
 #> writexl            "/usr/local/lib/R/site-library" "1.5.4"      
-#> xfun               "/usr/local/lib/R/site-library" "0.58"       
+#> xfun               "/usr/local/lib/R/site-library" "0.59"       
 #> xml2               "/usr/local/lib/R/site-library" "1.5.2"      
 #> xmlparsedata       "/usr/local/lib/R/site-library" "1.0.5"      
 #> xopen              "/usr/local/lib/R/site-library" "1.0.1"      
 #> xtable             "/usr/local/lib/R/site-library" "1.8-8"      
 #> yaml               "/usr/local/lib/R/site-library" "2.3.12"     
 #> ymlthis            "/usr/local/lib/R/site-library" "1.0.0"      
-#> zip                "/usr/local/lib/R/site-library" "2.3.3"      
+#> zip                "/usr/local/lib/R/site-library" "3.0.0"      
 #> zoo                "/usr/local/lib/R/site-library" "1.8-15"     
 #> KernSmooth         "/usr/local/lib/R/library"      "2.23-26"    
 #> MASS               "/usr/local/lib/R/library"      "7.3-65"     
@@ -1786,7 +1786,7 @@ setup_info()
 #> xtable             NA                                                              
 #> yaml               NA                                                              
 #> ymlthis            NA                                                              
-#> zip                NA                                                              
+#> zip                "cli"                                                           
 #> zoo                NA                                                              
 #> KernSmooth         NA                                                              
 #> MASS               NA                                                              
@@ -1821,7 +1821,7 @@ setup_info()
 #> Deriv              "testthat (>= 0.11.0)"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 #> Formula            NA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 #> GDPuc              "countrycode, covr, knitr, magclass, madrat (>= 3.6.4), purrr,\nrmarkdown, stringr, testthat (>= 3.0.0), usethis, WDI, zoo"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
-#> Hmisc              "survival, qreport, acepack, chron, rms, mice, rstudioapi,\ntables, plotly (>= 4.5.6), rlang, VGAM, leaps, pcaPP, digest,\nparallel, polspline, abind, kableExtra, rio, lattice,\nlatticeExtra, gt, sparkline, jsonlite, htmlwidgets, qs,\ngetPass, keyring, safer, htm2txt, boot"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+#> Hmisc              "survival, qreport, acepack, chron, rms, mice, rstudioapi,\ntables, plotly (>= 4.5.6), rlang, VGAM, leaps, pcaPP, digest,\nparallel, polspline, abind, kableExtra, rio, lattice,\nlatticeExtra, gt, sparkline, jsonlite, htmlwidgets, qs2,\ngetPass, keyring, safer, htm2txt, boot"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
 #> Lmoments           NA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 #> MatrixModels       NA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 #> R.cache            NA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
@@ -1943,7 +1943,7 @@ setup_info()
 #> lpjclass           "covr"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 #> lpjmlkit           "rmarkdown, knitr, testthat (>= 3.0.0), terra, raster,\nreshape2, maps, sf, ncdf4, CFtime, R6"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 #> lubridate          "covr, knitr, rmarkdown, testthat (>= 2.1.0), vctrs (>= 0.6.5)"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
-#> lucode2            "covr, gdx, gdxrrw, gert, ggplot2, knitr, lusweave, magclass,\npoorman, renv, rmarkdown, styler, testthat"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+#> lucode2            "covr, gdx, gert, ggplot2, knitr, lusweave, magclass, poorman,\nrenv, rmarkdown, styler, testthat"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 #> luplot             "covr, rworldmap (>= 1.3.8), lemon"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
 #> luscale            "covr"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 #> lusweave           "covr, testthat (>= 3.0.0)"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
@@ -2026,7 +2026,7 @@ setup_info()
 #> rootSolve          NA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 #> roxygen2           "covr, R.methodsS3, S7, R.oo, rmarkdown (>= 2.16), testthat\n(>= 3.1.2), yaml"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 #> rprojroot          "covr, knitr, lifecycle, rlang, rmarkdown, testthat (>=\n3.2.0), withr"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-#> rstudioapi         "testthat, knitr, rmarkdown, clipr, covr, curl, jsonlite,\nwithr"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+#> rstudioapi         "testthat, knitr, rmarkdown, clipr, covr, curl, jsonlite, R6,\nwithr"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 #> rversions          "pillar, testthat (>= 3.0.0), webfakes, withr"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 #> rworldmap          "rworldxtra, RColorBrewer, classInt, sf"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
 #> sass               "testthat, knitr, rmarkdown, withr, shiny, curl"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
@@ -2042,7 +2042,7 @@ setup_info()
 #> svglite            "covr, fontquiver (>= 0.2.0), htmltools, knitr, rmarkdown,\ntestthat (>= 3.0.0), xml2 (>= 1.0.0)"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 #> sys                "unix (>= 1.4), spelling, testthat"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
 #> systemfonts        "covr, farver, ggplot2, graphics, knitr, ragg, rmarkdown,\nsvglite, testthat (>= 2.1.0)"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-#> terra              "parallel, tinytest, ncdf4, sf (>= 0.9-8), deldir, XML,\nleaflet (>= 2.2.1), htmlwidgets, future, future.apply"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+#> terra              "parallel, tinytest, ncdf4, sf (>= 0.9-8), igraph, deldir,\nXML, leaflet (>= 2.2.1), htmlwidgets, future, future.apply"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 #> testthat           "covr, curl (>= 0.9.5), diffviewer (>= 0.1.0), digest (>=\n0.6.33), gh, knitr, otel, otelsdk, rmarkdown, rstudioapi, S7,\nshiny, usethis, vctrs (>= 0.1.0), xml2"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 #> textshaping        "covr, grDevices, grid, knitr, rmarkdown, testthat (>= 3.0.0)"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 #> tibble             "bench, bit64, blob, brio, callr, DiagrammeR, dplyr, evaluate,\nformattable, ggplot2, here, hms, htmltools, knitr, lubridate,\nnycflights13, pkgload, purrr, rmarkdown, stringi, testthat (>=\n3.0.2), tidyr, withr"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
@@ -2073,7 +2073,7 @@ setup_info()
 #> xtable             "knitr, zoo, survival, glue, tinytex"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 #> yaml               "knitr, rmarkdown, testthat (>= 3.0.0)"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 #> ymlthis            "blogdown, bookdown, covr, knitr, miniUI, pkgdown, prettydoc,\nroxygen2 (>= 7.0.0), shiny, shinyBS, spelling, testthat (>=\n3.0.0), xaringan"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-#> zip                "covr, pillar, processx, R6, testthat, withr"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+#> zip                "callr, cli, curl, pillar, processx, R6, testthat, webfakes,\nwithr"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 #> zoo                "AER, coda, chron, ggplot2 (>= 3.5.0), mondate, scales,\nstinepack, strucchange, timeDate, timeSeries, tinyplot, tis,\ntseries, xts"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 #> KernSmooth         "MASS, carData"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 #> MASS               "lattice, nlme, nnet, survival"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              

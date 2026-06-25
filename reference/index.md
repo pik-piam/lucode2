@@ -14,7 +14,6 @@
 - [`checkRequiredPackages()`](checkRequiredPackages.md) :
   checkRequiredPackages
 - [`check_versions()`](check_versions.md) : Package version check tool
-- [`checkup()`](checkup.md) : checkup
 - [`conditionalCopy()`](conditionalCopy.md) : conditionalCopy
 - [`eprint()`](eprint.md) : extended Print
 - [`eprint_list()`](eprint_list.md) : Extended list print
