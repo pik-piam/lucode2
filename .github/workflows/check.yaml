@@ -15,7 +15,7 @@ jobs:
       image: ghcr.io/pik-piam/ci-image:latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install package and dependencies
         shell: Rscript {0}
@@ -66,7 +66,7 @@ jobs:
         env:
           NOT_CRAN: "true"
 
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v7
         if: ${{ github.event_name != 'pull_request' }}
         with:
           file: ./simple-codecov.json
