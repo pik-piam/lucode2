@@ -32,13 +32,16 @@ mergestatistics <- function(dir = ".", file = NULL, renew = FALSE, quickcheck = 
   keepCols <- setdiff(keepCols, removeCols)
 
   out <- NULL
-  id  <- NULL
   if (!is.null(file) && !renew) {
     if (file.exists(file)) {
-      out <- readRDS(file)
+      out <- tryCatch(readRDS(file), error = function(e) {
+        warning("Failed to read '", file, "': ", conditionMessage(e), ". Recreating that file.")
+        NULL
+      })
     }
-    id <- out$.id
   }
+  id <- if (!is.null(out)) out$.id else NULL
+
   cwd <- getwd()
   local_dir(dir)
   files <- list.files(pattern = pattern, recursive = TRUE)
