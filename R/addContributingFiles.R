@@ -1,7 +1,9 @@
 # A madrat-based package has read/calc/correct/full functions run via madrat
 # (readSource/calcOutput/retrieveData). CONTRIBUTING.md is only relevant to those.
 isMadratPackage <- function(lib = ".") {
-  file.exists(file.path(lib, "R", "madrat.R"))
+  isMadratPackage <- file.exists(file.path(lib, "R", "madrat.R"))
+  isMadrat <- file.exists(file.path(lib, "R", "madrat-package.R"))
+  return(isMadratPackage || isMadrat)
 }
 
 # CODE_STYLE.md goes into every package (its .Rbuildignore entry lives centrally in
