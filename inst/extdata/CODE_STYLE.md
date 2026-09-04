@@ -6,7 +6,7 @@
 - No non-standard evaluation
 - :: is recommended over @importFrom
 - Mapping files need to be put into inst/extdata in packages
-- `magpiecell` cellular resolution is deprecated and should not be added anymore 
+- `magpiecell` cellular resolution is deprecated and should not be added anymore
 - Use `terra` instead of `raster`
 - Use `withr` calls instead of base tempdir and deferred function executions
 

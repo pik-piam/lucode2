@@ -1,13 +1,13 @@
 # How to Contribute to a mr* Package
 
-Thanks for considering to contributing to a mr* package!
+Thanks for considering contributing to a mr* package!
 
 For our coding style, see the CODE_STYLE.md file.
 
 ## Environment Setup
 - By installing the full `lucode2` package, you get all needed tools:
 ```R
-  pak::pak()
+  pak::pak("lucode2", repos = c('https://pik-piam.r-universe.dev', 'https://cloud.r-project.org'))
   # OR
   install.packages("lucode2", repos = c('https://pik-piam.r-universe.dev', 'https://cloud.r-project.org'), dependencies = TRUE)
 ```
