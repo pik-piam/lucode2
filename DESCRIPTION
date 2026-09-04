@@ -31,6 +31,7 @@ BugReports: https://github.com/pik-piam/lucode2/issues
 Imports:
     callr,
     citation (>= 0.11.3),
+    cyclocomp,
     data.table,
     desc,
     devtools,
