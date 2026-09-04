@@ -1,4 +1,4 @@
-ValidationKey: '11625532'
+ValidationKey: '11799000'
 AutocreateReadme: yes
 AutocreateCITATION: yes
 AcceptedWarnings:
@@ -6,7 +6,7 @@ AcceptedWarnings:
 - 'Warning: namespace ''.*'' is not available and has been replaced'
 AcceptedNotes:
 - unable to verify current time
-- 'Package suggested but not available for checking: .poorman.'
+- Namespace in Imports field not imported from:.*cyclocomp
 allowLinterWarnings: no
 enforceVersionUpdate: no
 skipCoverage: no
