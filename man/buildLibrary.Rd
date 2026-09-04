@@ -42,7 +42,9 @@ following steps: \itemize{
 \item Linter: Check for code style problems.
 \item R check: Check whether the library is consistent and can be built.
 \item Package building: Builds the .zip and .tar.gz packages under windows.
-Under linux, only the .tar.gz package is built. }
+Under linux, only the .tar.gz package is built.
+\item Contributing docs: Adds/updates CODE_STYLE.md at the package root. Madrat-based
+packages (detected via the presence of R/madrat.R) additionally get CONTRIBUTING.md. }
 }
 \note{
 The behavior of buildLibrary can be configured via the \code{.buildLibrary} file in the

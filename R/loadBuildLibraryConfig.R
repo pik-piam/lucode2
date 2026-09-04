@@ -38,6 +38,7 @@ loadBuildLibraryConfig <- function(lib = ".") {
     "^\\.buildlibrary$",
     "^\\.pre-commit-config\\.yaml$",
     "^Makefile$",
+    "^CODE_STYLE\\.md$",
     "^workflow$",
     "^\\.claude$"
   )
