@@ -18,6 +18,10 @@ To evaluate your changes interactively in an R session:
 - Use `madrat::setConfig(ignorecache = c("calcMyFunction", "readMyData"))` to force the re-execution of your function
 - Execute your function through `calcOutput`/`readSource`/`retrieveData`
 
+## Note on Caching in madrat
+- madrat computes cache keys from the source of a function and its dependencies (including `tool*` functions)
+- Therefore define auxiliary functions inside your `calc`/`read`/`retrieveData` function, or, if shared between functions, as a `tool*` function
+
 ## Testing
 - Tests are in tests/testthat
 - Fixtures should go into tests/testthat/fixtures
@@ -32,5 +36,4 @@ To evaluate your changes interactively in an R session:
 - If your change is very small and the repository allows it: push directly
 
 ## Attribution
-- Add yourself to authors list in DESCRIPTION <!-- what do you need to have done to warrant being added? -->
-<!-- no bots -->
+- When you have contributed to this package, feel free to add yourself to the DESCRIPTION file
