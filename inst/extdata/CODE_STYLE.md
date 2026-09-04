@@ -1,5 +1,5 @@
 ## Coding Conventions
-- General coding style is documented through linter rules (lucode2::lintrRules). Main rules:
+- General coding style is documented through linter rules (lucode2::lintrRules). Basic rules:
   - Camel case
   - Line length: 120 characters
 

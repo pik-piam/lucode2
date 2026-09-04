@@ -2,7 +2,7 @@
 
 Thanks for considering to contributing to a mr* package!
 
-For our coding style, see the CODE_STLYE.md file.
+For our coding style, see the CODE_STYLE.md file.
 
 ## Environment Setup
 - By installing the full `lucode2` package, you get all needed tools:
@@ -26,9 +26,9 @@ To evaluate your changes interactively in an R session:
   - Single test file: `devtools::test_file("tests/testthat/test_myFunction.R")`
 
 ## Overall Development Process
-- Before pushing your changes you need to run `lucode2::buildLibrary()`, which will check the new version and take care of updating meta data
-- Every published change, needs a new version (we follow semantic versioning)
-- For publishing your change, in general: open a PR then merge it
+- Before pushing your changes, you need to run `lucode2::buildLibrary()`, which will check the new version and take care of updating metadata
+- Every published change needs a new version (we follow semantic versioning)
+- For publishing your change, in general: open a PR, then merge it
 - If your change is very small and the repository allows it: push directly
 
 ## Attribution
