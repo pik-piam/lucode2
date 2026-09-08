@@ -10,7 +10,9 @@
 #' \item Linter: Check for code style problems.
 #' \item R check: Check whether the library is consistent and can be built.
 #' \item Package building: Builds the .zip and .tar.gz packages under windows.
-#' Under linux, only the .tar.gz package is built. }
+#' Under linux, only the .tar.gz package is built.
+#' \item Contributing docs: Adds/updates CODE_STYLE.md at the package root. Madrat-based
+#' packages additionally get CONTRIBUTING.md. }
 #'
 #' @param lib Path to the package
 #' @param cran If cran-like test is needed
@@ -145,7 +147,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
   unlink(rcheckfolders, recursive = TRUE)
 
   ############################################################
-  # add GitHub actions, pre-commit-config, and Makefile
+  # add GitHub actions, pre-commit-config, Makefile, and contributing docs
   ############################################################
   tryCatch(addGitHubActions(config = cfg), error = function(error) {
     message("Could not add GitHub Actions:", error)
@@ -154,6 +156,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
   # hidden files in inst/extdata produce NOTE during check, so remove leading dot from .pre-commit-config.yaml
   conditionalCopy(".pre-commit-config.yaml", "pre-commit-config.yaml")
   conditionalCopy("Makefile")
+  addContributingFiles()
 
   ##########################################################
   # Check for version numbers
