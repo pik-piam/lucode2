@@ -19,7 +19,7 @@ To evaluate your changes interactively in an R session:
 - Execute your function through `calcOutput`/`readSource`/`retrieveData`
 
 ## Note on Caching in madrat
-- madrat computes cache keys from the source of a function and its dependencies (including `tool*` functions)
+- madrat computes cache keys from the source of a function and its dependencies (including `tool*` functions); auxiliaries defined outside a `calc*`/`read*`/`retrieveData` body are not in the cache key, so changing them won't invalidate cached outputs
 - Therefore define auxiliary functions inside your `calc`/`read`/`retrieveData` function, or, if shared between functions, as a `tool*` function
 
 ## Testing

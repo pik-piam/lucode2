@@ -4,7 +4,8 @@
   - Line length: 120 characters
 
 - No non-standard evaluation
-- :: is recommended over @importFrom, if the package is in depends also no ::
+- Prefer `pkg::fun()` over `@importFrom pkg fun`
+- If `pkg` is in `Depends:`, drop the `::` (it is already attached)
 - Mapping files need to be put into inst/extdata in packages
 - `magpiecell` cellular resolution is deprecated and should not be added anymore
 - Use `terra` instead of `raster`
