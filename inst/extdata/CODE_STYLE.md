@@ -4,7 +4,7 @@
   - Line length: 120 characters
 
 - No non-standard evaluation
-- :: is recommended over @importFrom
+- :: is recommended over @importFrom, if the package is in depends also no ::
 - Mapping files need to be put into inst/extdata in packages
 - `magpiecell` cellular resolution is deprecated and should not be added anymore
 - Use `terra` instead of `raster`
