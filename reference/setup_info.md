@@ -30,7 +30,7 @@ setup_info()
 #>                                       version 
 #> "#22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026" 
 #>                                      nodename 
-#>                                "ad16936701e9" 
+#>                                "5109af3eac73" 
 #>                                       machine 
 #>                                      "x86_64" 
 #>                                         login 
@@ -65,30 +65,30 @@ setup_info()
 #> [7] base     
 #> 
 #> other attached packages:
-#> [1] lucode2_0.56.2
+#> [1] lucode2_0.56.3
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] generics_0.1.4     sass_0.4.10        renv_1.2.4        
-#>  [4] xml2_1.6.0         digest_0.6.39      magrittr_2.0.5    
-#>  [7] evaluate_1.0.5     pkgload_1.5.3      fastmap_1.2.0     
-#> [10] jsonlite_2.0.0     processx_3.9.0     pkgbuild_1.4.8    
-#> [13] sessioninfo_1.2.4  whisker_0.4.1      ps_1.9.3          
-#> [16] purrr_1.2.2        fansi_1.0.7        lintr_3.4.0       
-#> [19] textshaping_1.0.5  httr2_1.3.0        jquerylib_0.1.4   
-#> [22] cli_3.6.6          rlang_1.3.0        tidytemplate_1.0.0
-#> [25] ellipsis_0.3.3     withr_3.0.3        cachem_1.1.0      
-#> [28] yaml_2.3.12        devtools_2.5.2     otel_0.2.0        
-#> [31] tools_4.5.3        memoise_2.0.1      dplyr_1.2.1       
-#> [34] curl_7.1.0         vctrs_0.7.3        R6_2.6.1          
-#> [37] lifecycle_1.0.5    htmlwidgets_1.6.4  fs_2.1.0          
-#> [40] usethis_3.2.1      ragg_1.5.2         fontawesome_0.5.3 
-#> [43] pkgconfig_2.0.3    desc_1.4.3         callr_3.8.0       
-#> [46] rex_1.2.2          pkgdown_2.2.1      pillar_1.11.1     
-#> [49] bslib_0.12.0       glue_1.8.1         data.table_1.18.4 
-#> [52] systemfonts_1.3.2  tidyselect_1.2.1   xfun_0.60         
-#> [55] tibble_3.3.1       rstudioapi_0.19.0  knitr_1.51        
-#> [58] htmltools_0.5.9    rmarkdown_2.31     compiler_4.5.3    
-#> [61] downlit_0.4.5      askpass_1.2.1      openssl_2.4.2     
+#>  [1] generics_0.1.4      sass_0.4.10         renv_1.2.4         
+#>  [4] xml2_1.6.0          digest_0.6.39       magrittr_2.0.5     
+#>  [7] evaluate_1.0.5      pkgload_1.5.3       fastmap_1.2.0      
+#> [10] jsonlite_2.0.0      processx_3.9.0      pkgbuild_1.4.8     
+#> [13] sessioninfo_1.2.4   whisker_0.4.1       ps_1.9.3           
+#> [16] purrr_1.2.2         fansi_1.0.7         lintr_3.4.0        
+#> [19] textshaping_1.0.5   httr2_1.3.0         jquerylib_0.1.4    
+#> [22] cli_3.6.6           rlang_1.3.0         tidytemplate_1.0.0 
+#> [25] ellipsis_0.3.3      withr_3.0.3         cachem_1.1.0       
+#> [28] yaml_2.3.12         devtools_2.5.2      otel_0.2.0         
+#> [31] tools_4.5.3         memoise_2.0.1       dplyr_1.2.1        
+#> [34] curl_8.0.0          vctrs_0.7.3         R6_2.6.1           
+#> [37] lifecycle_1.0.5     htmlwidgets_1.6.4   fs_2.1.0           
+#> [40] usethis_3.2.1       ragg_1.5.2          fontawesome_0.5.3  
+#> [43] pkgconfig_2.0.3     desc_1.4.3          callr_3.8.0        
+#> [46] rex_1.2.2           pkgdown_2.2.1       pillar_1.11.1      
+#> [49] bslib_0.12.0        glue_1.8.1          data.table_1.18.6.1
+#> [52] systemfonts_1.3.2   tidyselect_1.2.1    xfun_0.60          
+#> [55] tibble_3.3.1        rstudioapi_0.19.0   knitr_1.51         
+#> [58] htmltools_0.5.9     rmarkdown_2.32      compiler_4.5.3     
+#> [61] downlit_0.4.5       askpass_1.2.1       openssl_2.4.2      
 #> 
 #> $libPaths
 #> [1] "/usr/local/lib/R/site-library" "/usr/local/lib/R/library"     
@@ -382,7 +382,7 @@ setup_info()
 #> tools              "tools"             
 #> utils              "utils"             
 #>                    LibPath                         Version     
-#> Deriv              "/usr/local/lib/R/site-library" "4.3.0"     
+#> Deriv              "/usr/local/lib/R/site-library" "4.3.5"     
 #> Formula            "/usr/local/lib/R/site-library" "1.2-6"     
 #> GDPuc              "/usr/local/lib/R/site-library" "1.6.1"     
 #> Hmisc              "/usr/local/lib/R/site-library" "5.2-6"     
@@ -406,7 +406,7 @@ setup_info()
 #> backports          "/usr/local/lib/R/site-library" "1.5.1"     
 #> base64enc          "/usr/local/lib/R/site-library" "0.1-6"     
 #> bit                "/usr/local/lib/R/site-library" "4.6.0"     
-#> bit64              "/usr/local/lib/R/site-library" "4.8.4"     
+#> bit64              "/usr/local/lib/R/site-library" "4.8.6"     
 #> brew               "/usr/local/lib/R/site-library" "1.0-10"    
 #> brio               "/usr/local/lib/R/site-library" "1.1.5"     
 #> broom              "/usr/local/lib/R/site-library" "1.0.13"    
@@ -430,8 +430,8 @@ setup_info()
 #> crayon             "/usr/local/lib/R/site-library" "1.5.3"     
 #> credentials        "/usr/local/lib/R/site-library" "2.0.3"     
 #> crosstalk          "/usr/local/lib/R/site-library" "1.2.2"     
-#> curl               "/usr/local/lib/R/site-library" "7.1.0"     
-#> data.table         "/usr/local/lib/R/site-library" "1.18.4"    
+#> curl               "/usr/local/lib/R/site-library" "8.0.0"     
+#> data.table         "/usr/local/lib/R/site-library" "1.18.6.1"  
 #> deSolve            "/usr/local/lib/R/site-library" "1.42"      
 #> desc               "/usr/local/lib/R/site-library" "1.4.3"     
 #> devtools           "/usr/local/lib/R/site-library" "2.5.2"     
@@ -480,7 +480,7 @@ setup_info()
 #> htmltools          "/usr/local/lib/R/site-library" "0.5.9"     
 #> htmlwidgets        "/usr/local/lib/R/site-library" "1.6.4"     
 #> httpuv             "/usr/local/lib/R/site-library" "1.6.17"    
-#> httr               "/usr/local/lib/R/site-library" "1.4.8"     
+#> httr               "/usr/local/lib/R/site-library" "1.4.9"     
 #> httr2              "/usr/local/lib/R/site-library" "1.3.0"     
 #> hypergeo           "/usr/local/lib/R/site-library" "1.2-14"    
 #> igraph             "/usr/local/lib/R/site-library" "2.3.3"     
@@ -506,14 +506,14 @@ setup_info()
 #> lpjclass           "/usr/local/lib/R/site-library" "1.19.7"    
 #> lpjmlkit           "/usr/local/lib/R/site-library" "1.8.2"     
 #> lubridate          "/usr/local/lib/R/site-library" "1.9.5"     
-#> lucode2            "/usr/local/lib/R/site-library" "0.56.2"    
+#> lucode2            "/usr/local/lib/R/site-library" "0.56.3"    
 #> luplot             "/usr/local/lib/R/site-library" "4.1.4"     
 #> luscale            "/usr/local/lib/R/site-library" "3.2.0"     
 #> lusweave           "/usr/local/lib/R/site-library" "1.46.6"    
-#> madrat             "/usr/local/lib/R/site-library" "3.38.4"    
-#> magclass           "/usr/local/lib/R/site-library" "7.5.5"     
+#> madrat             "/usr/local/lib/R/site-library" "3.41.2"    
+#> magclass           "/usr/local/lib/R/site-library" "7.6.0"     
 #> magic              "/usr/local/lib/R/site-library" "1.6-1"     
-#> magpie4            "/usr/local/lib/R/site-library" "2.80.2"    
+#> magpie4            "/usr/local/lib/R/site-library" "2.80.3"    
 #> magpiesets         "/usr/local/lib/R/site-library" "0.48.0"    
 #> magrittr           "/usr/local/lib/R/site-library" "2.0.5"     
 #> maps               "/usr/local/lib/R/site-library" "3.4.3"     
@@ -522,7 +522,7 @@ setup_info()
 #> miniUI             "/usr/local/lib/R/site-library" "0.1.2"     
 #> minqa              "/usr/local/lib/R/site-library" "1.2.8"     
 #> minty              "/usr/local/lib/R/site-library" "0.0.6"     
-#> mip                "/usr/local/lib/R/site-library" "0.155.13"  
+#> mip                "/usr/local/lib/R/site-library" "0.155.14"  
 #> modelr             "/usr/local/lib/R/site-library" "0.1.11"    
 #> mrcommons          "/usr/local/lib/R/site-library" "1.72.4"    
 #> mrcommonsenergy    "/usr/local/lib/R/site-library" "0.5.1"     
@@ -530,11 +530,11 @@ setup_info()
 #> mrdrivers          "/usr/local/lib/R/site-library" "7.2.1"     
 #> mrenergy           "/usr/local/lib/R/site-library" "0.1.5"     
 #> mrfaocore          "/usr/local/lib/R/site-library" "1.8.2"     
-#> mrindustry         "/usr/local/lib/R/site-library" "1.3.1"     
-#> mrlandcore         "/usr/local/lib/R/site-library" "1.8.1"     
-#> mrremind           "/usr/local/lib/R/site-library" "0.274.2"   
+#> mrindustry         "/usr/local/lib/R/site-library" "1.3.6"     
+#> mrlandcore         "/usr/local/lib/R/site-library" "1.8.4"     
+#> mrremind           "/usr/local/lib/R/site-library" "0.276.1"   
 #> mrtransport        "/usr/local/lib/R/site-library" "0.17.0"    
-#> mstools            "/usr/local/lib/R/site-library" "0.15.0"    
+#> mstools            "/usr/local/lib/R/site-library" "0.16.0"    
 #> ncdf4              "/usr/local/lib/R/site-library" "1.24"      
 #> nleqslv            "/usr/local/lib/R/site-library" "3.3.7"     
 #> nloptr             "/usr/local/lib/R/site-library" "2.2.1"     
@@ -542,11 +542,11 @@ setup_info()
 #> nonparaeff         "/usr/local/lib/R/site-library" "0.5-15"    
 #> numDeriv           "/usr/local/lib/R/site-library" "2016.8-1.1"
 #> openssl            "/usr/local/lib/R/site-library" "2.4.2"     
-#> openxlsx           "/usr/local/lib/R/site-library" "4.2.8.1"   
+#> openxlsx           "/usr/local/lib/R/site-library" "4.2.9"     
 #> otel               "/usr/local/lib/R/site-library" "0.2.0"     
 #> pak                "/usr/local/lib/R/site-library" "0.11.1"    
 #> pbkrtest           "/usr/local/lib/R/site-library" "0.5.5"     
-#> piamInterfaces     "/usr/local/lib/R/site-library" "0.63.0"    
+#> piamInterfaces     "/usr/local/lib/R/site-library" "0.64.0"    
 #> piamPlotComparison "/usr/local/lib/R/site-library" "0.1.5"     
 #> piamutils          "/usr/local/lib/R/site-library" "0.1.1"     
 #> pillar             "/usr/local/lib/R/site-library" "1.11.1"    
@@ -573,19 +573,19 @@ setup_info()
 #> rbibutils          "/usr/local/lib/R/site-library" "2.4.1"     
 #> rcmdcheck          "/usr/local/lib/R/site-library" "1.4.0"     
 #> rdtools            "/usr/local/lib/R/site-library" "0.1.0"     
-#> readODS            "/usr/local/lib/R/site-library" "2.3.5"     
+#> readODS            "/usr/local/lib/R/site-library" "2.3.6"     
 #> readr              "/usr/local/lib/R/site-library" "2.2.0"     
 #> readxl             "/usr/local/lib/R/site-library" "1.5.0"     
 #> reformulas         "/usr/local/lib/R/site-library" "0.4.4"     
 #> rematch            "/usr/local/lib/R/site-library" "2.0.0"     
-#> remind2            "/usr/local/lib/R/site-library" "2.5.5"     
+#> remind2            "/usr/local/lib/R/site-library" "2.6.1"     
 #> renv               "/usr/local/lib/R/site-library" "1.2.4"     
 #> reporttransport    "/usr/local/lib/R/site-library" "1.6.2"     
 #> reshape            "/usr/local/lib/R/site-library" "0.8.10"    
 #> reshape2           "/usr/local/lib/R/site-library" "1.4.5"     
 #> rex                "/usr/local/lib/R/site-library" "1.2.2"     
 #> rlang              "/usr/local/lib/R/site-library" "1.3.0"     
-#> rmarkdown          "/usr/local/lib/R/site-library" "2.31"      
+#> rmarkdown          "/usr/local/lib/R/site-library" "2.32"      
 #> rmndt              "/usr/local/lib/R/site-library" "0.7.0"     
 #> rootSolve          "/usr/local/lib/R/site-library" "1.8.2.4"   
 #> roxygen2           "/usr/local/lib/R/site-library" "8.1.0"     
@@ -606,7 +606,7 @@ setup_info()
 #> svglite            "/usr/local/lib/R/site-library" "2.2.2"     
 #> sys                "/usr/local/lib/R/site-library" "3.4.3"     
 #> systemfonts        "/usr/local/lib/R/site-library" "1.3.2"     
-#> terra              "/usr/local/lib/R/site-library" "1.9-34"    
+#> terra              "/usr/local/lib/R/site-library" "1.9-46"    
 #> testthat           "/usr/local/lib/R/site-library" "3.3.2"     
 #> textshaping        "/usr/local/lib/R/site-library" "1.0.5"     
 #> tibble             "/usr/local/lib/R/site-library" "3.3.1"     
@@ -629,7 +629,7 @@ setup_info()
 #> whisker            "/usr/local/lib/R/site-library" "0.4.1"     
 #> whoami             "/usr/local/lib/R/site-library" "1.3.0"     
 #> withr              "/usr/local/lib/R/site-library" "3.0.3"     
-#> writexl            "/usr/local/lib/R/site-library" "2.0.0"     
+#> writexl            "/usr/local/lib/R/site-library" "2.0.1"     
 #> xfun               "/usr/local/lib/R/site-library" "0.60"      
 #> xml2               "/usr/local/lib/R/site-library" "1.6.0"     
 #> xmlparsedata       "/usr/local/lib/R/site-library" "1.0.5"     
@@ -956,7 +956,7 @@ setup_info()
 #> tools              "base"       
 #> utils              "base"       
 #>                    Depends                                                                                                                                                                                                                     
-#> Deriv              "Rcpp"                                                                                                                                                                                                                      
+#> Deriv              "Rcpp, R (>= 4.5)"                                                                                                                                                                                                          
 #> Formula            "R (>= 2.0.0), stats"                                                                                                                                                                                                       
 #> GDPuc              "R (>= 2.10)"                                                                                                                                                                                                               
 #> Hmisc              "R (>= 4.2.0)"                                                                                                                                                                                                              
@@ -1446,7 +1446,7 @@ setup_info()
 #> reshape2           "plyr (>= 1.8.1), Rcpp, stringr"                                                                                                                                                                                                                                                                                                                                                                                  
 #> rex                "withr"                                                                                                                                                                                                                                                                                                                                                                                                           
 #> rlang              "utils"                                                                                                                                                                                                                                                                                                                                                                                                           
-#> rmarkdown          "bslib (>= 0.2.5.1), evaluate (>= 0.13), fontawesome (>=\n0.5.0), htmltools (>= 0.5.1), jquerylib, jsonlite, knitr (>=\n1.43), methods, tinytex (>= 0.31), tools, utils, xfun (>=\n0.36), yaml (>= 2.1.19)"                                                                                                                                                                                                       
+#> rmarkdown          "bslib (>= 0.2.5.1), evaluate (>= 0.13), fontawesome (>=\n0.5.0), htmltools (>= 0.5.1), jquerylib, jsonlite, knitr (>=\n1.50), methods, tinytex (>= 0.31), tools, utils, xfun (>=\n0.36), yaml (>= 2.1.19)"                                                                                                                                                                                                       
 #> rmndt              "gamstransfer"                                                                                                                                                                                                                                                                                                                                                                                                    
 #> rootSolve          "stats, graphics, grDevices"                                                                                                                                                                                                                                                                                                                                                                                      
 #> roxygen2           "brew, cli (>= 3.3.0), commonmark, desc (>= 1.2.0), knitr,\nlifecycle, methods, pkgload (>= 1.5.2), R6 (>= 2.1.2), rdtools\n(>= 0.1.0), rlang (>= 1.1.0), utils, withr, xml2"                                                                                                                                                                                                                                     
@@ -1941,12 +1941,12 @@ setup_info()
 #> lpjclass           "covr"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 #> lpjmlkit           "rmarkdown, knitr, testthat (>= 3.0.0), terra, raster,\nreshape2, maps, sf, ncdf4, CFtime, R6"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 #> lubridate          "covr, knitr, rmarkdown, testthat (>= 2.1.0), vctrs (>= 0.6.5)"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
-#> lucode2            "covr, gdx, gert, ggplot2, knitr, lusweave, magclass, poorman,\nrenv, rmarkdown, styler, testthat"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+#> lucode2            "covr, gert, ggplot2, knitr, lusweave, magclass, poorman,\nrenv, rmarkdown, styler, testthat"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 #> luplot             "covr, rworldmap (>= 1.3.8), lemon"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
 #> luscale            "covr"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 #> lusweave           "covr, testthat (>= 3.0.0)"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
-#> madrat             "covr, ggplot2, graphics, grDevices, knitr, rmarkdown, terra,\ntestthat, tibble"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
-#> magclass           "covr, ggplot2, knitr, lpjmlkit, ncdf4, pkgconfig, quitte,\nraster, rmarkdown, terra, testthat (>= 3.1.5), tibble, withr"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+#> madrat             "covr, ggplot2, graphics, grDevices, knitr, qs2, rmarkdown,\nterra, testthat, tibble"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+#> magclass           "covr, ggplot2, knitr, lpjmlkit, maps, ncdf4, pkgconfig,\nquitte, raster, rmarkdown, terra, testthat (>= 3.1.5), tibble,\nwithr"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 #> magic              NA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 #> magpie4            "covr, filelock, FRACTION, ncdf4, terra, testthat (>= 3.3.2),\nwithr"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 #> magpiesets         "covr, knitr, rmarkdown"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
@@ -1977,7 +1977,7 @@ setup_info()
 #> nonparaeff         "pwt, psych"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
 #> numDeriv           NA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 #> openssl            "curl, testthat (>= 2.1.0), digest, knitr, rmarkdown,\njsonlite, jose, sodium"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
-#> openxlsx           "curl, formula.tools, knitr, rmarkdown, testthat"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+#> openxlsx           "curl, formula.tools, ggplot2, jpeg, knitr, rmarkdown,\nsurvival, testthat"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
 #> otel               "callr, cli, glue, jsonlite, otelsdk, processx, shiny,\nspelling, testthat (>= 3.0.0), utils, withr"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 #> pak                "callr (>= 3.7.0), cli (>= 3.2.0), covr, curl (>= 4.3.2), desc\n(>= 1.4.1), filelock (>= 1.0.2), gitcreds, glue (>= 1.6.2),\njsonlite (>= 1.8.0), keyring (>= 1.4.0), pingr, pkgbuild (>=\n1.4.2), pkgcache (>= 2.2.4), pkgdepends (>= 0.9.0), pkgload,\npkgsearch (>= 3.1.0), processx (>= 3.8.1), ps (>= 1.6.0),\nrstudioapi, testthat (>= 3.2.0), webfakes, withr, yaml"                                                                                                                                                                                                                                                                                                                                                                                                                                                  
 #> pbkrtest           "nlme, markdown, knitr"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
@@ -2008,7 +2008,7 @@ setup_info()
 #> rbibutils          "testthat"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 #> rcmdcheck          "covr, knitr, mockery, processx, ps, rmarkdown, svglite,\ntestthat, webfakes"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 #> rdtools            "testthat (>= 3.0.0), withr"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-#> readODS            "spelling, testthat, datasets, covr, knitr, rmarkdown, readr\n(>= 1.2.1)"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+#> readODS            "spelling, testthat, datasets, covr, knitr, rmarkdown, readr\n(>= 1.2.1), desc"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 #> readr              "covr, curl, datasets, knitr, rmarkdown, spelling, stringi,\ntestthat (>= 3.2.0), tzdb (>= 0.1.1), waldo, xml2"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 #> readxl             "covr, knitr, rmarkdown, testthat (>= 3.1.6), withr"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 #> reformulas         "lme4, tinytest, glmmTMB, Formula"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
@@ -2594,7 +2594,7 @@ setup_info()
 #> reshape2           "MIT + file LICENSE"                            
 #> rex                "MIT + file LICENSE"                            
 #> rlang              "MIT + file LICENSE"                            
-#> rmarkdown          "GPL-3"                                         
+#> rmarkdown          "MIT + file LICENSE"                            
 #> rmndt              "GPL-3"                                         
 #> rootSolve          "GPL (>= 2)"                                    
 #> roxygen2           "MIT + file LICENSE"                            
