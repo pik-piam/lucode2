@@ -1,8 +1,8 @@
 Type: Package
 Package: lucode2
 Title: Code Manipulation and Analysis Tools
-Version: 0.56.3
-Date: 2026-09-08
+Version: 0.56.4
+Date: 2026-09-11
 Authors@R: c(
     person("Jan Philipp", "Dietrich", , "dietrich@pik-potsdam.de", role = c("aut", "cre"),
            comment = c(affiliation = "Potsdam Institute for Climate Impact Research", ORCID = "0000-0002-4309-6431")),
@@ -20,7 +20,9 @@ Authors@R: c(
            comment = c(affiliation = "Potsdam Institute for Climate Impact Research")),
     person("Mika", "Pflüger", role = "aut"),
     person("Patrick", "Rein", , "patrick.rein@pik-potsdam.de", role = "aut",
-           comment = c(affiliation = "Potsdam Institute for Climate Impact Research", ORCID = "0000-0001-9454-8381"))
+           comment = c(affiliation = "Potsdam Institute for Climate Impact Research", ORCID = "0000-0001-9454-8381")),
+    person("Tonn", "Rüter", , "tonn.rueter@pik-potsdam.de", role = "aut",
+           comment = c(affiliation = "Potsdam Institute for Climate Impact Research"))
   )
 Description: A collection of tools which allow to manipulate and analyze
     code.

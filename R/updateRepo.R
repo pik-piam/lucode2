@@ -90,6 +90,7 @@ updateRepo <- function(path = ".", check = TRUE, forceRebuild = FALSE, clean = T
                          "https://github.com/\\1",
                          gert::git_remote_info(repo = repoPath)$url)
         cat("Repository: ", repoUrl, "\n",
+            "RemoteType: repository\n",
             "RemoteUrl: ", remoteUrl, "\n",
             "RemoteRef: HEAD\n",
             "RemoteSha: ", gert::git_commit_id(repo = repoPath), "\n",
