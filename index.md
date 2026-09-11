@@ -1,6 +1,6 @@
 # Code Manipulation and Analysis Tools
 
-R package **lucode2**, version **0.56.3**
+R package **lucode2**, version **0.56.4**
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4389418.svg)](https://doi.org/10.5281/zenodo.4389418)
 [![R build
@@ -49,9 +49,9 @@ In case of questions / problems please contact Jan Philipp Dietrich
 To cite package **lucode2** in publications use:
 
 Dietrich J, Sauer P, Klein D, Giannousakis A, Bonsch M, Bodirsky B,
-Baumstark L, Richters O, Pflüger M, Rein P (2026). “lucode2: Code
-Manipulation and Analysis Tools.” <doi:10.5281/zenodo.4389418>
-<https://doi.org/10.5281/zenodo.4389418>, Version: 0.56.3,
+Baumstark L, Richters O, Pflüger M, Rein P, Rüter T (2026). “lucode2:
+Code Manipulation and Analysis Tools.” <doi:10.5281/zenodo.4389418>
+<https://doi.org/10.5281/zenodo.4389418>, Version: 0.56.4,
 <https://github.com/pik-piam/lucode2>.
 
 A BibTeX entry for LaTeX users is
@@ -59,11 +59,11 @@ A BibTeX entry for LaTeX users is
 ``` latex
 @Misc{,
  title = {lucode2: Code Manipulation and Analysis Tools},
- author = {Jan Philipp Dietrich and Pascal Sauer and David Klein and Anastasis Giannousakis and Markus Bonsch and Benjamin Leon Bodirsky and Lavinia Baumstark and Oliver Richters and Mika Pflüger and Patrick Rein},
+ author = {Jan Philipp Dietrich and Pascal Sauer and David Klein and Anastasis Giannousakis and Markus Bonsch and Benjamin Leon Bodirsky and Lavinia Baumstark and Oliver Richters and Mika Pflüger and Patrick Rein and Tonn Rüter},
  doi = {10.5281/zenodo.4389418},
- date = {2026-09-08},
+ date = {2026-09-11},
  year = {2026},
  url = {https://github.com/pik-piam/lucode2},
- note = {Version: 0.56.3},
+ note = {Version: 0.56.4},
 }
 ```

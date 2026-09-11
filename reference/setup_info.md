@@ -30,7 +30,7 @@ setup_info()
 #>                                       version 
 #> "#22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026" 
 #>                                      nodename 
-#>                                "5109af3eac73" 
+#>                                "33a6ff62a196" 
 #>                                       machine 
 #>                                      "x86_64" 
 #>                                         login 
@@ -65,7 +65,7 @@ setup_info()
 #> [7] base     
 #> 
 #> other attached packages:
-#> [1] lucode2_0.56.3
+#> [1] lucode2_0.56.4
 #> 
 #> loaded via a namespace (and not attached):
 #>  [1] generics_0.1.4      sass_0.4.10         renv_1.2.4         
@@ -506,7 +506,7 @@ setup_info()
 #> lpjclass           "/usr/local/lib/R/site-library" "1.19.7"    
 #> lpjmlkit           "/usr/local/lib/R/site-library" "1.8.2"     
 #> lubridate          "/usr/local/lib/R/site-library" "1.9.5"     
-#> lucode2            "/usr/local/lib/R/site-library" "0.56.3"    
+#> lucode2            "/usr/local/lib/R/site-library" "0.56.4"    
 #> luplot             "/usr/local/lib/R/site-library" "4.1.4"     
 #> luscale            "/usr/local/lib/R/site-library" "3.2.0"     
 #> lusweave           "/usr/local/lib/R/site-library" "1.46.6"    

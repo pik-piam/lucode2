@@ -30,18 +30,21 @@
 - **Patrick Rein**. Author. [](https://orcid.org/0000-0001-9454-8381)  
   Potsdam Institute for Climate Impact Research
 
+- **Tonn Rüter**. Author.  
+  Potsdam Institute for Climate Impact Research
+
 ## Citation
 
 Source:
 [`inst/CITATION`](https://github.com/pik-piam/lucode2/blob/master/inst/CITATION)
 
 Dietrich J, Sauer P, Klein D, Giannousakis A, Bonsch M, Bodirsky B,
-Baumstark L, Richters O, Pflüger M, Rein P (2026). *lucode2: Code
-Manipulation and Analysis Tools*. R package version 0.56.3.
+Baumstark L, Richters O, Pflüger M, Rein P, Rüter T (2026). *lucode2:
+Code Manipulation and Analysis Tools*. R package version 0.56.4.
 
     @Manual{,
       title = {lucode2: Code Manipulation and Analysis Tools},
-      author = {Jan Philipp Dietrich and Pascal Sauer and David Klein and Anastasis Giannousakis and Markus Bonsch and Benjamin Leon Bodirsky and Lavinia Baumstark and Oliver Richters and Mika Pflüger and Patrick Rein},
+      author = {Jan Philipp Dietrich and Pascal Sauer and David Klein and Anastasis Giannousakis and Markus Bonsch and Benjamin Leon Bodirsky and Lavinia Baumstark and Oliver Richters and Mika Pflüger and Patrick Rein and Tonn Rüter},
       year = {2026},
-      note = {R package version 0.56.3},
+      note = {R package version 0.56.4},
     }

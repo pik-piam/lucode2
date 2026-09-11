@@ -48,3 +48,6 @@ Authors:
 - Patrick Rein <patrick.rein@pik-potsdam.de>
   ([ORCID](https://orcid.org/0000-0001-9454-8381)) (affiliation: Potsdam
   Institute for Climate Impact Research)
+
+- Tonn Rüter <tonn.rueter@pik-potsdam.de> (affiliation: Potsdam
+  Institute for Climate Impact Research)
