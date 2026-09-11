@@ -32,6 +32,7 @@ Authors:
   \item Oliver Richters (affiliation: Potsdam Institute for Climate Impact Research)
   \item Mika Pflüger
   \item Patrick Rein \email{patrick.rein@pik-potsdam.de} (\href{https://orcid.org/0000-0001-9454-8381}{ORCID}) (affiliation: Potsdam Institute for Climate Impact Research)
+  \item Tonn Rüter \email{tonn.rueter@pik-potsdam.de} (affiliation: Potsdam Institute for Climate Impact Research)
 }
 
 }

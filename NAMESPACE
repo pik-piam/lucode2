@@ -46,66 +46,86 @@ export(verifyCheck)
 export(verifyLinter)
 export(verifyTests)
 importFrom(callr,r)
-importFrom(data.table,as.data.table)
-importFrom(data.table,rbindlist)
-importFrom(desc,desc)
-importFrom(desc,desc_get_deps)
-importFrom(devtools,build)
-importFrom(devtools,check)
-importFrom(devtools,document)
-importFrom(devtools,install_deps)
-importFrom(devtools,install_github)
-importFrom(dplyr,"%>%")
-importFrom(dplyr,arrange)
-importFrom(dplyr,group_by)
-importFrom(dplyr,mutate)
-importFrom(dplyr,rename)
-importFrom(dplyr,summarize)
-importFrom(lintr,T_and_F_symbol_linter)
-importFrom(lintr,absolute_path_linter)
-importFrom(lintr,cyclocomp_linter)
-importFrom(lintr,default_undesirable_functions)
-importFrom(lintr,default_undesirable_operators)
-importFrom(lintr,line_length_linter)
-importFrom(lintr,linters_with_defaults)
-importFrom(lintr,object_length_linter)
-importFrom(lintr,object_name_linter)
-importFrom(lintr,todo_comment_linter)
-importFrom(lintr,undesirable_function_linter)
-importFrom(lintr,undesirable_operator_linter)
+importFrom(data.table,
+  as.data.table,
+  rbindlist
+)
+importFrom(desc,
+  desc,
+  desc_get_deps
+)
+importFrom(devtools,
+  build,
+  check,
+  document,
+  install_deps,
+  install_github
+)
+importFrom(dplyr,
+  "%>%",
+  arrange,
+  group_by,
+  mutate,
+  rename,
+  summarize
+)
+importFrom(lintr,
+  T_and_F_symbol_linter,
+  absolute_path_linter,
+  cyclocomp_linter,
+  default_undesirable_functions,
+  default_undesirable_operators,
+  line_length_linter,
+  linters_with_defaults,
+  object_length_linter,
+  object_name_linter,
+  todo_comment_linter,
+  undesirable_function_linter,
+  undesirable_operator_linter
+)
 importFrom(rlang,.data)
-importFrom(tools,file_ext)
-importFrom(tools,md5sum)
-importFrom(tools,write_PACKAGES)
-importFrom(usethis,git_remotes)
-importFrom(usethis,local_project)
-importFrom(usethis,use_coverage)
-importFrom(usethis,with_project)
-importFrom(utils,askYesNo)
-importFrom(utils,available.packages)
-importFrom(utils,capture.output)
-importFrom(utils,citation)
-importFrom(utils,download.file)
-importFrom(utils,head)
-importFrom(utils,install.packages)
-importFrom(utils,installed.packages)
-importFrom(utils,object.size)
-importFrom(utils,old.packages)
-importFrom(utils,packageDescription)
-importFrom(utils,packageVersion)
-importFrom(utils,read.delim)
-importFrom(utils,sessionInfo)
-importFrom(utils,tail)
-importFrom(utils,type.convert)
-importFrom(utils,update.packages)
-importFrom(utils,vignette)
-importFrom(withr,defer)
-importFrom(withr,local_connection)
-importFrom(withr,local_dir)
-importFrom(withr,local_envvar)
-importFrom(withr,local_options)
-importFrom(withr,local_tempdir)
-importFrom(withr,local_tempfile)
-importFrom(withr,with_dir)
-importFrom(yaml,read_yaml)
-importFrom(yaml,write_yaml)
+importFrom(tools,
+  file_ext,
+  md5sum,
+  write_PACKAGES
+)
+importFrom(usethis,
+  git_remotes,
+  local_project,
+  use_coverage,
+  with_project
+)
+importFrom(utils,
+  askYesNo,
+  available.packages,
+  capture.output,
+  citation,
+  download.file,
+  head,
+  install.packages,
+  installed.packages,
+  object.size,
+  old.packages,
+  packageDescription,
+  packageVersion,
+  read.delim,
+  sessionInfo,
+  tail,
+  type.convert,
+  update.packages,
+  vignette
+)
+importFrom(withr,
+  defer,
+  local_connection,
+  local_dir,
+  local_envvar,
+  local_options,
+  local_tempdir,
+  local_tempfile,
+  with_dir
+)
+importFrom(yaml,
+  read_yaml,
+  write_yaml
+)
