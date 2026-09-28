@@ -13,6 +13,7 @@
 ^tests/.lintr$
 ^vignettes/.lintr$
 ^Makefile$
+^CODE_STYLE\.md$
 ^.*CITATION.cff$
 ^_pkgdown\.yml$
 ^\.claude$
