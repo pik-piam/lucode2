@@ -67,6 +67,9 @@ performs the following steps:
 - Package building: Builds the .zip and .tar.gz packages under windows.
   Under linux, only the .tar.gz package is built.
 
+- Contributing docs: Adds/updates CODE_STYLE.md at the package root.
+  Madrat-based packages additionally get CONTRIBUTING.md.
+
 ## Note
 
 The behavior of buildLibrary can be configured via the `.buildLibrary`
