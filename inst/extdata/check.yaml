@@ -29,15 +29,6 @@ jobs:
         run: |
           pre-commit run --show-diff-on-failure --color=always --all-files
 
-      - name: Verify validation key
-        shell: Rscript {0}
-        run: lucode2:::validkey(stopIfInvalid = TRUE)
-
-      - name: Verify that lucode2::buildLibrary was successful
-        if: github.event_name == 'pull_request'
-        shell: Rscript {0}
-        run: lucode2:::isVersionUpdated()
-
       - name: Checks
         shell: Rscript {0}
         run: |
@@ -73,3 +64,35 @@ jobs:
           plugin: noop
           disable_search: true
           token: ${{ secrets.CODECOV_TOKEN }}
+
+  version:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    container:
+      image: ghcr.io/pik-piam/ci-image:latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Update lucode2
+        shell: Rscript {0}
+        run: |
+          options(repos = c(pikpiam = 'https://pik-piam.r-universe.dev',
+                            CRAN = Sys.getenv('RSPM')))
+          pak::pak("lucode2")
+
+      - name: Verify validation key
+        shell: Rscript {0}
+        run: lucode2:::validkey(stopIfInvalid = TRUE)
+
+      # Compare the PR with the current base branch (and not the latest release, which might not include the most recent changes)
+      - name: Fetch base branch
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          git fetch --no-tags --depth=1 origin "+refs/heads/${GITHUB_BASE_REF}:refs/remotes/origin/${GITHUB_BASE_REF}"
+
+      - name: Verify that lucode2::buildLibrary was successful
+        if: github.event_name == 'pull_request'
+        shell: Rscript {0}
+        run: lucode2:::isVersionUpdated(base = paste0("origin/", Sys.getenv("GITHUB_BASE_REF")))
