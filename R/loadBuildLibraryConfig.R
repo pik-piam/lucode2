@@ -40,7 +40,9 @@ loadBuildLibraryConfig <- function(lib = ".") {
     "^Makefile$",
     "^CODE_STYLE\\.md$",
     "^workflow$",
-    "^\\.claude$"
+    "^\\.claude$",
+    "^CLAUDE.md$",
+    "^AGENTS.md$"
   )
   rbuildIgnore <- rbuildIgnore[!duplicated(rbuildIgnore)]
   writeLines(rbuildIgnore, file.path(lib, ".Rbuildignore"))

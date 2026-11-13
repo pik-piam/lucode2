@@ -4,7 +4,7 @@ test_that("snakeToCamel works", {
                  "aSD",
                  "a_s_D + a_s_D^3"), "test.R")
     expect_warning({
-      actual <- snakeToCamel("test.R", ask = FALSE)
+      actual <- suppressMessages(snakeToCamel("test.R", ask = FALSE))
     }, "aSD is already present in the original file:")
     expect_identical(actual,
                      c("aSD <- 5045",

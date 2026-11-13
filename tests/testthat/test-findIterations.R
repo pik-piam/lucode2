@@ -7,7 +7,7 @@ test_that("findIterations works", {
     dir.create(file.path(tmpfolder, f))
     file.create(file.path(tmpfolder, f, "fulldata.gdx"))
   }
-  found <- findIterations("SCEN", tmpfolder)
+  capture.output(found <- findIterations("SCEN", tmpfolder))
   expect_true(setequal(found, file.path(tmpfolder, goodfolders)))
 
   tmpfolder <- withr::local_tempdir()
@@ -18,7 +18,7 @@ test_that("findIterations works", {
     dir.create(file.path(tmpfolder, f))
     file.create(file.path(tmpfolder, f, "fulldata.gdx"))
   }
-  found <- findIterations("SCEN", tmpfolder)
+  capture.output(found <- findIterations("SCEN", tmpfolder))
   expect_true(setequal(found, file.path(tmpfolder, goodfolders)))
 
   tmpfolder <- withr::local_tempdir()
@@ -27,6 +27,6 @@ test_that("findIterations works", {
     dir.create(file.path(tmpfolder, f))
     file.create(file.path(tmpfolder, f, "fulldata.gdx"))
   }
-  found <- findIterations(c("SCEN1", "SCEN2"), tmpfolder)
+  capture.output(found <- findIterations(c("SCEN1", "SCEN2"), tmpfolder))
   expect_true(setequal(found, file.path(tmpfolder, goodfolders)))
 })

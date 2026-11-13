@@ -11,7 +11,7 @@
 - Use `terra` instead of `raster`
 - Use `withr` calls instead of base tempdir and deferred function executions
 - use `paste0` over `sprintf`
-- avoid single line `if` (e.g. `if (condition) a <- x`), except for the form `if (cond) x else y` with `x` and `y` being variables
+- avoid single line `if` (e.g. `if (condition) a <- x`), except for the form `if (cond) x else y` with `x` and `y` being simple expressions without side-effects
 - avoid package-level variables
 
 - Aim to stay with magclass objects, only switch to data.frames or alike when external packages need it or operations can be expressed much more concisely
