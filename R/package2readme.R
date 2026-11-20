@@ -2,6 +2,9 @@
 #'
 #' Creates a README.md for a R package.
 #'
+#' Hand written sections below the last generated section of an existing README.md are kept,
+#' e.g. a funding section. They are appended unchanged, everything else comes from the template.
+#'
 #' @param package either the path to the main folder of a package (containing a DESCRIPTION file)
 #' or the name of the package
 #' @param add a character vector with additions to the README file. Each element of the vector can be either
@@ -238,6 +241,26 @@ package2readme <- function(package = ".", add = NULL, logo = NULL, logoHeight = 
     return(out)
   }
 
+  keepCustomSections <- function(new, old) {
+    # README.md is written from scratch. Hand written sections below the last generated
+    # section, e.g. a funding section, are taken over from the previous version.
+    newLines <- unlist(strsplit(paste(new, collapse = "\n"), "\n", fixed = TRUE))
+    generated <- trimws(grep("^#{2,} ", newLines, value = TRUE))
+    positions <- grep("^#{2,} ", old)
+    headings <- trimws(old[positions])
+    isCustom <- !(headings %in% generated)
+    # content above the first custom section is generated, so it would only be outdated
+    lastGenerated <- max(c(positions[!isCustom], 0))
+    keep <- isCustom & positions > lastGenerated
+    if (!any(keep)) {
+      return(new)
+    }
+    for (heading in headings[keep]) {
+      message("Kept custom README section: ", sub("^#+ +", "", heading))
+    }
+    return(c(newLines, "", old[min(positions[keep]):length(old)]))
+  }
+
   fillTemplate <- function(x, fill) {
     for (what in names(fill)) {
       if (is.null(fill[[what]])) fill[[what]] <- ""
@@ -285,6 +308,7 @@ package2readme <- function(package = ".", add = NULL, logo = NULL, logoHeight = 
   if (!is.null(folder)) {
     readmefile <- file.path(folder, "README.md")
     if (file.exists(readmefile)) {
+      out <- keepCustomSections(out, readLines(readmefile))
       message("Updated README.md file")
     } else {
       message("Added README.md file")

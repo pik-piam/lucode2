@@ -28,6 +28,39 @@ test_that("CRAN badge shown when CRAN-SUBMISSION exists", {
   expect_match(r, "CRAN status")
 })
 
+test_that("hand written sections at the end of README.md are kept", {
+  tmpdir <- withr::local_tempdir()
+  tmpdir <- file.path(tmpdir, "fakepkg")
+  dir.create(tmpdir)
+  file.copy(system.file("DESCRIPTION", package = "lucode2"), tmpdir)
+  d <- desc::desc(file.path(tmpdir, "DESCRIPTION"))
+  d$set(Package = "fakepkg")
+  d$write()
+  suppressMessages(package2readme(tmpdir))
+
+  readmeFile <- file.path(tmpdir, "README.md")
+  readme <- readLines(readmeFile)
+  writeLines(c(readme, "", "## Funding", "", "Funding text."), readmeFile)
+
+  expect_message(suppressWarnings(package2readme(tmpdir)), "Kept custom README section: Funding")
+  readme <- readLines(readmeFile)
+  fundingStart <- grep("^## Funding$", readme)
+  expect_length(fundingStart, 1)
+  expect_equal(readme[fundingStart - 1], "") # single blank line as separator
+  expect_true("Funding text." %in% readme)
+  # generated sections are not duplicated
+  expect_length(grep("^## Citation", readme), 1)
+
+  # a second run keeps it, still exactly once
+  suppressMessages(suppressWarnings(package2readme(tmpdir)))
+  expect_length(grep("^## Funding$", readLines(readmeFile)), 1)
+
+  # if it is deleted by hand, it stays deleted
+  writeLines(readme[seq_len(fundingStart - 2)], readmeFile)
+  suppressMessages(suppressWarnings(package2readme(tmpdir)))
+  expect_length(grep("^## Funding$", readLines(readmeFile)), 0)
+})
+
 test_that("readme title does not contain newlines", {
   local_mocked_bindings(
     desc = function(...) {
