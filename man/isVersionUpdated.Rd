@@ -6,7 +6,8 @@
 \usage{
 isVersionUpdated(
   repo = "https://rse.pik-potsdam.de/r/packages/",
-  config = loadBuildLibraryConfig()
+  config = loadBuildLibraryConfig(),
+  base = NULL
 )
 }
 \arguments{
@@ -14,10 +15,17 @@ isVersionUpdated(
 
 \item{config}{A configuration defining enforceVersionUpdate. By default
 the .buildLibrary file is read.}
+
+\item{base}{A git ref (e.g. "origin/main") to compare the version with, typically
+the base branch of a pull request. The local version must be strictly greater than
+the version in that ref's DESCRIPTION file. If NULL (default) no such comparison
+is done.}
 }
 \description{
 Checks if the version number in the DESCRIPTION file of a given package has
 been updated (may not be a version number for development stage packages).
+The version is compared with the latest version on the package repository and,
+if \code{base} is given, with the version in the DESCRIPTION file of that git ref.
 }
 \author{
 Falk Benke

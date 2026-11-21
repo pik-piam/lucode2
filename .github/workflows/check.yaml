@@ -65,20 +65,29 @@ jobs:
           disable_search: true
           token: ${{ secrets.CODECOV_TOKEN }}
 
-  version:
+  checkVersion:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     container:
-      image: ghcr.io/pik-piam/ci-image:latest
+      image: rocker/r-ubuntu:latest
 
     steps:
+      - name: Install git
+        shell: bash
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends git
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - uses: actions/checkout@v7
 
-      - name: Update lucode2
+      - name: Install lucode2
         shell: Rscript {0}
         run: |
+          install.packages("pak", repos = sprintf("https://r-lib.github.io/p/pak/stable/%s/%s/%s",
+                                                  .Platform$pkgType, R.Version()$os, R.Version()$arch))
           options(repos = c(pikpiam = 'https://pik-piam.r-universe.dev',
-                            CRAN = Sys.getenv('RSPM')))
+                            CRAN = 'https://p3m.dev/cran/__linux__/noble/latest'))
           pak::pak("lucode2")
 
       - name: Verify validation key

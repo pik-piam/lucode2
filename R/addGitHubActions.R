@@ -1,8 +1,8 @@
 #' addGitHubActions
 #'
 #' This function adds a standard Github action workflow called "check.yaml" to the project. Its job "check" runs
-#' lucode2::check() and creates a coverage report using codecov. Its separate job "version" checks the validation key
-#' and, for pull requests, whether the version number was increased compared to the base branch.
+#' lucode2::check() and creates a coverage report using codecov. Its separate job "checkVersion" checks the validation
+#' key and, for pull requests, whether the version number was increased compared to the base branch.
 #' This file is overwritten automatically each time this function is run and should not be edited by hand.
 #'
 #' #' If the config option `UsePkgDown` is set to TRUE in the `.buildlibrary` file,
