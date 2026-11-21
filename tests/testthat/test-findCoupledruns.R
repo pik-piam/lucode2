@@ -6,7 +6,7 @@ test_that("findCoupledruns works", {
   for (f in c(goodfolders, badfolders)) {
     dir.create(file.path(tmpfolder, f))
   }
-  found <- findCoupledruns(tmpfolder)
+  capture.output(suppressMessages(found <- findCoupledruns(tmpfolder)))
   expect_true(setequal(found, c("TEST", "TEST5")))
 
   tmpfolder <- withr::local_tempdir()
@@ -16,7 +16,7 @@ test_that("findCoupledruns works", {
   for (f in c(goodfolders, badfolders)) {
     dir.create(file.path(tmpfolder, f))
   }
-  found <- findCoupledruns(tmpfolder)
+  capture.output(suppressMessages(found <- findCoupledruns(tmpfolder)))
   expect_true(setequal(found, c("TEST", "TEST5")))
   file.create(file.path(tmpfolder, "TEST-rem-10.pdf"))
   expect_true(setequal(found, c("TEST", "TEST5")))

@@ -1,6 +1,6 @@
 test_that("updateRepo works", {
   skip_if(Sys.getenv("UNIVERSE_NAME") == "pik-piam", "the git operations lead to certifacte issues on r-universe CI")
-  capture.output({
+  suppressMessages(capture.output({
     baseFolder <- withr::local_tempdir()
     reposFolder <- file.path(baseFolder, "repos")
     miniPackageRepo <- file.path(baseFolder, "repo-miniPackage")
@@ -36,5 +36,5 @@ test_that("updateRepo works", {
                    "There were errors, see log (on RSE server with `journalctl -r -u update-repo.service`)",
                    fixed = TRUE)
     }, "invalid validation key")
-  })
+  }))
 })

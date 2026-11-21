@@ -1,5 +1,5 @@
 test_that("readme can be created from package", {
-  expect_invisible(r <- package2readme("lucode2"))
+  expect_invisible(r <- suppressMessages(package2readme("lucode2")))
   expect_gt(length(r), 30)
   expect_gt(sum(nchar(r)), 1500)
 
@@ -24,7 +24,7 @@ test_that("CRAN badge shown when CRAN-SUBMISSION exists", {
   d$write()
   file.create(file.path(tmpdir, "CRAN-SUBMISSION"))
 
-  r <- paste0(package2readme(tmpdir), collapse = "\n")
+  r <- paste0(suppressMessages(package2readme(tmpdir)), collapse = "\n")
   expect_match(r, "CRAN status")
 })
 
@@ -36,6 +36,6 @@ test_that("readme title does not contain newlines", {
       return(originalDesc)
     }
   )
-  expect_invisible(r <- package2readme("lucode2"))
+  expect_invisible(r <- suppressMessages(package2readme("lucode2")))
   expect_match(paste0(r, collapse = "\n"), "a zZzZz c")
 })
