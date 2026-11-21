@@ -74,6 +74,7 @@ buildLibrary <- function(lib = ".", cran = TRUE, updateType = NULL,
   if (isTRUE(updateType == "")) updateType <- NULL
   lib <- normalizePath(lib)
   local_dir(lib)
+  localCranMirror()
   checkRepoUpToDate(".", autoCheckRepoUpToDate)
 
   loadedLucode2Version <- .__NAMESPACE__.$spec[["version"]]
