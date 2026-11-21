@@ -1,0 +1,71 @@
+name: renovate
+
+# Updates pinned action SHAs in .github/workflows and inst/extdata, then runs
+# buildLibrary as a Renovate postUpgradeTask so the PR is directly mergeable.
+# Needs a GitHub App token: GITHUB_TOKEN cannot push to .github/workflows and
+# its PRs do not trigger check.yaml.
+
+on:
+  schedule:
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: renovate
+  cancel-in-progress: false
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/pik-piam/ci-image:latest
+
+    steps:
+      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        id: app-token
+        with:
+          client-id: ${{ vars.RENOVATE_LUCODE_CLIENT_ID }}
+          private-key: ${{ secrets.RENOVATE_LUCODE_APP_PRIVATE_KEY }}
+
+      - name: Get bot git identity
+        id: bot
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+        run: |
+          userId=$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" \
+            "https://api.github.com/users/${APP_SLUG}%5Bbot%5D" | Rscript -e 'cat(jsonlite::fromJSON(file("stdin"))$id)')
+          echo "author=${APP_SLUG}[bot] <${userId}+${APP_SLUG}[bot]@users.noreply.github.com>" >> "$GITHUB_OUTPUT"
+
+      # only needed so pak can read DESCRIPTION; Renovate does its own clone
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Install package and dependencies
+        shell: Rscript {0}
+        run: |
+          options(repos = c(pikpiam = 'https://pik-piam.r-universe.dev',
+                            CRAN = Sys.getenv('RSPM')))
+          pak::pak()
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+
+      - name: Run Renovate
+        run: npx --yes renovate@44.225.1
+        env:
+          RENOVATE_PLATFORM: github
+          RENOVATE_TOKEN: ${{ steps.app-token.outputs.token }}
+          RENOVATE_REPOSITORIES: ${{ github.repository }}
+          RENOVATE_GIT_AUTHOR: ${{ steps.bot.outputs.author }}
+          RENOVATE_ONBOARDING: "false"
+          RENOVATE_BINARY_SOURCE: global
+          # global-only, so a PR cannot widen it by editing renovate.json
+          RENOVATE_ALLOWED_COMMANDS: >-
+            ["^Rscript -e 'lucode2::buildLibrary\\(updateType = \"patch\", updateLucode2 = FALSE, autoCheckRepoUpToDate = NULL\\)'$"]
+          LOG_LEVEL: info

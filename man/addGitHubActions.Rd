@@ -20,6 +20,7 @@ automatically each time this function is run and should not be edited by hand.
 #' If the config option `UsePkgDown` is set to TRUE in the `.buildlibrary` file,
 this function also adds a pkgdown.yaml workflow that builds and deploys package documentation
 to GitHub Pages, and creates a default `_pkgdown.yml` configuration file if it doesn't exist.
+Deployment requires the repository's Pages source to be set to "GitHub Actions".
 
 In addition, this function adds a codecov.yml to the repository, if not already existing. This file
 is only created if missing and can be edited manually.

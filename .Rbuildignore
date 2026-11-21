@@ -17,3 +17,6 @@
 ^.*CITATION.cff$
 ^_pkgdown\.yml$
 ^\.claude$
+^renovate\.json$
+^CLAUDE.md$
+^AGENTS.md$

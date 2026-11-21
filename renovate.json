@@ -1,0 +1,25 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
+  "enabledManagers": ["github-actions"],
+  "github-actions": {
+    "managerFilePatterns": ["/^inst/extdata/[^/]+\\.ya?ml$/"]
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "dependencyDashboardApproval": true
+    }
+  ],
+  "schedule": ["before 8am on monday"],
+  "minimumReleaseAge": "10 days",
+  "automerge": false,
+  "postUpgradeTasks": {
+    "commands": [
+      "Rscript -e 'lucode2::buildLibrary(updateType = \"patch\", updateLucode2 = FALSE, autoCheckRepoUpToDate = NULL)'"
+    ],
+    "fileFilters": ["**/*"],
+    "executionMode": "branch"
+  }
+}
