@@ -32,15 +32,6 @@ jobs:
         run: |
           pre-commit run --show-diff-on-failure --color=always --all-files
 
-      - name: Verify validation key
-        shell: Rscript {0}
-        run: lucode2:::validkey(stopIfInvalid = TRUE)
-
-      - name: Verify that lucode2::buildLibrary was successful
-        if: github.event_name == 'pull_request'
-        shell: Rscript {0}
-        run: lucode2:::isVersionUpdated()
-
       - name: Checks
         shell: Rscript {0}
         run: |
@@ -62,3 +53,44 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+
+  checkVersion:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    container:
+      image: rocker/r-ubuntu:latest
+
+    steps:
+      - name: Install git
+        shell: bash
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends git
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - uses: actions/checkout@v7
+
+      - name: Install lucode2
+        shell: Rscript {0}
+        run: |
+          install.packages("pak", repos = sprintf("https://r-lib.github.io/p/pak/stable/%s/%s/%s",
+                                                  .Platform$pkgType, R.Version()$os, R.Version()$arch))
+          options(repos = c(pikpiam = 'https://pik-piam.r-universe.dev',
+                            CRAN = 'https://p3m.dev/cran/__linux__/noble/latest'))
+          pak::pak("lucode2")
+
+      - name: Verify validation key
+        shell: Rscript {0}
+        run: lucode2:::validkey(stopIfInvalid = TRUE)
+
+      # Compare the PR with the current base branch (and not the latest release, which might not include the most recent changes)
+      - name: Fetch base branch
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          git fetch --no-tags --depth=1 origin "+refs/heads/${GITHUB_BASE_REF}:refs/remotes/origin/${GITHUB_BASE_REF}"
+
+      - name: Verify that lucode2::buildLibrary was successful
+        if: github.event_name == 'pull_request'
+        shell: Rscript {0}
+        run: lucode2:::isVersionUpdated(base = paste0("origin/", Sys.getenv("GITHUB_BASE_REF")))
