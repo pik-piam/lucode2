@@ -2,6 +2,10 @@
 #'
 #' Creates a README.md for a R package.
 #'
+#' Hand written content below the `<!-- end of generated readme -->` marker of an existing
+#' README.md is kept, e.g. a funding section. It is appended unchanged, everything else
+#' comes from the template.
+#'
 #' @param package either the path to the main folder of a package (containing a DESCRIPTION file)
 #' or the name of the package
 #' @param add a character vector with additions to the README file. Each element of the vector can be either
@@ -238,6 +242,30 @@ package2readme <- function(package = ".", add = NULL, logo = NULL, logoHeight = 
     return(out)
   }
 
+  appendCustomContent <- function(new, old) {
+    # README.md is written from scratch. Everything below the end marker in the
+    # existing file is hand written and gets appended unchanged.
+    marker <- "<!-- end of generated readme -->"
+    newLines <- unlist(strsplit(paste(new, collapse = "\n"), "\n", fixed = TRUE))
+    markerPos <- grep(marker, old, fixed = TRUE)
+    if (!length(markerPos) || markerPos[1] >= length(old)) {
+      return(newLines)
+    }
+    custom <- old[(markerPos[1] + 1):length(old)]
+    # trim blank lines, they are restored by the separator below
+    while (length(custom) && !nzchar(trimws(custom[1]))) {
+      custom <- custom[-1]
+    }
+    while (length(custom) && !nzchar(trimws(custom[length(custom)]))) {
+      custom <- custom[-length(custom)]
+    }
+    if (!length(custom)) {
+      return(newLines)
+    }
+    message("Appended custom README content")
+    return(c(newLines, "", custom))
+  }
+
   fillTemplate <- function(x, fill) {
     for (what in names(fill)) {
       if (is.null(fill[[what]])) fill[[what]] <- ""
@@ -285,6 +313,7 @@ package2readme <- function(package = ".", add = NULL, logo = NULL, logoHeight = 
   if (!is.null(folder)) {
     readmefile <- file.path(folder, "README.md")
     if (file.exists(readmefile)) {
+      out <- appendCustomContent(out, readLines(readmefile))
       message("Updated README.md file")
     } else {
       message("Added README.md file")

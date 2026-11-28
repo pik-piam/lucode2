@@ -48,9 +48,11 @@ A BibTeX entry for LaTeX users is
   title = {lucode2: Code Manipulation and Analysis Tools},
   author = {Jan Philipp Dietrich and Pascal Sauer and David Klein and Anastasis Giannousakis and Markus Bonsch and Benjamin Leon Bodirsky and Lavinia Baumstark and Oliver Richters and Mika Pflüger and Patrick Rein and Tonn Rüter},
   doi = {10.5281/zenodo.4389418},
-  date = {2026-11-21},
+  date = {2026-11-23},
   year = {2026},
   url = {https://github.com/pik-piam/lucode2},
   note = {Version: 0.59.0},
 }
 ```
+
+<!-- end of generated readme -->

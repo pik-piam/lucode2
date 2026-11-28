@@ -36,3 +36,5 @@ In case of questions / problems please contact [:maintainer:].
 
 ## Citation
 [:cite:]
+
+<!-- end of generated readme -->

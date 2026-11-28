@@ -3,7 +3,7 @@ message: If you use this software, please cite it using the metadata from this f
 type: software
 title: 'lucode2: Code Manipulation and Analysis Tools'
 version: 0.59.0
-date-released: '2026-11-21'
+date-released: '2026-11-23'
 abstract: A collection of tools which allow to manipulate and analyze code.
 authors:
 - family-names: Dietrich
